@@ -1,6 +1,6 @@
-package com.back.mybackadmintemplate.mapper;
+package com.back.reservoirmanagement.mapper;
 
-import com.back.mybackadmintemplate.entity.User;
+import com.back.reservoirmanagement.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

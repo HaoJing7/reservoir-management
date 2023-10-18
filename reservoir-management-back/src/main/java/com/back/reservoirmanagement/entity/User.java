@@ -1,4 +1,4 @@
-package com.back.mybackadmintemplate.entity;
+package com.back.reservoirmanagement.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

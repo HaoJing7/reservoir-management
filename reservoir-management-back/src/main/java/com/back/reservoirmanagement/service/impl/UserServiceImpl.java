@@ -1,8 +1,8 @@
-package com.back.mybackadmintemplate.service.impl;
+package com.back.reservoirmanagement.service.impl;
 
-import com.back.mybackadmintemplate.entity.User;
-import com.back.mybackadmintemplate.mapper.UserMapper;
-import com.back.mybackadmintemplate.service.UserService;
+import com.back.reservoirmanagement.entity.User;
+import com.back.reservoirmanagement.mapper.UserMapper;
+import com.back.reservoirmanagement.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

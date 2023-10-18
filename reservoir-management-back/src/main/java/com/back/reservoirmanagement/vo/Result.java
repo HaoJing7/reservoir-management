@@ -1,4 +1,4 @@
-package com.back.mybackadmintemplate.vo;
+package com.back.reservoirmanagement.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

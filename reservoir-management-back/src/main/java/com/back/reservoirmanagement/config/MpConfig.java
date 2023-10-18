@@ -1,4 +1,4 @@
-package com.back.mybackadmintemplate.config;
+package com.back.reservoirmanagement.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;

@@ -1,8 +1,8 @@
-package com.back.mybackadmintemplate.controller;
+package com.back.reservoirmanagement.controller;
 
-import com.back.mybackadmintemplate.entity.User;
-import com.back.mybackadmintemplate.service.UserService;
-import com.back.mybackadmintemplate.vo.Result;
+import com.back.reservoirmanagement.entity.User;
+import com.back.reservoirmanagement.service.UserService;
+import com.back.reservoirmanagement.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
