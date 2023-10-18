@@ -18,5 +18,6 @@ create table t_token
 # 用户详细信息表
 create table t_info
 (
-    id int auto_increment primary key
+    id int auto_increment primary key,
+    phone int
 );
