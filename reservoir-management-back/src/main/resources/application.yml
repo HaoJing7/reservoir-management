@@ -1,0 +1,13 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    username: root
+    password: tanhao
+    url: jdbc:mysql://localhost:3306/reservoir_management?serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true

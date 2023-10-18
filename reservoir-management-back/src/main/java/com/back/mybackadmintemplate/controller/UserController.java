@@ -1,0 +1,36 @@
+package com.back.mybackadmintemplate.controller;
+
+import com.back.mybackadmintemplate.entity.User;
+import com.back.mybackadmintemplate.service.UserService;
+import com.back.mybackadmintemplate.vo.Result;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Author:tan hao
+ * Date: 2023-10-18 12:05
+ * Description:
+ */
+@RestController
+@RequestMapping("/user")
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/login")
+    public Result<?> login(@RequestBody User user) {
+        Map<String, Object> data = userService.login(user);
+        return Result.success(data);
+    }
+
+    @GetMapping("/info")
+    public Result<?> getUserInfo(String token) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("name", "github");
+        return Result.success(data);
+    }
+}
