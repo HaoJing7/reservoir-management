@@ -19,5 +19,6 @@ create table t_token
 create table t_info
 (
     id int auto_increment primary key,
-    phone int
+    phone int,
+    description varchar(30)
 );
