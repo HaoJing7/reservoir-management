@@ -36,6 +36,7 @@ public class UserController {
 
     @GetMapping("/logout")
     public Result<?> logout(String token) {
+        System.out.println("撤回推送测试");
         return Result.success();
     }
 }
