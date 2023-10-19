@@ -28,7 +28,7 @@ public class Result<T> {
     public static<T>  Result<T> success(String message){
         return new Result<>(20000,message,null);
     }
-    // 失败
+    // 失败 没有失败的消息
     public static<T>  Result<T> fail(){
         return new Result<>(20001,"fail",null);
     }

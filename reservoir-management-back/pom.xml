@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.back</groupId>
-    <artifactId>reservoir-management</artifactId>
+    <artifactId>reservoir-management-back</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>my-back-admin-template</name>
     <description>my-back-admin-template</description>

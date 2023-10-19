@@ -33,4 +33,9 @@ public class UserController {
         data.put("name", "github");
         return Result.success(data);
     }
+
+    @GetMapping("/logout")
+    public Result<?> logout(String token) {
+        return Result.success();
+    }
 }

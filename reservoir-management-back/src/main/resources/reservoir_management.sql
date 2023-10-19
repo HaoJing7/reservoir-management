@@ -20,5 +20,6 @@ create table t_info
 (
     id int auto_increment primary key,
     phone int,
-    description varchar(30)
+    description varchar(30),
+    address varchar(50)
 );
