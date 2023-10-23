@@ -43,9 +43,15 @@ public class AdminController {
         Admin admin = adminService.getById(userId);
         if (admin != null) {
             Map<String, Object> data = new HashMap<>();
-            data.put("userName", admin.getUserName());
+            data.put("username", admin.getUsername());
             return Result.success(data);
         }
         return Result.fail("获取用户信息失败！");
+    }
+
+    @PostMapping("/logout")
+    public Result<?> logout(@RequestHeader("X-Token") String token) {
+        tokenService.deleteToken(token);
+        return Result.success();
     }
 }

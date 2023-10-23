@@ -41,6 +41,13 @@ public class TokenServiceImpl extends ServiceImpl<TokenMapper, Token> implements
         queryWrapper.eq(Token::getToken, token);
         return tokenMapper.selectOne(queryWrapper).getUserId();
     }
+
+    @Override
+    public void deleteToken(String token) {
+        LambdaQueryWrapper<Token> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Token::getToken, token);
+        tokenMapper.delete(queryWrapper);
+    }
 }
 
 

@@ -9,4 +9,5 @@ public interface TokenService extends IService<Token> {
     Map<String, Object> getToken(Integer userId);
 
     Integer getUserIdByToken(String token);
+    void deleteToken(String token);
 }

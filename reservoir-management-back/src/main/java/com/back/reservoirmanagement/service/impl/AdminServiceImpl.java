@@ -1,6 +1,7 @@
 package com.back.reservoirmanagement.service.impl;
 
 import com.back.reservoirmanagement.entity.Admin;
+import com.back.reservoirmanagement.entity.Token;
 import com.back.reservoirmanagement.mapper.AdminMapper;
 import com.back.reservoirmanagement.service.AdminService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -27,7 +28,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     public Admin login(Admin admin) {
         LambdaQueryWrapper<Admin> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Admin::getPassword, admin.getPassword())
-                .eq(Admin::getUserName, admin.getUserName());
+                .eq(Admin::getUsername, admin.getUsername());
         return adminMapper.selectOne(queryWrapper);
     }
 }
