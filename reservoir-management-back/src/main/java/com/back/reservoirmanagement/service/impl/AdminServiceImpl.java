@@ -31,4 +31,11 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
                 .eq(Admin::getUsername, admin.getUsername());
         return adminMapper.selectOne(queryWrapper);
     }
+
+    @Override
+    public Admin getAdminByUsername(String username) {
+        LambdaQueryWrapper<Admin> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Admin::getUsername, username);
+        return adminMapper.selectOne(queryWrapper);
+    }
 }

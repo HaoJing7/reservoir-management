@@ -4,6 +4,7 @@ import com.back.reservoirmanagement.entity.Admin;
 import com.back.reservoirmanagement.service.AdminService;
 import com.back.reservoirmanagement.service.TokenService;
 import com.back.reservoirmanagement.vo.Result;
+import com.sun.xml.internal.ws.api.ha.StickyFeature;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -108,4 +109,19 @@ public class AdminController {
         return Result.fail("修改失败");
     }
 
+    /**
+     * 找回密码功能，根据用户名获取用户信息
+     * @Param
+     * @Return
+     **/
+    @GetMapping("/{username}")
+    public Result<?> getUserInfoByUsername(@PathVariable String username) {
+        Admin admin = adminService.getAdminByUsername(username);
+        if (admin != null) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("userInfo", admin);
+            return Result.success(data, "获取成功！");
+        }
+        return Result.fail("无该用户名的用户！");
+    }
 }

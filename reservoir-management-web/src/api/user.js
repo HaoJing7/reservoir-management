@@ -49,3 +49,10 @@ export function updateUser(data) {
     data
   })
 }
+
+export function getUserInfoByUsername(username) {
+  return request({
+    url: `/admin/user/${username}`,
+    method: 'get',
+  })
+}

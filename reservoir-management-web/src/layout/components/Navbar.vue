@@ -11,17 +11,15 @@
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link to="/">
-<!--            个人信息部分自行开发-->
-            <el-dropdown-item>
-              个人信息
-            </el-dropdown-item>
-          </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
-            <el-dropdown-item>github主页</el-dropdown-item>
-          </a>
+          <!--个人信息部分自行开发-->
+          <el-dropdown-item>
+            个人信息
+          </el-dropdown-item>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">注销</span>
+          </el-dropdown-item>
+          <el-dropdown-item divided @click.native="">
+            <span style="display:block;">删除该用户</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -34,6 +32,9 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 
+// TODO 完成个人信息查看部分
+// TODO 完成修改个人信息部分
+// TODO 完成删除用户部分（需要输入问题答案才能进行删除）
 export default {
   components: {
     Breadcrumb,
@@ -51,6 +52,7 @@ export default {
     },
     async logout() {
       await this.$store.dispatch('user/logout')
+      // 跳转到登陆页面
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }

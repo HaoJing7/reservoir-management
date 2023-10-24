@@ -69,8 +69,6 @@ const actions = {
           reject('登陆失败！')
         }
 
-        console.log(data.userInfo)
-
         // 拆解出用户信息
         const { id, username, password, problem, answer } = data.userInfo
 
