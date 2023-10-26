@@ -55,7 +55,7 @@
       <!-- 注册用户先进行校验 -->
       <el-dialog title="检验是否有权限注册管理员" :visible.sync="checkTableVisible" width="400px">
         <el-form label-position="left" :model="checkForm" status-icon :rules="checkRules" ref="ruleForm"
-                 label-width="100px">
+                 label-width="70px">
           <el-form-item label="检验码" prop="checkStr">
             <el-input v-model="checkForm.checkStr" style="color:black;">请输入检验码</el-input>
           </el-form-item>
@@ -65,19 +65,19 @@
 
       <!-- 注册用户，填写用户信息 -->
       <el-dialog title="注册管理员用户" :visible.sync="userTableVisible" width="400px">
-        <el-form id="userForm" :model="userForm">
-          <el-form-item label=" 用户名" :label-width="formLabelWidth" prop="username">
-            <el-input style="color: black" v-model="userForm.username" autocomplete="off"></el-input>
+        <el-form id="userForm" :model="userForm" label-position="left" label-width="55px">
+          <el-form-item label=" 用户名" prop="username">
+            <el-input v-model="userForm.username" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="密 码" :label-width="formLabelWidth" prop="password">
+          <el-form-item label="密 码" prop="password">
             <el-input v-model="userForm.password" autocomplete="off" type="password"></el-input>
           </el-form-item>
           <p style="font-size: 15px">密保内容（用于找回密码）</p>
-          <el-form-item label="问 题" :label-width="formLabelWidth" prop="problem">
-            <el-input v-model="userForm.problem" autocomplete="off" type="password"></el-input>
+          <el-form-item label="问 题" prop="problem">
+            <el-input v-model="userForm.problem" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="答 案" :label-width="formLabelWidth" prop="answer">
-            <el-input v-model="userForm.answer" autocomplete="off" type="password"></el-input>
+          <el-form-item label="答 案" prop="answer">
+            <el-input v-model="userForm.answer" autocomplete="off"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -88,7 +88,7 @@
 
       <!-- 找回密码功能 -->
       <el-dialog title="所需找回的用户名" :visible.sync="retrieveTableVisible" width="400px">
-        <el-form label-position="left" :model="retrieveForm" status-icon ref="ruleForm" label-width="100px">
+        <el-form label-position="left" :model="retrieveForm" status-icon ref="ruleForm" label-width="70px">
           <el-form-item label="用户名" prop="username">
             <el-input v-model="retrieveForm.username" style="color:black;">请输入用户名</el-input>
           </el-form-item>
@@ -174,7 +174,7 @@ export default {
       userTableVisible: false,
       formLabelWidth: '60px',
 
-      // TODO 实现找回密码的功能
+      // 实现找回密码的功能
       retrieveTableVisible: false,
       retrieveForm: {
         username: '',
@@ -230,7 +230,10 @@ export default {
     submitCheck() {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          alert('验证通过！');
+          this.$message({
+            message: '校验通过！',
+            type: 'success'
+          });
           this.checkTableVisible = false;
           this.userTableVisible = true;
         } else {
