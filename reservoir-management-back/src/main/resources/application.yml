@@ -3,7 +3,7 @@ server:
 spring:
   datasource:
     username: root
-    password: tanhao
+    password: 1234
     url: jdbc:mysql://localhost:3306/reservoir_management?serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
 
@@ -11,3 +11,12 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
+
+token:
+  jwt:
+    # 设置jwt签名加密时使用的秘钥
+    user-secret-key: userSKey
+    # 设置jwt签名加密时使用的秘钥
+    user-ttl: 600000 # 10分钟
+    # 设置jwt签名加密时使用的秘钥
+    user-token-name: userToken

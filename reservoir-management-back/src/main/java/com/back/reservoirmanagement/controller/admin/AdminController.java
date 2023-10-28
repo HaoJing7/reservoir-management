@@ -4,7 +4,6 @@ import com.back.reservoirmanagement.entity.Admin;
 import com.back.reservoirmanagement.service.AdminService;
 import com.back.reservoirmanagement.service.TokenService;
 import com.back.reservoirmanagement.vo.Result;
-import com.sun.xml.internal.ws.api.ha.StickyFeature;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
