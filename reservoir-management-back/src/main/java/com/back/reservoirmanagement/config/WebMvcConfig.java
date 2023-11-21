@@ -1,8 +1,7 @@
 package com.back.reservoirmanagement.config;
 
-import com.back.reservoirmanagement.common.json.JacksonObjectMapper;
-import com.back.reservoirmanagement.interceptor.JwtTokenAdminInterceptor;
 import com.back.reservoirmanagement.interceptor.JwtTokenUserInterceptor;
+import com.back.reservoirmanagement.json.JacksonObjectMapper;
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,53 +23,42 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import java.util.List;
 
 @Configuration
-@Slf4j
 @EnableSwagger2
 @EnableKnife4j
+@Slf4j
 public class WebMvcConfig extends WebMvcConfigurationSupport {
 
     @Autowired
-    private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
-
-    @Autowired
     private JwtTokenUserInterceptor jwtTokenUserInterceptor;
-
-    // TODO 修改自定义拦截器
     /**
      * 注册自定义拦截器
      *
      * @param registry
      */
-    /*protected void addInterceptors(InterceptorRegistry registry) {
+    protected void addInterceptors(InterceptorRegistry registry) {
         log.info("开始注册自定义拦截器...");
-        registry.addInterceptor(jwtTokenAdminInterceptor)
-                //.addPathPatterns("/admin/**")
-                .excludePathPatterns("/admin/employee/login");
 
+
+        //用户端
         registry.addInterceptor(jwtTokenUserInterceptor)
-                //.addPathPatterns("/user/**")
-                .excludePathPatterns("/user/user/login")
-                .excludePathPatterns("/user/shop/status");
-    }*/
-
-    /**
-     * 扩展Spring MVC框架的消息转换器
-     * 对后端返回给前端的数据做一个统一的处理
-     * （用于处理日期类型的转换  实体类对应数据库日期类型）
-     * @Param
-     * @Return
-     **/
-    @Override
-    protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-        log.info("消息转换器");
-        //创建一个消息转换器对象
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        //需要为消息转换器设置一个对象转换器，对象转换器可以将Java对象序列化为json数据
-        converter.setObjectMapper(new JacksonObjectMapper());
-        //将自己的消息转化器加入容器中
-        converters.add(0, converter);
+                .addPathPatterns("/app/**")
+//                .excludePathPatterns("/app/user/login");
+                .excludePathPatterns("/app/**");
     }
 
+    /**
+     * 扩展mvc框架的消息转换器
+     * @param converters
+     */
+    @Override
+    protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+        //创建消息转换器对象
+        MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
+        //设置对象转换器，底层使用Jackson将Java对象转为json
+        messageConverter.setObjectMapper(new JacksonObjectMapper());
+        //将上面的消息转换器对象追加到mvc框架的转换器集合中
+        converters.add(0,messageConverter);
+    }
 
     /**
      * 配置静态资源映射

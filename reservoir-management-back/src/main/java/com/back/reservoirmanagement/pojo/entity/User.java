@@ -7,11 +7,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -43,6 +45,9 @@ public class User {
 
     @ApiModelProperty("工作地点")
     private String workPlace;
+
+    @ApiModelProperty("个人头像")
+    private String icon;
 
     @ApiModelProperty("用户创建时间")
     private LocalDateTime createTime;
