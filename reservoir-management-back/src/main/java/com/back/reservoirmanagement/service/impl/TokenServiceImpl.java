@@ -1,6 +1,6 @@
 package com.back.reservoirmanagement.service.impl;
 
-import com.back.reservoirmanagement.entity.Token;
+import com.back.reservoirmanagement.pojo.entity.Token;
 import com.back.reservoirmanagement.mapper.TokenMapper;
 import com.back.reservoirmanagement.service.TokenService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;

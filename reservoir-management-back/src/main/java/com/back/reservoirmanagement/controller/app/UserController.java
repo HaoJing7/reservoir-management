@@ -1,10 +1,9 @@
 package com.back.reservoirmanagement.controller.app;
 
-import com.back.reservoirmanagement.entity.User;
+import com.back.reservoirmanagement.common.result.Result;
+import com.back.reservoirmanagement.pojo.entity.User;
 import com.back.reservoirmanagement.service.UserService;
-import com.back.reservoirmanagement.vo.Result;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +29,7 @@ public class UserController {
     public Result<User> login(@RequestBody User user){
         User userInfo = userService.login(user);
         if (userInfo==null){
-            return Result.fail("登录失败,用户名或密码错误");
+            return Result.error("登录失败,用户名或密码错误");
         }
         return Result.success(userInfo);
     }

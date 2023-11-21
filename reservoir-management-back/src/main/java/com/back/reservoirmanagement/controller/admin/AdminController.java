@@ -1,10 +1,10 @@
 package com.back.reservoirmanagement.controller.admin;
 
-import com.back.reservoirmanagement.entity.Admin;
+import com.back.reservoirmanagement.common.result.Result;
+import com.back.reservoirmanagement.pojo.entity.Admin;
 import com.back.reservoirmanagement.service.AdminService;
 import com.back.reservoirmanagement.service.TokenService;
-import com.back.reservoirmanagement.vo.Result;
-import org.apache.ibatis.annotations.Param;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +18,7 @@ import java.util.Map;
  * 用于处理后台有关管理员的请求
  */
 @RestController
+@Slf4j
 @RequestMapping("/admin/user")
 public class AdminController {
     @Autowired
@@ -37,9 +38,9 @@ public class AdminController {
         if (admin1 != null) {
             // 根据用户id去获取token
             Map<String, Object> data = tokenService.getToken(admin1.getId());
-            return Result.success(data, "登陆成功！");
+            return Result.success(data);
         }
-        return Result.fail("登陆失败！");
+        return Result.error("登陆失败！");
     }
 
     /**
@@ -54,9 +55,9 @@ public class AdminController {
         if (admin != null) {
             Map<String, Object> data = new HashMap<>();
             data.put("userInfo", admin);
-            return Result.success(data, "获取用户信息成功！");
+            return Result.success(data);
         }
-        return Result.fail("获取用户信息失败！");
+        return Result.error("获取用户信息失败！");
     }
 
     /**
@@ -67,7 +68,7 @@ public class AdminController {
     @PostMapping("/logout")
     public Result<?> logout(@RequestHeader("X-Token") String token) {
         tokenService.deleteToken(token);
-        return Result.success("成功退出！");
+        return Result.success();
     }
 
     /**
@@ -78,7 +79,7 @@ public class AdminController {
     @PostMapping
     public Result<?> addAdminUser(@RequestBody Admin admin) {
         adminService.saveOrUpdate(admin);
-        return Result.success("注册成功！");
+        return Result.success();
     }
 
     /**
@@ -91,7 +92,7 @@ public class AdminController {
     @DeleteMapping ("/{id}")
     public Result<?> deleteAdminUser(@PathVariable Integer id) {
         adminService.removeById(id);
-        return Result.success("成功删除账号！");
+        return Result.success();
     }
 
     /**
@@ -103,9 +104,9 @@ public class AdminController {
     public Result<?> updateAdminUser(@RequestBody Admin admin) {
         boolean update = adminService.updateById(admin);
         if (update) {
-            return Result.success("修改成功！");
+            return Result.success();
         }
-        return Result.fail("修改失败");
+        return Result.error("修改失败");
     }
 
     /**
@@ -119,8 +120,8 @@ public class AdminController {
         if (admin != null) {
             Map<String, Object> data = new HashMap<>();
             data.put("userInfo", admin);
-            return Result.success(data, "获取成功！");
+            return Result.success(data);
         }
-        return Result.fail("无该用户名的用户！");
+        return Result.error("无该用户名的用户！");
     }
 }

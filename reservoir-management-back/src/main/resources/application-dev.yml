@@ -1,0 +1,27 @@
+# 开发环境的配置项  如果没有阿里云和redis配置的话可以注释掉
+#  application-dev.yml：本地开发环境
+#  application-test.yml：测试环境
+#  application-prod.yml：生产环境
+#  三个文件存放在application.yml同一目录下，其中application.yml存放公共配置
+
+sky:
+  # 数据库的配置属性
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    host: localhost
+    port: 3306
+    database: reservoir_management
+    username: root
+    password: tanhao
+  # 阿里云的配置属性
+  alioss:
+    endpoint: oss-cn-guangzhou.aliyuncs.com
+    bucket-name: tanhao-bucket
+    access-key-id: LTAI5tDbc3CVnmWPnobddDnc
+    access-key-secret: qGaSw8NEq33VZdVqmlzXM01RWVzjd7
+  # redis的配置属性
+  redis:
+    host: 192.168.198.100
+    port: 6379
+    password: tanhao
+    database: 0

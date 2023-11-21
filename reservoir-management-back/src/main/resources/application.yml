@@ -1,13 +1,59 @@
 server:
   port: 8080
 spring:
+  profiles:
+    active: dev #开发环境
+  # 数据库的配置属性
   datasource:
-    username: root
-    password: tanhao
-    url: jdbc:mysql://localhost:3306/reservoir_management?serverTimezone=UTC
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 使用druid连接池
+    druid:
+      driver-class-name: ${sky.datasource.driver-class-name}
+      url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: ${sky.datasource.username}
+      password: ${sky.datasource.password}
+  # redis的配置属性
+  redis:
+    host: ${sky.redis.host}
+    port: ${sky.redis.port}
+    password: ${sky.redis.password}
+    database: ${sky.redis.database}
 
 mybatis-plus:
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 打印日志配置
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #开启驼峰命名
     map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.back.reservoirmanagement.pojo.entity
+
+# 配置日志信息
+# 日志输出
+
+
+logging:
+  level:
+    com.back.reservoirmanagement.mapper: debug
+    com.back.reservoirmanagement.controller: info
+    com.back.reservoirmanagement.service: info
+
+sky:
+  jwt:
+    # 设置jwt签名加密时使用的秘钥
+    admin-secret-key: itcast
+    # 设置jwt过期时间 （以毫秒为单位，为了测试方便将该时间设置得很长）
+    admin-ttl: 7200000000
+    # 设置前端传递过来的令牌名称
+    admin-token-name: X-Token
+
+    # 设置小程序端的jwt
+    user-secret-key: itheima
+    user-ttl: 7200000000
+    user-token-name: authentication
+
+  # 阿里云的配置属性
+  alioss:
+    endpoint: ${sky.alioss.endpoint}
+    bucket-name: ${sky.alioss.bucket-name}
+    access-key-id: ${sky.alioss.access-key-id}
+    access-key-secret: ${sky.alioss.access-key-secret}

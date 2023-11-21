@@ -1,6 +1,6 @@
 package com.back.reservoirmanagement.service;
 
-import com.back.reservoirmanagement.entity.Token;
+import com.back.reservoirmanagement.pojo.entity.Token;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.Map;

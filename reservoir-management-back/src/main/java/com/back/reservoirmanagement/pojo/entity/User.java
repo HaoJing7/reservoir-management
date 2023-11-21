@@ -1,4 +1,4 @@
-package com.back.reservoirmanagement.entity;
+package com.back.reservoirmanagement.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

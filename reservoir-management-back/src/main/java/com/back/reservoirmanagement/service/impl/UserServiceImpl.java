@@ -1,6 +1,6 @@
 package com.back.reservoirmanagement.service.impl;
 
-import com.back.reservoirmanagement.entity.User;
+import com.back.reservoirmanagement.pojo.entity.User;
 import com.back.reservoirmanagement.mapper.UserMapper;
 import com.back.reservoirmanagement.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
