@@ -38,8 +38,6 @@ mybatis-plus:
 
 # 配置日志信息
 # 日志输出
-
-
 logging:
   level:
     com.back.reservoirmanagement.mapper: debug

@@ -1,9 +1,9 @@
 package com.back.reservoirmanagement.controller.app;
 
+import com.back.reservoirmanagement.common.properties.JwtProperties;
 import com.back.reservoirmanagement.common.result.Result;
 import com.back.reservoirmanagement.pojo.dto.UserLoginDTO;
 import com.back.reservoirmanagement.pojo.entity.User;
-import com.back.reservoirmanagement.properties.JwtProperties;
 import com.back.reservoirmanagement.service.UserService;
 import com.back.reservoirmanagement.utils.JwtUtil;
 import io.swagger.annotations.Api;
