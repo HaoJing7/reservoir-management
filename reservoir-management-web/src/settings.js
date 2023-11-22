@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '水库管理系统',
+  title: 'My Vue template',
 
   /**
    * @type {boolean} true | false

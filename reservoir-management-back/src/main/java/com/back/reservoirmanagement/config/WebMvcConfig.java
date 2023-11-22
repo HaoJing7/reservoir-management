@@ -1,7 +1,8 @@
 package com.back.reservoirmanagement.config;
 
+import com.back.reservoirmanagement.common.json.JacksonObjectMapper;
+import com.back.reservoirmanagement.interceptor.JwtTokenAdminInterceptor;
 import com.back.reservoirmanagement.interceptor.JwtTokenUserInterceptor;
-import com.back.reservoirmanagement.json.JacksonObjectMapper;
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ import java.util.List;
 public class WebMvcConfig extends WebMvcConfigurationSupport {
 
     @Autowired
+    private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
+
+    @Autowired
     private JwtTokenUserInterceptor jwtTokenUserInterceptor;
     /**
      * 注册自定义拦截器
@@ -38,6 +42,10 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
     protected void addInterceptors(InterceptorRegistry registry) {
         log.info("开始注册自定义拦截器...");
 
+        // 管理端
+        registry.addInterceptor(jwtTokenAdminInterceptor)
+                .addPathPatterns("/admin/**")
+                .excludePathPatterns("/admin/user/login");
 
         //用户端
         registry.addInterceptor(jwtTokenUserInterceptor)

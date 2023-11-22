@@ -8,10 +8,11 @@ export function login(data) {
   })
 }
 
-export function getInfo() {
+export function getInfo(token) {
   return request({
     url: '/admin/user/info',
-    method: 'get'
+    method: 'get',
+    params: { token }
   })
 }
 
@@ -19,40 +20,5 @@ export function logout() {
   return request({
     url: '/admin/user/logout',
     method: 'post'
-  })
-}
-
-export function addUser(data) {
-  return request({
-    url: '/admin/user',
-    method: 'post',
-    data
-  })
-}
-
-/**
- * 删除用户，RESTful风格的请求
- * @param id
- * @returns {*}
- */
-export function deleteUser(id) {
-  return request({
-    url: `/admin/user/${id}`,
-    method: 'delete',
-  })
-}
-
-export function updateUser(data) {
-  return request({
-    url: '/admin/user',
-    method: 'put',
-    data
-  })
-}
-
-export function getUserInfoByUsername(username) {
-  return request({
-    url: `/admin/user/${username}`,
-    method: 'get',
   })
 }

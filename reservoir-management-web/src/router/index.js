@@ -31,7 +31,6 @@ import Layout from '@/layout'
  * all roles can be accessed
  */
 export const constantRoutes = [
-
   {
     path: '/login',
     component: () => import('@/views/login/index'),
@@ -81,9 +80,9 @@ export const constantRoutes = [
   {
     path: '/test',
     component: Layout,
-    redirect: '/sys/test1',
-    name: 'sysManage',
-    meta: { title: 'test', icon: 'form' },
+    redirect: '/test/test1',
+    name: 'test',
+    meta: { title: '测试', icon: 'form' },
     children: [
       {
         path: 'test1',
@@ -103,10 +102,7 @@ export const constantRoutes = [
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
-
 ]
-
-
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support

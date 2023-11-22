@@ -3,4 +3,5 @@ build/*.js
 src/assets
 public
 dist
+*
 # 如果加上了 * 的话表示忽略所有文件
