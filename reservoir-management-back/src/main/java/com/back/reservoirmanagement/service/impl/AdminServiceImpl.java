@@ -88,4 +88,20 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
                 .build();
         return adminInfoVO;
     }
+
+    /**
+     * 修改密码
+     * @param password
+     */
+    @Override
+    public void updatePassword(String password) {
+        // 进行md5加密
+        password = DigestUtils.md5DigestAsHex(password.getBytes());
+        // 进行密码修改
+        Admin admin = Admin.builder().password(password).build();
+        Long currentId = BaseContext.getCurrentId();
+        LambdaQueryWrapper<Admin> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Admin::getId, currentId);
+        adminMapper.update(admin, wrapper);
+    }
 }

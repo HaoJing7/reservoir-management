@@ -51,62 +51,40 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '首页', icon: 'dashboard', affix: true}
+      meta: {title: '首页', icon: 'index', affix: true}
     }]
   },
 
+  // 员工路由
   {
-    path: '/sys',
+    path: '/employee',
     component: Layout,
-    redirect: '/sys/user',
-    name: 'sysManage',
-    meta: { title: '系统管理', icon: 'el-icon-s-help' },
+    redirect: '/employee/list',
+    name: 'employee',
+    meta: {title: '员工管理', icon: 'userM'},
     children: [
       {
-        path: 'user',
-        name: 'user',
-        component: () => import('@/views/sys/user.vue'),
-        meta: { title: '用户管理', icon: 'table' }
+        path: "list",
+        name: "employeeList",
+        component: () => import(/* webpackChunkName: "shopTable" */ "@/views/employee/index.vue"),
+        meta: {title: "员工列表",icon: "list"}
       },
       {
-        path: 'role',
-        name: 'role',
-        component: () => import('@/views/sys/role.vue'),
-        meta: { title: '角色管理', icon: 'tree' }
-      }
-    ]
-  },
-
-  {
-    path: '/test',
-    component: Layout,
-    redirect: '/test/test1',
-    name: 'test',
-    meta: { title: '测试', icon: 'form' },
-    children: [
-      {
-        path: 'test1',
-        name: 'test1',
-        component: () => import('@/views/test/test1.vue'),
-        meta: { title: 'test1', icon: 'table' }
+        path: "add",
+        name: "employeeAdd",
+        component: () => import(/* webpackChunkName: "shopTable" */ "@/views/employee/AddUser.vue"),
+        meta: {title: "添加员工",icon: "add"}
       },
-      {
-        path: 'test2',
-        name: 'test2',
-        component: () => import('@/views/test/test2.vue'),
-        meta: { title: 'test2', icon: 'tree' }
-      },
-
     ]
   },
 
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  {path: '*', redirect: '/404', hidden: true}
 ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({y: 0}),
   routes: constantRoutes
 })
 

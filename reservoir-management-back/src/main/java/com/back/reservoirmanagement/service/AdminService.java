@@ -10,4 +10,6 @@ public interface AdminService extends IService<Admin> {
     Admin login(UserLoginDTO userLoginDTO);
 
     AdminInfoVO getInfoById();
+
+    void updatePassword(String password);
 }

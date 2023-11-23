@@ -12,7 +12,7 @@ export function getInfo(token) {
   return request({
     url: '/admin/user/info',
     method: 'get',
-    params: { token }
+    params: {token}
   })
 }
 
@@ -22,3 +22,24 @@ export function logout() {
     method: 'post'
   })
 }
+
+/**
+ * 修改密码
+ */
+export function updatePwd(password) {
+  return request({
+    url: '/admin/user/password',
+    method: 'put',
+    params: {password}
+  })
+}
+
+// TODO 员工列表
+/**
+ * 查询管理员列表
+ */
+
+// TODO 添加员工
+/**
+ * 添加管理员
+ */

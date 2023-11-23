@@ -67,4 +67,24 @@ public class AdminController {
         return Result.success();
     }
 
+    /**
+     * 修改密码
+     * @param password
+     * @return
+     */
+    @PutMapping("/password")
+    public Result<?> updatePassword(String password) {
+        adminService.updatePassword(password);
+        return Result.success();
+    }
+
+    // TODO 添加员工
+    /**
+     * 添加管理员
+     */
+    @PostMapping
+    public Result<?> add() {
+
+        return Result.success();
+    }
 }

@@ -11,30 +11,100 @@
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link to="/">
-<!--            个人信息部分自行开发-->
+<!--          <router-link to="/">
             <el-dropdown-item>
-              个人信息
+              首页
             </el-dropdown-item>
-          </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
-            <el-dropdown-item>github主页</el-dropdown-item>
-          </a>
+          </router-link>-->
+          <el-dropdown-item divided @click.native="handlePwd">
+            <span style="display:block;">修改密码</span>
+          </el-dropdown-item>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">注销</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+    <el-dialog
+      title="修改密码"
+      :visible.sync="dialogFormVisible"
+      width="568px"
+      class="pwdCon"
+      @close="handlePwdClose()"
+    >
+      <el-form :model="passwordForm" label-width="85px" :rules="rules" ref="form">
+        <el-form-item label="原密码：" prop="oldPassword">
+          <el-input
+            v-model="passwordForm.oldPassword"
+            type="password"
+            placeholder="请输入"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="新密码：" prop="newPassword">
+          <el-input
+            v-model="passwordForm.newPassword"
+            type="password"
+            placeholder="6 - 20位密码，数字或字母，区分大小写"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="确认：" prop="affirmPassword">
+          <el-input
+            v-model="passwordForm.affirmPassword"
+            type="password"
+            placeholder="请再输入一遍新密码"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="handlePwdClose()">取 消</el-button>
+        <el-button type="primary" @click="handleSave()">保 存</el-button>
+      </div>
+    </el-dialog>
   </div>
+
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import {updatePwd} from "@/api/user";
 
 export default {
+  data() {
+    const validatePwd = (rule, value, callback) => {
+      const reg = /^[0-9A-Za-z]{6,20}$/
+      if (!value) {
+        callback(new Error('请输入'))
+      } else if (!reg.test(value)) {
+        callback(new Error('6 - 20位密码，数字或字母，区分大小写'))
+      } else {
+        callback()
+      }
+    }
+    const validatePass2 = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.passwordForm.newPassword) {
+        callback(new Error('密码不一致，请重新输入密码'))
+      } else {
+        callback()
+      }
+    }
+    return {
+      passwordForm: {
+        oldPassword: '',
+        newPassword: '',
+        affirmPassword: '',
+      },
+      rules: {
+        oldPassword: [{required: true, validator: validatePwd, trigger: 'blur'}],
+        newPassword: [{required: true, validator: validatePwd, trigger: 'blur'}],
+        affirmPassword: [{required: true, validator: validatePass2, trigger: 'blur'}],
+      },
+      dialogFormVisible: false,
+    }
+  },
   components: {
     Breadcrumb,
     Hamburger
@@ -52,10 +122,55 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    handlePwd() {
+      this.dialogFormVisible = true;
+      console.log("修改密码");
+    },
+    handlePwdClose() {
+      this.passwordForm.oldPassword = '';
+      this.passwordForm.newPassword = '';
+      this.passwordForm.affirmPassword = '';
+      this.dialogFormVisible = false;
+    },
+    handleSave(){
+      this.$refs.form.validate (valid => {
+        if (valid) {
+          console.log("修改密码");
+          updatePwd(this.passwordForm.newPassword).then(response => {
+            this.handlePwdClose();
+          })
+        } else {
+          console.log('error submit!!');
+          return false
+        }
+      })
     }
   }
 }
 </script>
+
+<style lang="scss">
+.navbar {
+  .pwdCon {
+    .el-dialog__body {
+      padding: 60px 100px 0;
+    }
+    .el-input__inner {
+      padding: 0 12px;
+    }
+    .el-form-item {
+      margin-bottom: 26px;
+    }
+    .el-form-item__label {
+      text-align: left;
+    }
+    .el-dialog__footer {
+      padding-top: 14px;
+    }
+  }
+}
+</style>
 
 <style lang="scss" scoped>
 .navbar {
