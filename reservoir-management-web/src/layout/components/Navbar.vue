@@ -1,112 +1,113 @@
 <template>
   <div class="navbar">
-    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar"/>
+    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
-    <breadcrumb class="breadcrumb-container"/>
+    <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img src="@/assets/avatar.png" class="user-avatar">
-          <i class="el-icon-caret-bottom"/>
+          <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <!--个人信息部分自行开发-->
-          <el-dropdown-item @click.native="userInfoVisible=true;">
-            个人信息
+<!--          <router-link to="/">
+            <el-dropdown-item>
+              首页
+            </el-dropdown-item>
+          </router-link>-->
+          <el-dropdown-item divided @click.native="handlePwd">
+            <span style="display:block;">修改密码</span>
           </el-dropdown-item>
-
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">注销</span>
           </el-dropdown-item>
-
-          <!-- 删除该用户功能的开发（需要先检验是否能删除） -->
-          <el-dropdown-item divided @click.native="inputAnswerTableVisible=true;inputAnswer='';">
-            <span style="display:block;">删除该用户</span>
-          </el-dropdown-item>
-
         </el-dropdown-menu>
       </el-dropdown>
-
-      <!-- 删除账号时回答密保问题 -->
-      <el-dialog title="回答密保问题" :visible.sync="inputAnswerTableVisible" width="400px">
-        <p>问题：{{ $store.state.user.problem }}</p>
-        <p>答案：</p>
-        <el-input v-model="inputAnswer" placeholder="请输入答案" clearable style="background-color: #eff5f5"></el-input>
-        <el-button type="primary" @click="checkAnswer" style="margin-top: 10px">确认答案</el-button>
-      </el-dialog>
-
-      <!-- 个人信息 -->
-      <el-dialog :visible.sync="userInfoVisible" width="400px">
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span><b style="font-size: 15px">个人信息</b></span>
-            <el-button style="float: right; padding: 3px 0" type="text" @click="inputAnswerTableVisible=true;inputAnswer2='';">修改个人信息</el-button>
-          </div>
-          <div>账号：{{ $store.state.user.name }}</div>
-          <div>密码：{{ $store.state.user.password }}</div>
-          <div>密保问题：{{ $store.state.user.problem }}</div>
-          <div>答案：*********</div>
-        </el-card>
-      </el-dialog>
-      <!-- 个人信息修改 -->
-      <el-dialog title="个人信息修改" :visible.sync="userFormVisible">
-        <el-form :model="userForm">
-          <el-form-item label="用户名" label-width="120px">
-            <el-input v-model="userForm.username" disabled autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="密码" label-width="120px">
-            <el-input v-model="userForm.password" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="密保问题" label-width="120px">
-            <el-input v-model="userForm.problem" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="答案" label-width="120px">
-            <el-input v-model="userForm.answer" autocomplete="off"></el-input>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="userFormVisible = false;userForm={};">取 消</el-button>
-          <el-button type="primary" @click="updateUserInfo">确 定</el-button>
-        </div>
-      </el-dialog>
-
-
     </div>
+    <el-dialog
+      title="修改密码"
+      :visible.sync="dialogFormVisible"
+      width="568px"
+      class="pwdCon"
+      @close="handlePwdClose()"
+    >
+      <el-form :model="passwordForm" label-width="85px" :rules="rules" ref="form">
+        <el-form-item label="原密码：" prop="oldPassword">
+          <el-input
+            v-model="passwordForm.oldPassword"
+            type="password"
+            placeholder="请输入"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="新密码：" prop="newPassword">
+          <el-input
+            v-model="passwordForm.newPassword"
+            type="password"
+            placeholder="6 - 20位密码，数字或字母，区分大小写"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="确认：" prop="affirmPassword">
+          <el-input
+            v-model="passwordForm.affirmPassword"
+            type="password"
+            placeholder="请再输入一遍新密码"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="handlePwdClose()">取 消</el-button>
+        <el-button type="primary" @click="handleSave()">保 存</el-button>
+      </div>
+    </el-dialog>
   </div>
+
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import {deleteUser, updateUser} from "@/api/user";
+import {updatePwd} from "@/api/user";
 
-//完成个人信息查看部分
-// 完成修改个人信息部分
-// 完成删除用户部分（需要输入问题答案才能进行删除）
 export default {
+  data() {
+    const validatePwd = (rule, value, callback) => {
+      const reg = /^[0-9A-Za-z]{6,20}$/
+      if (!value) {
+        callback(new Error('请输入'))
+      } else if (!reg.test(value)) {
+        callback(new Error('6 - 20位密码，数字或字母，区分大小写'))
+      } else {
+        callback()
+      }
+    }
+    const validatePass2 = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.passwordForm.newPassword) {
+        callback(new Error('密码不一致，请重新输入密码'))
+      } else {
+        callback()
+      }
+    }
+    return {
+      passwordForm: {
+        oldPassword: '',
+        newPassword: '',
+        affirmPassword: '',
+      },
+      rules: {
+        oldPassword: [{required: true, validator: validatePwd, trigger: 'blur'}],
+        newPassword: [{required: true, validator: validatePwd, trigger: 'blur'}],
+        affirmPassword: [{required: true, validator: validatePass2, trigger: 'blur'}],
+      },
+      dialogFormVisible: false,
+    }
+  },
   components: {
     Breadcrumb,
     Hamburger
-  },
-  data() {
-    return {
-      // 删除用户验证
-      inputAnswerTableVisible: false,
-      inputAnswer: '',
-      // 用户详细信息
-      userInfoVisible: false,
-      inputAnswer2: '',
-      userFormVisible: false,
-      userForm: {
-        id: '',
-        username: '',
-        password: '',
-        problem: '',
-        answer: ''
-      },
-    }
   },
   computed: {
     ...mapGetters([
@@ -120,45 +121,56 @@ export default {
     },
     async logout() {
       await this.$store.dispatch('user/logout')
-      // 跳转到登陆页面
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     },
-    // 判断删除用户的回答是否正确
-    checkAnswer() {
-      if (this.inputAnswer === this.$store.state.user.answer) {
-        // 密码正确之后删除用户
-        this.inputAnswerTableVisible = false;
-        if (this.inputAnswer2 === null) {
-          // 删除用户验证通过
-          deleteUser(this.$store.state.user.id).then(response => {
-            this.$message.success("删除成功！");
-            this.logout();
+    handlePwd() {
+      this.dialogFormVisible = true;
+      console.log("修改密码");
+    },
+    handlePwdClose() {
+      this.passwordForm.oldPassword = '';
+      this.passwordForm.newPassword = '';
+      this.passwordForm.affirmPassword = '';
+      this.dialogFormVisible = false;
+    },
+    handleSave(){
+      this.$refs.form.validate (valid => {
+        if (valid) {
+          console.log("修改密码");
+          updatePwd(this.passwordForm.newPassword).then(response => {
+            this.handlePwdClose();
           })
         } else {
-          // 修改用户详细验证通过
-          this.userFormVisible = true;
-          this.userForm={};
+          console.log('error submit!!');
+          return false
         }
-      } else {
-        this.$message.error('回答错误！');
-      }
-    },
-    // 修改用户
-    updateUserInfo() {
-      this.userForm.id = this.$store.state.user.id;
-      this.userForm.username = this.$store.state.user.name;
-      updateUser(this.userForm).then(response => {
-        this.$message.success('修改成功！');
-        this.userFormVisible = false;
-        this.userInfoVisible = false;
-        this.$store.dispatch('user/getInfo').then();
       })
     }
-
-
   }
 }
 </script>
+
+<style lang="scss">
+.navbar {
+  .pwdCon {
+    .el-dialog__body {
+      padding: 60px 100px 0;
+    }
+    .el-input__inner {
+      padding: 0 12px;
+    }
+    .el-form-item {
+      margin-bottom: 26px;
+    }
+    .el-form-item__label {
+      text-align: left;
+    }
+    .el-dialog__footer {
+      padding-top: 14px;
+    }
+  }
+}
+</style>
 
 <style lang="scss" scoped>
 .navbar {
@@ -166,7 +178,7 @@ export default {
   overflow: hidden;
   position: relative;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
+  box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
   .hamburger-container {
     line-height: 46px;
@@ -174,7 +186,7 @@ export default {
     float: left;
     cursor: pointer;
     transition: background .3s;
-    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color:transparent;
 
     &:hover {
       background: rgba(0, 0, 0, .025)

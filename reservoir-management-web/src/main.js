@@ -10,7 +10,7 @@ import '@/styles/index.scss' // global css
 
 import App from './App'
 import store from './store'
-import router from './router'  // 如果下面有index.js文件则会默认读取index.js文件
+import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control

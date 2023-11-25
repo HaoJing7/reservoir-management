@@ -1,9 +1,12 @@
 package com.back.reservoirmanagement.controller.admin;
 
+import com.back.reservoirmanagement.common.constant.JwtClaimsConstant;
+import com.back.reservoirmanagement.common.properties.JwtProperties;
 import com.back.reservoirmanagement.common.result.Result;
+import com.back.reservoirmanagement.common.utils.JwtUtil;
+import com.back.reservoirmanagement.pojo.dto.UserLoginDTO;
 import com.back.reservoirmanagement.pojo.entity.Admin;
 import com.back.reservoirmanagement.service.AdminService;
-import com.back.reservoirmanagement.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,106 +25,66 @@ import java.util.Map;
 @RequestMapping("/admin/user")
 public class AdminController {
     @Autowired
-    AdminService adminService;
+    private AdminService adminService;
 
     @Autowired
-    TokenService tokenService;
+    private JwtProperties jwtProperties;
 
     /**
-     * 登陆功能，返回token，token和用户id唯一对应
-     * @Param 只有账号和密码的Admin对象
-     * @Return
-     **/
+     * 管理员登陆
+     */
     @PostMapping("/login")
-    public Result<?> login(@RequestBody Admin admin) {
-        Admin admin1 = adminService.login(admin);
-        if (admin1 != null) {
-            // 根据用户id去获取token
-            Map<String, Object> data = tokenService.getToken(admin1.getId());
-            return Result.success(data);
-        }
-        return Result.error("登陆失败！");
+    public Result<?> login(@RequestBody UserLoginDTO userLoginDTO) {
+        Admin admin = adminService.login(userLoginDTO);
+
+        //登录成功后，生成jwt令牌（把用户id放进token中）
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(JwtClaimsConstant.EMP_ID, admin.getId());
+        String token = JwtUtil.createJWT(
+                jwtProperties.getAdminSecretKey(),
+                jwtProperties.getAdminTtl(),
+                claims);
+
+        log.info("登陆成功！用户id为：{}", admin.getId());
+        Map<String, Object> data = new HashMap<>();
+        data.put("token", token);
+        return Result.success(data);
     }
 
     /**
-     * 获取用户信息，此时前端还不知道用户id，因此需要使用token来获取id
-     * @Param
-     * @Return
-     **/
+     * 获得管理员信息
+     */
     @GetMapping("/info")
-    public Result<?> getInfo(@RequestHeader("X-Token") String token) {
-        Integer userId = tokenService.getUserIdByToken(token);
-        Admin admin = adminService.getById(userId);
-        if (admin != null) {
-            Map<String, Object> data = new HashMap<>();
-            data.put("userInfo", admin);
-            return Result.success(data);
-        }
-        return Result.error("获取用户信息失败！");
+    public Result<?> getInfo() {
+        return Result.success(adminService.getInfoById());
     }
 
     /**
-     * 注销，此时要删除token
-     * @Param
-     * @Return
-     **/
+     * 退出登陆
+     */
     @PostMapping("/logout")
-    public Result<?> logout(@RequestHeader("X-Token") String token) {
-        tokenService.deleteToken(token);
+    public Result<?> logout() {
         return Result.success();
     }
 
     /**
-     * 注册管理员用户，此时admin对象是没有id的，自增主键
-     * @Param
-     * @Return
-     **/
+     * 修改密码
+     * @param password
+     * @return
+     */
+    @PutMapping("/password")
+    public Result<?> updatePassword(String password) {
+        adminService.updatePassword(password);
+        return Result.success();
+    }
+
+    // TODO 添加员工
+    /**
+     * 添加管理员
+     */
     @PostMapping
-    public Result<?> addAdminUser(@RequestBody Admin admin) {
-        adminService.saveOrUpdate(admin);
+    public Result<?> add() {
+
         return Result.success();
-    }
-
-    /**
-     * 根据用户id删除用户，然后前端再调用注销就会把token删除，不用在这里删
-     * @Param
-     * @Return
-     **/
-    //这个请求是/admin/user/1，把请求参数拼接在路径中 RESTful风格
-    // 而不是/admin/user?id=1(id作为param)
-    @DeleteMapping ("/{id}")
-    public Result<?> deleteAdminUser(@PathVariable Integer id) {
-        adminService.removeById(id);
-        return Result.success();
-    }
-
-    /**
-     * 修改用户信息，用户id在表中是hidden的
-     * @Param
-     * @Return
-     **/
-    @PutMapping
-    public Result<?> updateAdminUser(@RequestBody Admin admin) {
-        boolean update = adminService.updateById(admin);
-        if (update) {
-            return Result.success();
-        }
-        return Result.error("修改失败");
-    }
-
-    /**
-     * 找回密码功能，根据用户名获取用户信息
-     * @Param
-     * @Return
-     **/
-    @GetMapping("/{username}")
-    public Result<?> getUserInfoByUsername(@PathVariable String username) {
-        Admin admin = adminService.getAdminByUsername(username);
-        if (admin != null) {
-            Map<String, Object> data = new HashMap<>();
-            data.put("userInfo", admin);
-            return Result.success(data);
-        }
-        return Result.error("无该用户名的用户！");
     }
 }

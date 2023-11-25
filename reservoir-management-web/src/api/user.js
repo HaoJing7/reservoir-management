@@ -8,10 +8,11 @@ export function login(data) {
   })
 }
 
-export function getInfo() {
+export function getInfo(token) {
   return request({
     url: '/admin/user/info',
-    method: 'get'
+    method: 'get',
+    params: {token}
   })
 }
 
@@ -22,37 +23,23 @@ export function logout() {
   })
 }
 
-export function addUser(data) {
-  return request({
-    url: '/admin/user',
-    method: 'post',
-    data
-  })
-}
-
 /**
- * 删除用户，RESTful风格的请求
- * @param id
- * @returns {*}
+ * 修改密码
  */
-export function deleteUser(id) {
+export function updatePwd(password) {
   return request({
-    url: `/admin/user/${id}`,
-    method: 'delete',
-  })
-}
-
-export function updateUser(data) {
-  return request({
-    url: '/admin/user',
+    url: '/admin/user/password',
     method: 'put',
-    data
+    params: {password}
   })
 }
 
-export function getUserInfoByUsername(username) {
-  return request({
-    url: `/admin/user/${username}`,
-    method: 'get',
-  })
-}
+// TODO 员工列表
+/**
+ * 查询管理员列表
+ */
+
+// TODO 添加员工
+/**
+ * 添加管理员
+ */
