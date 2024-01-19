@@ -2,6 +2,7 @@
   <div :class="{'has-logo':showLogo}">
     <logo v-if="showLogo" :collapse="isCollapse" />
     <el-scrollbar wrap-class="scrollbar-wrapper">
+      <!-- 左侧菜单 -->
       <el-menu
         :default-active="activeMenu"
         :collapse="isCollapse"
@@ -12,6 +13,7 @@
         :collapse-transition="false"
         mode="vertical"
       >
+        <!-- 循环路由信息 -->
         <sidebar-item v-for="route in routes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>
     </el-scrollbar>
@@ -30,7 +32,9 @@ export default {
     ...mapGetters([
       'sidebar'
     ]),
+    // 路由信息的计算属性
     routes() {
+      // 返回所有的路由信息
       return this.$router.options.routes
     },
     activeMenu() {

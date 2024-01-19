@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '水库管理系统',
+  title: '人力资源后台管理系统',
 
   /**
    * @type {boolean} true | false
@@ -12,5 +12,5 @@ module.exports = {
    * @type {boolean} true | false
    * @description Whether show the logo in sidebar
    */
-  sidebarLogo: false
+  sidebarLogo: true
 }

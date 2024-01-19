@@ -1,15 +1,33 @@
-// sidebar
-$menuText:#bfcbd9;
-$menuActiveText:#409EFF;
-$subMenuActiveText:#f4f4f5; //https://github.com/ElemeFE/element/issues/12951
+// base color
+$blue: #001529; // 基础色调
+$light-blue:#001529;
+$red:#C03639;
+$pink: #E65D6E;
+$green: #30B08F;
+$orange:#fa7c4d;
+$tiffany: #4AB7BD;
+$yellow:#FEC171;
+$panGreen: #30B08F;
+$green1: #44b549;
+$menuFontColor: #A7ACBA;   // 导航文字颜色
+$fontColor: #383C4E; // 标题文本颜色
+$secondFontColor: #697086; // 辅助文字颜色
+$hoverFontColor: #fff; // hover辅助颜色
 
-$menuBg:#304156;
-$menuHover:#263445;
+// sidebar
+$menuText:#ffffff;
+$menuActiveText:#409EFF;
+$subMenuActiveText:#f4f4f5; // https://github.com/ElemeFE/element/issues/12951
+
+$menuBg: transparent;
+$menuHover:#ffffff;
+
+
 
 $subMenuBg:#1f2d3d;
 $subMenuHover:#001528;
 
-$sideBarWidth: 210px;
+$sideBarWidth: 145px;
 
 // the :export directive is the magic sauce for webpack
 // https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
@@ -22,4 +40,25 @@ $sideBarWidth: 210px;
   subMenuBg: $subMenuBg;
   subMenuHover: $subMenuHover;
   sideBarWidth: $sideBarWidth;
+}
+
+$cl-0: #cfeffe;
+$cl-1: #a8f8bb;
+$cl-2: #fedbd7;
+$cl-3: #ffe8c9;
+$cl-4: #fdfcd5;
+$cl-10: #25a49e;
+
+// //sidebar
+// $menuBg:#001529;
+// $subMenuBg:#001529;
+// $menuHover:#001529;
+/* 改变 icon 字体路径变量，必需 */
+// $--font-path: '~element-ui/lib/theme-chalk/fonts';
+// $--border-radius-base: 2px;
+
+// @import "~element-ui/packages/theme-chalk/src/index";
+
+.el-input__inner, .el-button {
+  border-radius: 2px;
 }

@@ -2,44 +2,25 @@ import request from '@/utils/request'
 
 export function login(data) {
   return request({
-    url: '/admin/user/login',
+    url: '/sys/login',
     method: 'post',
     data
   })
 }
 
-export function getInfo(token) {
+export function getUserInfo() {
   return request({
-    url: '/admin/user/info',
-    method: 'get',
-    params: {token}
-  })
-}
-
-export function logout() {
-  return request({
-    url: '/admin/user/logout',
-    method: 'post'
+    url: '/sys/profile'
   })
 }
 
 /**
- * 修改密码
- */
-export function updatePwd(password) {
+ * 更新密码
+ * **/
+export function updatePassword(data) {
   return request({
-    url: '/admin/user/password',
+    url: '/sys/user/updatePass',
     method: 'put',
-    params: {password}
+    data
   })
 }
-
-// TODO 员工列表
-/**
- * 查询管理员列表
- */
-
-// TODO 添加员工
-/**
- * 添加管理员
- */

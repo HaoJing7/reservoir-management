@@ -1,107 +1,50 @@
-import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { resetRouter } from '@/router'
+import { login, getUserInfo } from '@/api/user'
+const state = {
+  token: getToken(), // 从缓存中读取初始值
+  userInfo: {} // 存储用户基本资料状态
+}
 
-const getDefaultState = () => {
-  return {
-    token: getToken(),
-    name: '',
-    username: '',
-    id: '',
+const mutations = {
+  setToken(state, token) {
+    state.token = token
+    // 同步到缓存
+    setToken(token)
+  },
+  removeToken(state) {
+    // 删除Vuex的token
+    state.token = null
+    removeToken()
+  },
+  setUserInfo(state, userInfo) {
+    state.userInfo = userInfo
   }
 }
 
-
-const state = getDefaultState()
-
-
-
-const mutations = {
-  RESET_STATE: (state) => {
-    Object.assign(state, getDefaultState())
-  },
-  SET_TOKEN: (state, token) => {
-    state.token = token
-  },
-  SET_NAME: (state, name) => {
-    state.name = name
-  },
-  SET_USERNAME: (state, username) => {
-    state.username = username
-  },
-  SET_ID: (state, id) => {
-    state.id = id
-  },
-}
-
-
 const actions = {
-  // user login
-  login({ commit }, userInfo) {
-    const { username, password } = userInfo
-    return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
+  // context上下文，传入参数
+  async login(context, data) {
+    console.log(data)
+    // todo: 调用登录接口
+    const token = await login(data)
+    // 返回一个token 123456
+    context.commit('setToken', token)
   },
-
-  // get user info
-  getInfo({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
-
-        if (!data) {
-          reject('Verification failed, please Login again.')
-        }
-
-        const { name,  username, id} = data
-
-        commit('SET_NAME', name)
-        commit('SET_USERNAME', username)
-        commit('SET_ID', id)
- //       commit('SET_AVATAR', 'src/assets/avatar.png')
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
-    })
+  // 获取用户的基本资料
+  async getUserInfo(context) {
+    const result = await getUserInfo()
+    context.commit('setUserInfo', result)
   },
-
-  // user logout
-  logout({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        removeToken() // must remove  token  first
-        resetRouter()
-        commit('RESET_STATE')
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
-
-  // remove token
-  resetToken({ commit }) {
-    return new Promise(resolve => {
-      removeToken() // must remove  token  first
-      commit('RESET_STATE')
-      resolve()
-    })
+  // 退出登录的action
+  logout(context) {
+    context.commit('removeToken') // 删除token
+    context.commit('setUserInfo', {}) // 设置用户信息为空对象
   }
 }
 
 export default {
-  namespaced: true,
+  namespaced: true, // 开启命名空间
   state,
   mutations,
   actions
 }
-

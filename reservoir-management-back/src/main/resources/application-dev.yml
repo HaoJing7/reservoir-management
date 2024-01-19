@@ -1,0 +1,21 @@
+sky:
+  # 数据库的配置属性
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    host: localhost
+    port: 3306
+    database: reservoir_management
+    username: root
+    password: tanhao
+  # 阿里云的配置属性
+  alioss:
+    endpoint: oss-cn-guangzhou.aliyuncs.com
+    bucket-name: tanhao-bucket
+    access-key-id: LTAI5tDbc3CVnmWPnobddDnc
+    access-key-secret: qGaSw8NEq33VZdVqmlzXM01RWVzjd7
+  # redis的配置属性
+  redis:
+    host: 192.168.198.100
+    port: 6379
+    password: tanhao
+    database: 0

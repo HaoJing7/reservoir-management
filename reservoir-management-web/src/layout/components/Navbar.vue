@@ -7,170 +7,140 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img src="@/assets/avatar.png" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
+          <!-- 头像 -->
+          <img v-if="avatar" :src="avatar" class="user-avatar">
+          <span v-else class="username">{{ name?.charAt(0) }}</span>
+          <!-- 用户名称 -->
+          <span class="name">{{ name }}</span>
+          <!-- 图标 -->
+          <i class="el-icon-setting" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
-<!--          <router-link to="/">
+          <router-link to="/">
             <el-dropdown-item>
               首页
             </el-dropdown-item>
-          </router-link>-->
-          <el-dropdown-item divided @click.native="handlePwd">
-            <span style="display:block;">修改密码</span>
-          </el-dropdown-item>
-          <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">注销</span>
+          </router-link>
+          <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
+            <el-dropdown-item>项目地址</el-dropdown-item>
+          </a>
+          <!-- prevent阻止默认事件 -->
+          <a target="_blank" @click.prevent="updatePassword">
+            <el-dropdown-item>修改密码</el-dropdown-item>
+          </a>
+          <!-- native事件修饰符 -->
+          <!-- 注册组件的根元素的原生事件 -->
+          <el-dropdown-item @click.native="logout">
+            <span style="display:block;">登出</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-    <el-dialog
-      title="修改密码"
-      :visible.sync="dialogFormVisible"
-      width="568px"
-      class="pwdCon"
-      @close="handlePwdClose()"
-    >
-      <el-form :model="passwordForm" label-width="85px" :rules="rules" ref="form">
-        <el-form-item label="原密码：" prop="oldPassword">
-          <el-input
-            v-model="passwordForm.oldPassword"
-            type="password"
-            placeholder="请输入"
-          ></el-input>
+    <!-- 放置dialog -->
+    <!-- sync- 可以接收子组件传过来的事件和值 -->
+    <el-dialog width="500px" title="修改密码" :visible.sync="showDialog" @close="btnCancel">
+      <!-- 放置表单 -->
+      <el-form ref="passForm" label-width="120px" :model="passForm" :rules="rules">
+        <el-form-item label="旧密码" prop="oldPassword">
+          <el-input v-model="passForm.oldPassword" show-password size="small" />
         </el-form-item>
-        <el-form-item label="新密码：" prop="newPassword">
-          <el-input
-            v-model="passwordForm.newPassword"
-            type="password"
-            placeholder="6 - 20位密码，数字或字母，区分大小写"
-          ></el-input>
+        <el-form-item label="新密码" prop="newPassword">
+          <el-input v-model="passForm.newPassword" show-password size="small" />
         </el-form-item>
-        <el-form-item label="确认：" prop="affirmPassword">
-          <el-input
-            v-model="passwordForm.affirmPassword"
-            type="password"
-            placeholder="请再输入一遍新密码"
-          ></el-input>
+        <el-form-item label="重复密码" prop="confirmPassword">
+          <el-input v-model="passForm.confirmPassword" show-password size="small" />
+        </el-form-item>
+        <el-form-item>
+          <el-button size="mini" type="primary" @click="btnOK">确认修改</el-button>
+          <el-button size="mini" @click="btnCancel">取消</el-button>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="handlePwdClose()">取 消</el-button>
-        <el-button type="primary" @click="handleSave()">保 存</el-button>
-      </div>
     </el-dialog>
   </div>
-
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import {updatePwd} from "@/api/user";
+import { updatePassword } from '@/api/user'
 
 export default {
-  data() {
-    const validatePwd = (rule, value, callback) => {
-      const reg = /^[0-9A-Za-z]{6,20}$/
-      if (!value) {
-        callback(new Error('请输入'))
-      } else if (!reg.test(value)) {
-        callback(new Error('6 - 20位密码，数字或字母，区分大小写'))
-      } else {
-        callback()
-      }
-    }
-    const validatePass2 = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error('请再次输入密码'))
-      } else if (value !== this.passwordForm.newPassword) {
-        callback(new Error('密码不一致，请重新输入密码'))
-      } else {
-        callback()
-      }
-    }
-    return {
-      passwordForm: {
-        oldPassword: '',
-        newPassword: '',
-        affirmPassword: '',
-      },
-      rules: {
-        oldPassword: [{required: true, validator: validatePwd, trigger: 'blur'}],
-        newPassword: [{required: true, validator: validatePwd, trigger: 'blur'}],
-        affirmPassword: [{required: true, validator: validatePass2, trigger: 'blur'}],
-      },
-      dialogFormVisible: false,
-    }
-  },
   components: {
     Breadcrumb,
     Hamburger
   },
+  data() {
+    return {
+      showDialog: false, // 控制弹层的显示和隐藏
+      passForm: {
+        oldPassword: '', // 旧密码
+        newPassword: '', // 新密码
+        confirmPassword: '' // 确认密码字段
+      },
+      rules: {
+        oldPassword: [{ required: true, message: '旧密码不能为空', trigger: 'blur' }], // 旧密码
+        newPassword: [{ required: true, message: '新密码不能为空', trigger: 'blur' }, {
+          trigger: 'blur',
+          min: 6,
+          max: 16,
+          message: '新密码的长度为6-16位之间'
+        }], // 新密码
+        confirmPassword: [{ required: true, message: '重复密码不能为空', trigger: 'blur' }, {
+          trigger: 'blur',
+          validator: (rule, value, callback) => {
+            // value
+            if (this.passForm.newPassword === value) {
+              callback()
+            } else {
+              callback(new Error('重复密码和新密码输入不一致'))
+            }
+          }
+        }] // 确认密码字段
+      }
+    }
+  },
   computed: {
+    // 引入头像和用户名称
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'name'
     ])
   },
   methods: {
+    updatePassword() {
+      // 弹出层
+      this.showDialog = true // 显示弹层
+    },
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
+      // 调用退出登录的action
       await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      this.$router.push('/login')
     },
-    handlePwd() {
-      this.dialogFormVisible = true;
-      console.log("修改密码");
-    },
-    handlePwdClose() {
-      this.passwordForm.oldPassword = '';
-      this.passwordForm.newPassword = '';
-      this.passwordForm.affirmPassword = '';
-      this.dialogFormVisible = false;
-    },
-    handleSave(){
-      this.$refs.form.validate (valid => {
-        if (valid) {
-          console.log("修改密码");
-          updatePwd(this.passwordForm.newPassword).then(response => {
-            this.handlePwdClose();
-          })
-        } else {
-          console.log('error submit!!');
-          return false
+    // 确定
+    btnOK() {
+      this.$refs.passForm.validate(async isOK => {
+        if (isOK) {
+          // 调用接口
+          await updatePassword(this.passForm)
+          this.$message.success('修改密码成功')
+          this.btnCancel()
         }
       })
+    },
+    // 取消
+    btnCancel() {
+      this.$refs.passForm.resetFields() // 重置表单
+      // 关闭弹层
+      this.showDialog = false
     }
   }
 }
 </script>
-
-<style lang="scss">
-.navbar {
-  .pwdCon {
-    .el-dialog__body {
-      padding: 60px 100px 0;
-    }
-    .el-input__inner {
-      padding: 0 12px;
-    }
-    .el-form-item {
-      margin-bottom: 26px;
-    }
-    .el-form-item__label {
-      text-align: left;
-    }
-    .el-dialog__footer {
-      padding-top: 14px;
-    }
-  }
-}
-</style>
 
 <style lang="scss" scoped>
 .navbar {
@@ -230,12 +200,31 @@ export default {
       .avatar-wrapper {
         margin-top: 5px;
         position: relative;
-
+        display: flex;
+        align-items: center;
+        .name {
+          //  用户名称距离右侧距离
+          margin-right: 10px;
+          font-size: 16px;
+        }
+        .username {
+          width: 30px;
+          height: 30px;
+          text-align: center;
+          line-height: 30px;
+          border-radius: 50%;
+          background: #04c9be;
+          color: #fff;
+          margin-right: 4px;
+        }
+        .el-icon-setting {
+          font-size: 20px;
+        }
         .user-avatar {
           cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
         }
 
         .el-icon-caret-bottom {

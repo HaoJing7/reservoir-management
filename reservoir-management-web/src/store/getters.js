@@ -2,10 +2,8 @@ const getters = {
   sidebar: state => state.app.sidebar,
   device: state => state.app.device,
   token: state => state.user.token,
-  avatar: state => state.user.avatar,
-  name: state => state.user.name,
-  visitedViews: state => state.tagsView.visitedViews,
-  cachedViews: state => state.tagsView.cachedViews,
-  permission_routes: state => state.permission.routes
+  userId: state => state.user.userInfo.userId,
+  avatar: state => state.user.userInfo.staffPhoto, // 头像
+  name: state => state.user.userInfo.username // 用户名称
 }
 export default getters
