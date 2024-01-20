@@ -1,90 +1,70 @@
 <template>
   <div class="navbar">
-    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar"/>
+    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
-    <breadcrumb class="breadcrumb-container"/>
+    <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img src="@/assets/avatar.png" class="user-avatar">
-          <i class="el-icon-caret-bottom"/>
+          <!-- 头像 -->
+          <img v-if="avatar" :src="avatar" class="user-avatar">
+          <span v-else class="username">{{ name?.charAt(0) }}</span>
+          <!-- 用户名称 -->
+          <span class="name">{{ name }}</span>
+          <!-- 图标 -->
+          <i class="el-icon-setting" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <!--个人信息部分自行开发-->
-          <el-dropdown-item @click.native="userInfoVisible=true;">
-            个人信息
+          <router-link to="/">
+            <el-dropdown-item>
+              首页
+            </el-dropdown-item>
+          </router-link>
+          <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
+            <el-dropdown-item>项目地址</el-dropdown-item>
+          </a>
+          <!-- prevent阻止默认事件 -->
+          <a target="_blank" @click.prevent="updatePassword">
+            <el-dropdown-item>修改密码</el-dropdown-item>
+          </a>
+          <!-- native事件修饰符 -->
+          <!-- 注册组件的根元素的原生事件 -->
+          <el-dropdown-item @click.native="logout">
+            <span style="display:block;">登出</span>
           </el-dropdown-item>
-
-          <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">注销</span>
-          </el-dropdown-item>
-
-          <!-- 删除该用户功能的开发（需要先检验是否能删除） -->
-          <el-dropdown-item divided @click.native="inputAnswerTableVisible=true;inputAnswer='';">
-            <span style="display:block;">删除该用户</span>
-          </el-dropdown-item>
-
         </el-dropdown-menu>
       </el-dropdown>
-
-      <!-- 删除账号时回答密保问题 -->
-      <el-dialog title="回答密保问题" :visible.sync="inputAnswerTableVisible" width="400px">
-        <p>问题：{{ $store.state.user.problem }}</p>
-        <p>答案：</p>
-        <el-input v-model="inputAnswer" placeholder="请输入答案" clearable style="background-color: #eff5f5"></el-input>
-        <el-button type="primary" @click="checkAnswer" style="margin-top: 10px">确认答案</el-button>
-      </el-dialog>
-
-      <!-- 个人信息 -->
-      <el-dialog :visible.sync="userInfoVisible" width="400px">
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span><b style="font-size: 15px">个人信息</b></span>
-            <el-button style="float: right; padding: 3px 0" type="text" @click="inputAnswerTableVisible=true;inputAnswer2='';">修改个人信息</el-button>
-          </div>
-          <div>账号：{{ $store.state.user.name }}</div>
-          <div>密码：{{ $store.state.user.password }}</div>
-          <div>密保问题：{{ $store.state.user.problem }}</div>
-          <div>答案：*********</div>
-        </el-card>
-      </el-dialog>
-      <!-- 个人信息修改 -->
-      <el-dialog title="个人信息修改" :visible.sync="userFormVisible">
-        <el-form :model="userForm">
-          <el-form-item label="用户名" label-width="120px">
-            <el-input v-model="userForm.username" disabled autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="密码" label-width="120px">
-            <el-input v-model="userForm.password" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="密保问题" label-width="120px">
-            <el-input v-model="userForm.problem" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="答案" label-width="120px">
-            <el-input v-model="userForm.answer" autocomplete="off"></el-input>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="userFormVisible = false;userForm={};">取 消</el-button>
-          <el-button type="primary" @click="updateUserInfo">确 定</el-button>
-        </div>
-      </el-dialog>
-
-
     </div>
+    <!-- 放置dialog -->
+    <!-- sync- 可以接收子组件传过来的事件和值 -->
+    <el-dialog width="500px" title="修改密码" :visible.sync="showDialog" @close="btnCancel">
+      <!-- 放置表单 -->
+      <el-form ref="passForm" label-width="120px" :model="passForm" :rules="rules">
+        <el-form-item label="旧密码" prop="oldPassword">
+          <el-input v-model="passForm.oldPassword" show-password size="small" />
+        </el-form-item>
+        <el-form-item label="新密码" prop="newPassword">
+          <el-input v-model="passForm.newPassword" show-password size="small" />
+        </el-form-item>
+        <el-form-item label="重复密码" prop="confirmPassword">
+          <el-input v-model="passForm.confirmPassword" show-password size="small" />
+        </el-form-item>
+        <el-form-item>
+          <el-button size="mini" type="primary" @click="btnOK">确认修改</el-button>
+          <el-button size="mini" @click="btnCancel">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import {deleteUser, updateUser} from "@/api/user";
+import { updatePassword } from '@/api/user'
 
-//完成个人信息查看部分
-// 完成修改个人信息部分
-// 完成删除用户部分（需要输入问题答案才能进行删除）
 export default {
   components: {
     Breadcrumb,
@@ -92,70 +72,72 @@ export default {
   },
   data() {
     return {
-      // 删除用户验证
-      inputAnswerTableVisible: false,
-      inputAnswer: '',
-      // 用户详细信息
-      userInfoVisible: false,
-      inputAnswer2: '',
-      userFormVisible: false,
-      userForm: {
-        id: '',
-        username: '',
-        password: '',
-        problem: '',
-        answer: ''
+      showDialog: false, // 控制弹层的显示和隐藏
+      passForm: {
+        oldPassword: '', // 旧密码
+        newPassword: '', // 新密码
+        confirmPassword: '' // 确认密码字段
       },
+      rules: {
+        oldPassword: [{ required: true, message: '旧密码不能为空', trigger: 'blur' }], // 旧密码
+        newPassword: [{ required: true, message: '新密码不能为空', trigger: 'blur' }, {
+          trigger: 'blur',
+          min: 6,
+          max: 16,
+          message: '新密码的长度为6-16位之间'
+        }], // 新密码
+        confirmPassword: [{ required: true, message: '重复密码不能为空', trigger: 'blur' }, {
+          trigger: 'blur',
+          validator: (rule, value, callback) => {
+            // value
+            if (this.passForm.newPassword === value) {
+              callback()
+            } else {
+              callback(new Error('重复密码和新密码输入不一致'))
+            }
+          }
+        }] // 确认密码字段
+      }
     }
   },
   computed: {
+    // 引入头像和用户名称
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'name'
     ])
   },
   methods: {
+    updatePassword() {
+      // 弹出层
+      this.showDialog = true // 显示弹层
+    },
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
+      // 调用退出登录的action
       await this.$store.dispatch('user/logout')
-      // 跳转到登陆页面
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      this.$router.push('/login')
     },
-    // 判断删除用户的回答是否正确
-    checkAnswer() {
-      if (this.inputAnswer === this.$store.state.user.answer) {
-        // 密码正确之后删除用户
-        this.inputAnswerTableVisible = false;
-        if (this.inputAnswer2 === null) {
-          // 删除用户验证通过
-          deleteUser(this.$store.state.user.id).then(response => {
-            this.$message.success("删除成功！");
-            this.logout();
-          })
-        } else {
-          // 修改用户详细验证通过
-          this.userFormVisible = true;
-          this.userForm={};
+    // 确定
+    btnOK() {
+      this.$refs.passForm.validate(async isOK => {
+        if (isOK) {
+          // 调用接口
+          await updatePassword(this.passForm)
+          this.$message.success('修改密码成功')
+          this.btnCancel()
         }
-      } else {
-        this.$message.error('回答错误！');
-      }
-    },
-    // 修改用户
-    updateUserInfo() {
-      this.userForm.id = this.$store.state.user.id;
-      this.userForm.username = this.$store.state.user.name;
-      updateUser(this.userForm).then(response => {
-        this.$message.success('修改成功！');
-        this.userFormVisible = false;
-        this.userInfoVisible = false;
-        this.$store.dispatch('user/getInfo').then();
       })
+    },
+    // 取消
+    btnCancel() {
+      this.$refs.passForm.resetFields() // 重置表单
+      // 关闭弹层
+      this.showDialog = false
     }
-
-
   }
 }
 </script>
@@ -166,7 +148,7 @@ export default {
   overflow: hidden;
   position: relative;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
+  box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
   .hamburger-container {
     line-height: 46px;
@@ -174,7 +156,7 @@ export default {
     float: left;
     cursor: pointer;
     transition: background .3s;
-    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color:transparent;
 
     &:hover {
       background: rgba(0, 0, 0, .025)
@@ -218,12 +200,31 @@ export default {
       .avatar-wrapper {
         margin-top: 5px;
         position: relative;
-
+        display: flex;
+        align-items: center;
+        .name {
+          //  用户名称距离右侧距离
+          margin-right: 10px;
+          font-size: 16px;
+        }
+        .username {
+          width: 30px;
+          height: 30px;
+          text-align: center;
+          line-height: 30px;
+          border-radius: 50%;
+          background: #04c9be;
+          color: #fff;
+          margin-right: 4px;
+        }
+        .el-icon-setting {
+          font-size: 20px;
+        }
         .user-avatar {
           cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
         }
 
         .el-icon-caret-bottom {

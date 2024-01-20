@@ -5,6 +5,14 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
+import departmentRouter from './modules/department'
+import approvalRouter from './modules/approval'
+import attendanceRouter from './modules/attendance'
+import employeeRouter from './modules/employee'
+import permissionRouter from './modules/permission'
+import roleRouter from './modules/role'
+import salaryRouter from './modules/salary'
+import socialRouter from './modules/social'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -51,55 +59,17 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '首页', icon: 'dashboard', affix: true}
+      meta: { title: '首页', icon: 'dashboard' }
     }]
   },
-
-  {
-    path: '/sys',
-    component: Layout,
-    redirect: '/sys/user',
-    name: 'sysManage',
-    meta: { title: '系统管理', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'user',
-        name: 'user',
-        component: () => import('@/views/sys/user.vue'),
-        meta: { title: '用户管理', icon: 'table' }
-      },
-      {
-        path: 'role',
-        name: 'role',
-        component: () => import('@/views/sys/role.vue'),
-        meta: { title: '角色管理', icon: 'tree' }
-      }
-    ]
-  },
-
-  {
-    path: '/test',
-    component: Layout,
-    redirect: '/sys/test1',
-    name: 'sysManage',
-    meta: { title: 'test', icon: 'form' },
-    children: [
-      {
-        path: 'test1',
-        name: 'test1',
-        component: () => import('@/views/test/test1.vue'),
-        meta: { title: 'test1', icon: 'table' }
-      },
-      {
-        path: 'test2',
-        name: 'test2',
-        component: () => import('@/views/test/test2.vue'),
-        meta: { title: 'test2', icon: 'tree' }
-      },
-
-    ]
-  },
-
+  departmentRouter,
+  roleRouter,
+  employeeRouter,
+  permissionRouter,
+  attendanceRouter,
+  approvalRouter,
+  salaryRouter,
+  socialRouter,
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

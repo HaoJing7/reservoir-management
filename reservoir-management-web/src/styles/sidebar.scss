@@ -6,7 +6,6 @@
     margin-left: $sideBarWidth;
     position: relative;
   }
-
   .sidebar-container {
     transition: width 0.28s;
     width: $sideBarWidth !important;
@@ -19,6 +18,7 @@
     left: 0;
     z-index: 1001;
     overflow: hidden;
+    background: $blue;
 
     // reset element-ui css
     .horizontal-collapse-transition {
@@ -27,6 +27,7 @@
 
     .scrollbar-wrapper {
       overflow-x: hidden !important;
+        background: url('~@/assets/common/leftnavBg.png') no-repeat 0 100%;
     }
 
     .el-scrollbar__bar.is-vertical {
@@ -66,13 +67,38 @@
       border: none;
       height: 100%;
       width: 100% !important;
+      a{
+        li{
+          .svg-icon{
+            color: $menuFontColor;
+            font-size: 18px;
+            vertical-align: middle;
+            .icon{
+              color:$menuFontColor;
+            }
+          }
+          span{
+            color: $menuFontColor;
+          }
+          &:hover{
+            .svg-icon{
+              color: $hoverFontColor
+            }
+            span{
+              color: $hoverFontColor;
+            }
+          }
+        }
+      }
     }
-
     // menu hover
     .submenu-title-noDropdown,
     .el-submenu__title {
       &:hover {
-        background-color: $menuHover !important;
+        // background-color: $menuHover !important;
+        background: linear-gradient(90deg,#1E3CAE
+        3.89%,  #001529
+        100%);
       }
     }
 
@@ -95,48 +121,38 @@
     .sidebar-container {
       width: 54px !important;
     }
-
     .main-container {
       margin-left: 54px;
     }
-
     .submenu-title-noDropdown {
       padding: 0 !important;
       position: relative;
 
       .el-tooltip {
         padding: 0 !important;
-
         .svg-icon {
           margin-left: 20px;
         }
-
         .sub-el-icon {
           margin-left: 19px;
         }
       }
     }
-
     .el-submenu {
       overflow: hidden;
-
       &>.el-submenu__title {
         padding: 0 !important;
-
         .svg-icon {
           margin-left: 20px;
         }
-
         .sub-el-icon {
           margin-left: 19px;
         }
-
         .el-submenu__icon-arrow {
           display: none;
         }
       }
     }
-
     .el-menu--collapse {
       .el-submenu {
         &>.el-submenu__title {
@@ -155,18 +171,16 @@
   .el-menu--collapse .el-menu .el-submenu {
     min-width: $sideBarWidth !important;
   }
-
   // mobile responsive
   .mobile {
     .main-container {
       margin-left: 0px;
     }
-
     .sidebar-container {
       transition: transform .28s;
       width: $sideBarWidth !important;
-    }
 
+    }
     &.hideSidebar {
       .sidebar-container {
         pointer-events: none;
@@ -177,7 +191,6 @@
   }
 
   .withoutAnimation {
-
     .main-container,
     .sidebar-container {
       transition: none;

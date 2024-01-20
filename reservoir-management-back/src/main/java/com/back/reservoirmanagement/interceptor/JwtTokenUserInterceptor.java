@@ -1,8 +1,9 @@
 package com.back.reservoirmanagement.interceptor;
 
-import com.back.reservoirmanagement.context.BaseContext;
-import com.back.reservoirmanagement.properties.JwtProperties;
-import com.back.reservoirmanagement.utils.JwtUtil;
+import com.back.reservoirmanagement.common.constant.JwtClaimsConstant;
+import com.back.reservoirmanagement.common.context.BaseContext;
+import com.back.reservoirmanagement.common.properties.JwtProperties;
+import com.back.reservoirmanagement.common.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,8 @@ public class JwtTokenUserInterceptor implements HandlerInterceptor {
     @Autowired
     private JwtProperties jwtProperties;
 
-    String USER_ID="userId";
     /**
-     * 校验User jwt
+     * 校验jwt
      *
      * @param request
      * @param response
@@ -41,19 +41,21 @@ public class JwtTokenUserInterceptor implements HandlerInterceptor {
         }
 
         //1、从请求头中获取令牌
+        // 如果请求头中没有token信息的话则为null
         String token = request.getHeader(jwtProperties.getUserTokenName());
 
         //2、校验令牌
         try {
+            log.info("jwt校验:{}", token);
+            // 如果token为空的话就会报错然后被捕获
             Claims claims = JwtUtil.parseJWT(jwtProperties.getUserSecretKey(), token);
-            Long userId = Long.valueOf(claims.get(USER_ID).toString());
+            Long userId = Long.valueOf(claims.get(JwtClaimsConstant.USER_ID).toString());
             log.info("当前用户的id：{}", userId);
             BaseContext.setCurrentId(userId);
             //3、通过，放行
             return true;
         } catch (Exception ex) {
             //4、不通过，响应401状态码
-            log.error("Token令牌已过期");
             response.setStatus(401);
             return false;
         }

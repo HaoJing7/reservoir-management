@@ -1,4 +1,5 @@
 <template>
+  <!-- 判断是否隐藏菜单 -->
   <div v-if="!item.hidden">
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
@@ -52,7 +53,7 @@ export default {
   },
   data() {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
-    // refactor with render function
+    // TODO: refactor with render function
     this.onlyOneChild = null
     return {}
   },
