@@ -2,10 +2,11 @@ server:
   port: 8080
 spring:
   datasource:
-    username: root
-    password: 1234
-    url: jdbc:mysql://localhost:3306/reservoir_management?serverTimezone=UTC
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: ${reservoir.datasource.driver-class-name}
+    url: jdbc:mysql://${reservoir.datasource.host}:${reservoir.datasource.port}/${reservoir.datasource.database}?serverTimezone=UTC
+    username: ${reservoir.datasource.username}
+    password: ${reservoir.datasource.password}
+
 
 mybatis-plus:
   configuration:
