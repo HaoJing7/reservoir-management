@@ -1,4 +1,4 @@
-package com.back.reservoirmanagement.dto;
+package com.back.reservoirmanagement.pojo.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

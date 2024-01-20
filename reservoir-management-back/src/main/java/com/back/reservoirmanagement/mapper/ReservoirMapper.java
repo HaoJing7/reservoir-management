@@ -1,6 +1,6 @@
 package com.back.reservoirmanagement.mapper;
 
-import com.back.reservoirmanagement.entity.Reservoir;
+import com.back.reservoirmanagement.pojo.entity.Reservoir;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

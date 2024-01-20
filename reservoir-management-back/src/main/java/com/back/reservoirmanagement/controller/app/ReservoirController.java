@@ -1,10 +1,11 @@
 package com.back.reservoirmanagement.controller.app;
 
-import com.back.reservoirmanagement.dto.ReservoirDTO;
-import com.back.reservoirmanagement.dto.ReservoirPageQueryDTO;
-import com.back.reservoirmanagement.entity.Reservoir;
+
+import com.back.reservoirmanagement.common.result.Result;
+import com.back.reservoirmanagement.pojo.dto.ReservoirDTO;
+import com.back.reservoirmanagement.pojo.dto.ReservoirPageQueryDTO;
+import com.back.reservoirmanagement.pojo.entity.Reservoir;
 import com.back.reservoirmanagement.service.ReservoirService;
-import com.back.reservoirmanagement.vo.Result;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;

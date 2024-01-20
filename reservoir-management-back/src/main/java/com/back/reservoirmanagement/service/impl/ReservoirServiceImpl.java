@@ -1,6 +1,6 @@
 package com.back.reservoirmanagement.service.impl;
 
-import com.back.reservoirmanagement.entity.Reservoir;
+import com.back.reservoirmanagement.pojo.entity.Reservoir;
 import com.back.reservoirmanagement.mapper.ReservoirMapper;
 import com.back.reservoirmanagement.service.ReservoirService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

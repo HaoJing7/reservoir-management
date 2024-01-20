@@ -1,13 +1,14 @@
 package com.back.reservoirmanagement.controller.app;
 
-import com.back.reservoirmanagement.dto.FindBackPasswordDTO;
-import com.back.reservoirmanagement.dto.UserLoginDTO;
-import com.back.reservoirmanagement.dto.UserUpdateDTO;
-import com.back.reservoirmanagement.entity.User;
-import com.back.reservoirmanagement.properties.JwtProperties;
+
+import com.back.reservoirmanagement.common.properties.JwtProperties;
+import com.back.reservoirmanagement.common.result.Result;
+import com.back.reservoirmanagement.common.utils.JwtUtil;
+import com.back.reservoirmanagement.pojo.dto.FindBackPasswordDTO;
+import com.back.reservoirmanagement.pojo.dto.UserLoginDTO;
+import com.back.reservoirmanagement.pojo.dto.UserUpdateDTO;
+import com.back.reservoirmanagement.pojo.entity.User;
 import com.back.reservoirmanagement.service.UserService;
-import com.back.reservoirmanagement.utils.JwtUtil;
-import com.back.reservoirmanagement.vo.Result;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -48,14 +49,14 @@ public class UserController {
         userLoginDTO.setPassword(password);
 
         //将dto的内容拷贝给user
-        User user=User.builder()
+        User user= User.builder()
                 .username(userLoginDTO.getUsername())
                 .password(userLoginDTO.getPassword())
                 .build();
 
         User userInfo = userService.login(user);
         if (userInfo==null){
-            return Result.fail("登录失败,用户名或密码错误");
+            return Result.error("登录失败,用户名或密码错误");
         }
 
         //登录成功后，生成jwt令牌
@@ -145,7 +146,7 @@ public class UserController {
         User userInfo =userService.getOne(queryWrapper);
 
         if(userInfo==null)
-            return Result.fail("该用户不存在");
+            return Result.error("该用户不存在");
 
         String password =findBackPasswordDTO.getPassword();
         password=DigestUtils.md5DigestAsHex(password.getBytes());//加密
