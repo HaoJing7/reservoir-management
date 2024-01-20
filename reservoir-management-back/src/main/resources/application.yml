@@ -51,7 +51,7 @@ sky:
     # 设置jwt过期时间 （以毫秒为单位，为了测试方便将该时间设置得很长）
     admin-ttl: 7200000000
     # 设置前端传递过来的令牌名称
-    admin-token-name: X-Token
+    admin-token-name: authorization
 
     # 设置小程序端的jwt
     user-secret-key: itheima

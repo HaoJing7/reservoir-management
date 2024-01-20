@@ -8,6 +8,7 @@ const state = {
 const mutations = {
   setToken(state, token) {
     state.token = token
+    // Vuex中的数据刷新页面后就没了，需要进行持久化(缓存)
     // 同步到缓存
     setToken(token)
   },
@@ -28,7 +29,7 @@ const actions = {
     // todo: 调用登录接口
     const token = await login(data)
     // 返回一个token 123456
-    context.commit('setToken', token)
+    context.commit('setToken', token.token)
   },
   // 获取用户的基本资料
   async getUserInfo(context) {

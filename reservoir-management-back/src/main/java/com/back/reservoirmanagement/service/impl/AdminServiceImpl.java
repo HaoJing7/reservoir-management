@@ -62,11 +62,6 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
             throw new LoginFailedException(MessageConstant.PASSWORD_ERROR);
         }
 
-        // 账号被锁定
-        if (admin.getStatus() == StatusConstant.DISABLE) {
-            throw new LoginFailedException(MessageConstant.ACCOUNT_LOCKED);
-        }
-
         // 能够登陆
         return admin;
 
@@ -83,8 +78,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         Admin admin = adminMapper.selectOne(wrapper);
         AdminInfoVO adminInfoVO = AdminInfoVO.builder()
                 .id(admin.getId())
-                .userName(admin.getUsername())
-                .name(admin.getName())
+                .username(admin.getUsername())
                 .build();
         return adminInfoVO;
     }

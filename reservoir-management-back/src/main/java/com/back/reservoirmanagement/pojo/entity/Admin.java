@@ -24,14 +24,6 @@ import java.time.LocalDateTime;
 public class Admin {
     @TableId(type = IdType.AUTO)
     private Long id;
-    private String name;
     private String username;
     private String password;
-    private String phone;
-    private String sex;
-    private Integer status;
-    private LocalDateTime create_time;
-    private LocalDateTime update_time;
-    private Long create_user;
-    private Long update_user;
 }

@@ -7,8 +7,8 @@
         <!--登录表单-->
         <!-- el-form > el-form-item > el-input -->
         <el-form ref="form" :model="loginForm" :rules="loginRules">
-          <el-form-item prop="mobile">
-            <el-input v-model="loginForm.mobile" placeholder="请输入手机号" />
+          <el-form-item prop="username">
+            <el-input v-model="loginForm.username" placeholder="请输入用户名" />
           </el-form-item>
           <el-form-item prop="password">
             <el-input v-model="loginForm.password" show-password placeholder="请输入密码" />
@@ -32,31 +32,30 @@ export default {
   data() {
     return {
       loginForm: {
-        mobile: process.env.NODE_ENV === 'development' ? '13800000002' : '',
-        password: process.env.NODE_ENV === 'development' ? '123456' : '',
+        username: process.env.NODE_ENV === 'development' ? 'admin' : '',
+        password: process.env.NODE_ENV === 'development' ? 'admin' : '',
         isAgree: process.env.NODE_ENV === 'development'
       },
       loginRules: {
-        mobile: [{
+        username: [{
           required: true,
-          message: '请输入手机号',
+          message: '请输入用户名',
           trigger: 'blur'
         }, {
-          pattern: /^1[3-9]\d{9}$/,
-          message: '手机号格式不正确',
+          min: 3,
+          max: 16,
+          message: '用户名长度应该为3-16位之间',
           trigger: 'blur'
-
         }],
         password: [{
           required: true,
           message: '请输入密码',
           trigger: 'blur'
         }, {
-          min: 6,
+          min: 3,
           max: 16,
-          message: '密码长度应该为6-16位之间',
+          message: '密码长度应该为3-16位之间',
           trigger: 'blur'
-
         }],
         // required只能检测 null undefined ""
         isAgree: [{
@@ -93,7 +92,7 @@ export default {
   height: 100vh;
   .logo {
     flex: 3;
-    background: rgba(38, 72, 176) url(../../assets/common/login_back.png)
+    background: rgba(38, 72, 176) url(../../assets/common/login_back.jpg)
       no-repeat center / cover;
     border-top-right-radius: 60px;
     display: flex;

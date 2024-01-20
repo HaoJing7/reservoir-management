@@ -1,25 +1,31 @@
 import request from '@/utils/request'
 
+/**
+ * 登陆
+ */
 export function login(data) {
   return request({
-    url: '/sys/login',
+    url: '/user/login',
     method: 'post',
     data
   })
 }
 
+/**
+ * 获取用户信息
+ */
 export function getUserInfo() {
   return request({
-    url: '/sys/profile'
+    url: '/user/info'
   })
 }
 
 /**
- * 更新密码
- * **/
+ * 修改密码
+ */
 export function updatePassword(data) {
   return request({
-    url: '/sys/user/updatePass',
+    url: '/user/updatePassword',
     method: 'put',
     data
   })

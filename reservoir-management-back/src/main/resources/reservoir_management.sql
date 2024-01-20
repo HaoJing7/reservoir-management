@@ -6,32 +6,18 @@ drop database if exists reservoir_management;
 create database reservoir_management;
 use reservoir_management;
 
-# 管理员用户表
+# 管理员表（只有一个管理员）
 drop table if exists `admin_user`;
 create table admin_user
 (
-    id          bigint auto_increment comment '主键'
+    id       bigint auto_increment comment '主键'
         primary key,
-    name        varchar(32)   not null comment '姓名',
-    username    varchar(32)   not null comment '用户名',
-    password    varchar(64)   not null comment '密码(加密后)',
-    phone       varchar(11)   not null comment '手机号',
-    sex         varchar(2)    not null comment '性别',
-    status      int default 1 not null comment '状态 0:禁用，1:启用',
-    create_time datetime      null comment '创建时间',
-    update_time datetime      null comment '更新时间',
-    create_user bigint        null comment '创建人',
-    update_user bigint        null comment '修改人',
-    constraint idx_username
-        unique (username)
-) comment '员工信息' collate = utf8mb3_bin;
-# 插入超级管理员数据
-insert into admin_user
-values (null, '超级管理员', 'admin', 'e10adc3949ba59abbe56e057f20f883e',
-        '13726844777', '1', 1, '2023-11-02 15:50:36', '2023-11-02 15:50:36', 1, 1);
+    username varchar(32) not null comment '用户名',
+    password varchar(64) not null comment '密码(MD5加密后)'
+) comment '管理员登陆表' collate = utf8mb3_bin;
 
-
-
+# 添加一条管理员数据（密码默认为admin，MD5加密）
+insert into admin_user values (null, 'admin', '21232f297a57a5a743894a0e4a801fc3');
 
 
 #############################################

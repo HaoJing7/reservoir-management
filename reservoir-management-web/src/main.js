@@ -35,6 +35,10 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
+// el: '#app' 表示element为App.vue中的#app
+// <div id="app">
+//   <router-view />
+// </div>
 new Vue({
   el: '#app',
   router,

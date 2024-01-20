@@ -21,9 +21,9 @@
               首页
             </el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
+<!--      <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
             <el-dropdown-item>项目地址</el-dropdown-item>
-          </a>
+          </a>-->
           <!-- prevent阻止默认事件 -->
           <a target="_blank" @click.prevent="updatePassword">
             <el-dropdown-item>修改密码</el-dropdown-item>
@@ -31,7 +31,7 @@
           <!-- native事件修饰符 -->
           <!-- 注册组件的根元素的原生事件 -->
           <el-dropdown-item @click.native="logout">
-            <span style="display:block;">登出</span>
+            <span style="display:block;">注销</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>

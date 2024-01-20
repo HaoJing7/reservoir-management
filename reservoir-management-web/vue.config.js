@@ -37,8 +37,9 @@ module.exports = {
       errors: true
     },
     proxy: {
-      '/api': {
-        target: 'https://heimahr.itheima.net'
+      '/': {
+        target: 'http://localhost:8080',
+        changeOrigin: true
       }
     }
     // before: require('./mock/mock-server.js')
