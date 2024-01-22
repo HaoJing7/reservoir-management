@@ -2,7 +2,7 @@
   <div class="login-container">
     <div class="logo" />
     <div class="form">
-      <h1>登录</h1>
+      <h1>管 理 员 登 录</h1>
       <el-card shadow="never" class="login-card">
         <!--登录表单-->
         <!-- el-form > el-form-item > el-input -->
@@ -12,6 +12,12 @@
           </el-form-item>
           <el-form-item prop="password">
             <el-input v-model="loginForm.password" show-password placeholder="请输入密码" />
+          </el-form-item>
+          <el-form-item>
+            <div style="display: flex">
+              <el-input v-model="loginForm.validCode" style="width: 60%" placeholder="请输入验证码" size="medium"></el-input>
+              <ValidCode @input="createValidCode" />
+            </div>
           </el-form-item>
           <el-form-item prop="isAgree">
             <el-checkbox v-model="loginForm.isAgree">
@@ -27,13 +33,17 @@
   </div>
 </template>
 <script>
+import ValidCode from "@/components/ValidCode.vue";
 export default {
   name: 'Login',
+  components: {
+    ValidCode,
+  },
   data() {
     return {
       loginForm: {
         username: process.env.NODE_ENV === 'development' ? 'admin' : '',
-        password: process.env.NODE_ENV === 'development' ? 'admin' : '',
+        password: process.env.NODE_ENV === 'development' ? '123456' : '',
         isAgree: process.env.NODE_ENV === 'development'
       },
       loginRules: {
@@ -67,21 +77,33 @@ export default {
             value ? callback() : callback(new Error('您必须勾选用户的使用协议'))
           }
         }]
-      }
+      },
+      validCode: '',
     }
   },
   methods: {
+    //接收验证码组件提交的4位验证码
+    createValidCode(data) {
+      this.validCode = data
+    },
     login() {
       this.$refs.form.validate(async(isOK) => {
         if (isOK) {
+          if (!this.loginForm.validCode) {
+            this.$message.error("请填写验证码")
+            return
+          }
+          if (this.loginForm.validCode.toLowerCase() !== this.validCode.toLowerCase()) {
+            this.$message.error("验证码错误")
+            return
+          }
           await this.$store.dispatch('user/login', this.loginForm)
           // Vuex 中的action 返回的promise
           // 跳转主页
           this.$router.push('/')
         }
       })
-    }
-
+    },
   }
 }
 </script>

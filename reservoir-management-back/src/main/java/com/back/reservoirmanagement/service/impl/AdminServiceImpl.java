@@ -4,7 +4,9 @@ import com.back.reservoirmanagement.common.constant.MessageConstant;
 import com.back.reservoirmanagement.common.constant.StatusConstant;
 import com.back.reservoirmanagement.common.context.BaseContext;
 import com.back.reservoirmanagement.common.exception.LoginFailedException;
+import com.back.reservoirmanagement.common.exception.PasswordFailedException;
 import com.back.reservoirmanagement.common.utils.JwtUtil;
+import com.back.reservoirmanagement.pojo.dto.UpdatePasswordDTO;
 import com.back.reservoirmanagement.pojo.dto.UserLoginDTO;
 import com.back.reservoirmanagement.pojo.entity.Admin;
 import com.back.reservoirmanagement.mapper.AdminMapper;
@@ -88,12 +90,25 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
      * @param password
      */
     @Override
-    public void updatePassword(String password) {
+    public void updatePassword(UpdatePasswordDTO updatePasswordDTO) {
+        String oldPassword = updatePasswordDTO.getOldPassword();
+        String password = updatePasswordDTO.getNewPassword();
+        LambdaQueryWrapper<Admin> queryWrapper = new LambdaQueryWrapper<>();
+        Long currentId = BaseContext.getCurrentId();
+        oldPassword = DigestUtils.md5DigestAsHex(oldPassword.getBytes());
+        queryWrapper.eq(Admin::getId, currentId).eq(Admin::getPassword, oldPassword);
+        Admin oldAdmin = adminMapper.selectOne(queryWrapper);
+        // 如果没有查询到该admin则表示所输入的旧密码错误
+        if (oldAdmin == null) {
+            throw new PasswordFailedException(MessageConstant.OLD_PASSWORD_ERROR);
+            // 抛出异常之后就不会执行下面的逻辑
+        }
+
         // 进行md5加密
         password = DigestUtils.md5DigestAsHex(password.getBytes());
         // 进行密码修改
         Admin admin = Admin.builder().password(password).build();
-        Long currentId = BaseContext.getCurrentId();
+
         LambdaQueryWrapper<Admin> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Admin::getId, currentId);
         adminMapper.update(admin, wrapper);

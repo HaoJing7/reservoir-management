@@ -5,14 +5,13 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
-import departmentRouter from './modules/department'
-import approvalRouter from './modules/approval'
-import attendanceRouter from './modules/attendance'
-import employeeRouter from './modules/employee'
-import permissionRouter from './modules/permission'
-import roleRouter from './modules/role'
-import salaryRouter from './modules/salary'
-import socialRouter from './modules/social'
+import weather from '@/router/modules/weather'
+import reservoir from "@/router/modules/reservoir";
+import station from "@/router/modules/station";
+import dispatch from "@/router/modules/dispatch";
+import log from "@/router/modules/log"
+import employee from "@/router/modules/employee";
+import work from "@/router/modules/work";
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -62,15 +61,16 @@ export const constantRoutes = [
       meta: { title: '首页', icon: 'dashboard' }
     }]
   },
+
   // 引入自己创建的modules中的route
-  departmentRouter,
-  roleRouter,
-  employeeRouter,
-  permissionRouter,
-  attendanceRouter,
-  approvalRouter,
-  salaryRouter,
-  socialRouter,
+  weather,
+  reservoir,
+  station,
+  dispatch,
+  log,
+  employee,
+  work,
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

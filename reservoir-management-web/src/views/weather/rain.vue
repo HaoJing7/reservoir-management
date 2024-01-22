@@ -1,12 +1,12 @@
 <template>
   <div class="container">
     <div class="app-container">
-      员工管理
+      降水信息
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: 'Employee'
+  name: 'Rain'
 }
 </script>

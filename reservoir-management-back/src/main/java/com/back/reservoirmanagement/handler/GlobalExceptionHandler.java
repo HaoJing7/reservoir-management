@@ -24,6 +24,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public Result<?> exceptionHandler(BaseException ex){
         log.error("异常信息：{}", ex.getMessage());
+        // 捕获到异常后直接返回错误结果，并把信息一同返回
         return Result.error(ex.getMessage());
     }
 

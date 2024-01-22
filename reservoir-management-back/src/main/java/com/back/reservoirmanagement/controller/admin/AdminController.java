@@ -74,6 +74,7 @@ public class AdminController {
      */
     @PutMapping("/updatePassword")
     public Result<?> updatePassword(@RequestBody UpdatePasswordDTO updatePasswordDTO) {
-        return null;
+        adminService.updatePassword(updatePasswordDTO);
+        return Result.success();
     }
 }

@@ -29,7 +29,7 @@ service.interceptors.response.use((response) => {
   if (code === 20000) {
     return data
   } else {
-    Message({ type: 'error', msg })
+    Message({ type: 'error', message: msg })
     return Promise.reject(new Error(msg))
   }
 }, async(error) => {
