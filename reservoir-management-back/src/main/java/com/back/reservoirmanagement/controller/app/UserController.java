@@ -1,6 +1,7 @@
 package com.back.reservoirmanagement.controller.app;
 
 
+import com.back.reservoirmanagement.common.context.BaseContext;
 import com.back.reservoirmanagement.common.properties.JwtProperties;
 import com.back.reservoirmanagement.common.result.Result;
 import com.back.reservoirmanagement.common.utils.JwtUtil;
@@ -8,6 +9,7 @@ import com.back.reservoirmanagement.pojo.dto.FindBackPasswordDTO;
 import com.back.reservoirmanagement.pojo.dto.UserLoginDTO;
 import com.back.reservoirmanagement.pojo.dto.UserUpdateDTO;
 import com.back.reservoirmanagement.pojo.entity.User;
+import com.back.reservoirmanagement.pojo.vo.UserInfoVO;
 import com.back.reservoirmanagement.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
@@ -18,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class UserController {
      */
     @PostMapping("/login")
     @ApiOperation("小程序用户登录")
-    public Result<User> login(@RequestBody UserLoginDTO userLoginDTO){
+    public Result<String> login(@RequestBody UserLoginDTO userLoginDTO){
 
         //对输入的密码进行加密处理
         String password=userLoginDTO.getPassword();
@@ -70,30 +71,19 @@ public class UserController {
         log.info("{}登录成功",userInfo.getUsername());
         log.info("token令牌；{}",token);
 
-        return Result.success(userInfo);
+        return Result.success(token);
     }
 
     /**
-     * 新增用户
-     * @param user
+     * 获取当前员工用户的信息
      * @return
      */
-    @PostMapping
-    @ApiOperation("新增用户")
-    public Result addUser(@RequestBody User user){
-
-        //对输入的密码进行加密处理
-        String password=user.getPassword();
-        password = DigestUtils.md5DigestAsHex(password.getBytes());
-
-        user.setPassword(password);
-        user.setCreateTime(LocalDateTime.now());
-        userService.save(user);
-        return Result.success();
-
+    @GetMapping("/info")
+    @ApiOperation("获取当前员工的信息")
+    public Result<UserInfoVO> info(){
+        UserInfoVO userVO = userService.getInfoById();
+        return Result.success(userVO);
     }
-
-    //TODO 更新基本信息，更改密码，密码找回
 
     /**
      * 编辑基本信息
@@ -105,7 +95,7 @@ public class UserController {
     public Result update(@RequestBody UserUpdateDTO userUpdateDTO){
         log.info("新的信息：{}", userUpdateDTO);
 
-        User userInfo=userService.getById(userUpdateDTO.getId());
+        User userInfo=userService.getById(BaseContext.getCurrentId());
 
         //理论上点开编辑效果是默认填上原先的基本信息的,不需要进行非空判断，为了方便接口文档测试，这里加了判断
         if(StringUtils.isNotEmpty(userUpdateDTO.getRealname()))
@@ -123,10 +113,12 @@ public class UserController {
         return Result.success();
     }
 
+    //TODO 更新基本信息，更改密码，密码找回
+
     @PostMapping("/updatePassword")
     @ApiOperation("更改密码")
     public Result updatePassword(User user){
-        User userInfo =userService.getById(user.getId());
+        User userInfo =userService.getById(BaseContext.getCurrentId());
 
         String password =user.getPassword();
         password=DigestUtils.md5DigestAsHex(password.getBytes());//加密
@@ -139,7 +131,7 @@ public class UserController {
     @PostMapping("/findBackPassword")
     @ApiOperation("找回密码")
     public Result findBackPassword(FindBackPasswordDTO findBackPasswordDTO){
-        log.info("findBackPasswordDTP：{}",findBackPasswordDTO);
+        log.info("findBackPasswordDTO：{}",findBackPasswordDTO);
 
         LambdaQueryWrapper<User> queryWrapper=new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getUsername,findBackPasswordDTO.getUsername());

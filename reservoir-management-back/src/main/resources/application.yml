@@ -14,18 +14,16 @@ spring:
     active: dev #开发环境
   # 数据库的配置属性
   datasource:
-    # 使用druid连接池
-    druid:
-      driver-class-name: ${sky.datasource.driver-class-name}
-      url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
-      username: ${sky.datasource.username}
-      password: ${sky.datasource.password}
+    driver-class-name: ${sky.datasource.driver-class-name}
+    url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${sky.datasource.username}
+    password: ${sky.datasource.password}
   # redis的配置属性
-  redis:
-    host: ${sky.redis.host}
-    port: ${sky.redis.port}
-    password: ${sky.redis.password}
-    database: ${sky.redis.database}
+#  redis:
+#    host: ${sky.redis.host}
+#    port: ${sky.redis.port}
+#    password: ${sky.redis.password}
+#    database: ${sky.redis.database}
 
 mybatis-plus:
   configuration:
@@ -59,8 +57,8 @@ sky:
     user-token-name: authentication
 
   # 阿里云的配置属性
-  alioss:
-    endpoint: ${sky.alioss.endpoint}
-    bucket-name: ${sky.alioss.bucket-name}
-    access-key-id: ${sky.alioss.access-key-id}
-    access-key-secret: ${sky.alioss.access-key-secret}
+#  alioss:
+#    endpoint: ${sky.alioss.endpoint}
+#    bucket-name: ${sky.alioss.bucket-name}
+#    access-key-id: ${sky.alioss.access-key-id}
+#    access-key-secret: ${sky.alioss.access-key-secret}
