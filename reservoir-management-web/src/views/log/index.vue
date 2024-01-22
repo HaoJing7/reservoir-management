@@ -1,12 +1,12 @@
 <template>
   <div class="container">
     <div class="app-container">
-      组织架构
+      调度日志
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: 'Department'
+  name: 'Log'
 }
 </script>

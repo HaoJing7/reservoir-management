@@ -1,5 +1,6 @@
 package com.back.reservoirmanagement.service;
 
+import com.back.reservoirmanagement.pojo.dto.UpdatePasswordDTO;
 import com.back.reservoirmanagement.pojo.dto.UserLoginDTO;
 import com.back.reservoirmanagement.pojo.entity.Admin;
 import com.back.reservoirmanagement.pojo.vo.AdminInfoVO;
@@ -11,5 +12,5 @@ public interface AdminService extends IService<Admin> {
 
     AdminInfoVO getInfoById();
 
-    void updatePassword(String password);
+    void updatePassword(UpdatePasswordDTO updatePasswordDTO);
 }

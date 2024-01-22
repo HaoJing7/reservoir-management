@@ -17,9 +17,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @TableName("app_user")
 public class User implements Serializable {
-
     @TableId(type=IdType.AUTO)
-    private Long id;
+    private Long id;  // 主键id
     private String realname;
     private String username;
     private String gender;

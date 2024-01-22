@@ -1,5 +1,7 @@
 package com.back.reservoirmanagement.pojo.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
@@ -11,6 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @TableName("app_reservoir")
 public class Reservoir {
+    @TableId(type = IdType.AUTO)
+    private Long id;  // 主键id
     private String number;   //水库编号
     private String name;     //水库名称
     private String address;    //水库地址
