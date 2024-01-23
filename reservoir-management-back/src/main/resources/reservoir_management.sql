@@ -16,36 +16,62 @@ create table admin_user
     password varchar(64) not null comment '密码(MD5加密后)'
 ) comment '管理员登陆表' collate = utf8mb3_bin;
 
-# 添加一条管理员数据（密码默认为admin，MD5加密）
+# 添加一条管理员数据（密码默认为123456，MD5加密）
 insert into admin_user
-values (null, 'admin', '21232f297a57a5a743894a0e4a801fc3');
+values (null, 'admin', 'e10adc3949ba59abbe56e057f20f883e');
 
 
 #############################################
 
+# 用户表
 drop table if exists `app_user`;
-CREATE TABLE `app_user`
+create table `app_user`
 (
-    `id`           bigint                                                       NOT NULL AUTO_INCREMENT COMMENT '主键唯一标识',
-    `realname`     varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '员工真实姓名',
-    `username`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '登录用户名',
-    `password`     varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '密码',
-    `phone`        varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '手机号',
-    `gender`       varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci   DEFAULT NULL COMMENT '性别',
-    `work_place`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '工作地点',
-    `home_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '家庭地址',
-    `icon`         varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci comment '用户头像',
-    `create_time`  timestamp                                                    NOT NULL COMMENT '该用户创建时间',
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
+    `id`           bigint auto_increment primary key comment '主键唯一标识',
+    `realname`     varchar(10) not null comment '员工真实姓名',
+    `username`     varchar(15) not null comment '登录用户名',
+    `password`     varchar(50) not null comment '密码',
+    `phone`        varchar(11) not null comment '手机号',
+    `gender`       varchar(3)   default null comment '性别',
+    `work_place`   varchar(255) default null comment '工作地点',
+    `home_address` varchar(255) default null comment '家庭地址',
+    `icon`         varchar(255) comment '用户头像',
+    `create_time`  timestamp comment '创建时间'
+);
 
 # 插入一条测试数据,密码为123456加密后的数据
 insert into app_user (id, realname, username, password, phone, gender,
                       work_place, home_address, icon, create_time)
 values (null, '张三', 'zhangsan', 'e10adc3949ba59abbe56e057f20f883e', '13012345123', '1', '华南职业技术学院',
-        '华山', null, '2023-10-01 00:00:00');
+        '华山', null, '2023-10-01 00:00:00'),
+       (null, '太乙真人', 'taiyizhenren', 'e10adc3949ba59abbe56e057f20f883e', '13043245123', '1', '华南职业技术学院',
+        '泰山', null, '2023-10-01 00:00:00'),
+       (null, '孙悟空', 'sunwukong', 'e10adc3949ba59abbe56e057f20f883e', '13075645123', '1', '华南职业技术学院',
+        '泰山', null, '2023-10-01 00:00:00'),
+       (null, '狄仁杰', 'direnjie', 'e10adc3949ba59abbe56e057f20f883e', '13075645123', '1', '华南职业技术学院',
+        '泰山', null, '2023-10-01 00:00:00'),
+       (null, '东方求败', 'dongfangqiubai', 'e10adc3949ba59abbe56e057f20f883e', '13031245123', '1', '华南职业技术学院',
+        '华山', null, '2023-10-01 00:00:00'),
+       (null, '武则天', 'wuzetian', 'e10adc3949ba59abbe56e057f20f883e', '13054345123', '1', '华南职业技术学院',
+        '华山', null, '2023-10-01 00:00:00'),
+       (null, '宫本武藏', 'gongbenwuzang', 'e10adc3949ba59abbe56e057f20f883e', '13012344323', '1', '华南职业技术学院',
+        '华山', null, '2023-10-01 00:00:00'),
+       (null, '李元芳', 'liyuanfang', 'e10adc3949ba59abbe56e057f20f883e', '13014321234', '1', '华南职业技术学院',
+        '泰山', null, '2024-01-01 00:00:00'),
+       (null, '法外狂徒', '法外狂徒', 'e10adc3949ba59abbe56e057f20f883e', '13045675345', '0', '华南职业技术学院',
+        '小黑山', null, '2024-01-02 00:00:00'),
+       (null, '上官婉儿', '上官婉儿', 'e10adc3949ba59abbe56e057f20f883e', '13064234345', '0', '华南职业技术学院',
+        '小黑山', null, '2024-01-02 00:00:00'),
+       (null, '王七', 'wangqi', 'e10adc3949ba59abbe56e057f20f883e', '15555345345', '0', '华南职业技术学院',
+        '小黑山', null, '2024-01-02 00:00:00'),
+       (null, '王八', 'wangba', 'e10adc3949ba59abbe56e057f20f883e', '13018888345', '0', '华南职业技术学院',
+        '小黑山', null, '2024-01-02 00:00:00'),
+       (null, '王九', 'wangjiu', 'e10adc3949ba59abbe56e057f20f883e', '13012345789', '0', '华南职业技术学院',
+        '小黑山', null, '2024-01-02 00:00:00'),
+       (null, '王十', 'wangshi', 'e10adc3949ba59abbe56e057f20f883e', '13015675345', '0', '华南职业技术学院',
+        '小黑山', null, '2024-01-02 00:00:00'),
+       (null, '赵六', 'zhaoliu', 'e10adc3949ba59abbe56e057f20f883e', '13012345456', '1', '华南职业技术学院',
+        '启林', null, '2024-01-03 00:00:00');
 
 
 # 水库表
@@ -90,4 +116,15 @@ VALUES (null, 'R001', '水库一', '地址一', '1000', '1200', '1500', '800', '
         '850'),
        (null, 'R010', '水库十', '地址十', '1400', '1700', '2000', '1200', '400', '1200', '1100', '1250', '1500', '1600',
         '1200');
+
+# 消息表  管理员发送给用户的消息
+drop table if exists app_message;
+create table app_message
+(
+    id          bigint auto_increment primary key comment '主键自增id',
+    level       int          not null check ( level in (1, 2, 3)) comment '消息的类型  1为通知消息 2为提示消息 3为紧急消息',
+    content     varchar(300) not null comment '消息的内容',
+    employee_id bigint       not null comment '接收该消息的员工id'
+)
+
 
