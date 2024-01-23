@@ -25,4 +25,5 @@ public class Message {
     private Integer level;  // 消息的类型  1为通知消息 2为提示消息 3为紧急消息
     private String content;  // 消息的内容
     private Long employeeId;  // 接收该消息的用户
+    private Integer checked;  // 是否已读  0未读  1已读
 }

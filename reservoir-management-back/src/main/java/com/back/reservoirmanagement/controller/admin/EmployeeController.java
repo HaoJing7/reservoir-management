@@ -50,4 +50,13 @@ public class EmployeeController {
         employeeService.deleteEmployee(id);
         return Result.success();
     }
+
+    /**
+     * 添加员工
+     */
+    @PostMapping("/add")
+    public Result<?> addEmployee(@RequestBody User user) {
+        employeeService.saveUser(user);
+        return Result.success();
+    }
 }

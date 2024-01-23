@@ -29,7 +29,7 @@ create table `app_user`
 (
     `id`           bigint auto_increment primary key comment '主键唯一标识',
     `realname`     varchar(10) not null comment '员工真实姓名',
-    `username`     varchar(15) not null comment '登录用户名',
+    `username`     varchar(15) not null unique comment '登录用户名',
     `password`     varchar(50) not null comment '密码',
     `phone`        varchar(11) not null comment '手机号',
     `gender`       varchar(3)   default null comment '性别',
@@ -124,7 +124,12 @@ create table app_message
     id          bigint auto_increment primary key comment '主键自增id',
     level       int          not null check ( level in (1, 2, 3)) comment '消息的类型  1为通知消息 2为提示消息 3为紧急消息',
     content     varchar(300) not null comment '消息的内容',
-    employee_id bigint       not null comment '接收该消息的员工id'
-)
-
+    employee_id bigint       not null comment '接收该消息的员工id',
+    checked     int          not null check ( checked in (0, 1) ) comment '是否已读，0为未读  1为已读'
+);
+insert into app_message
+values (null, 1, '一号水库进行放水', 1, 0),
+       (null, 2, '二号水库进行放水', 2, 0),
+       (null, 3, '三号水库进行放水', 1, 0),
+       (null, 3, '四号水库进行放水', 1, 1);
 

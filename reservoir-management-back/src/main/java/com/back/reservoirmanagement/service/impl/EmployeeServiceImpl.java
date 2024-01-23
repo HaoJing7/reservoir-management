@@ -1,5 +1,6 @@
 package com.back.reservoirmanagement.service.impl;
 
+import com.back.reservoirmanagement.common.exception.DuplicateUsernameException;
 import com.back.reservoirmanagement.mapper.MessageMapper;
 import com.back.reservoirmanagement.mapper.UserMapper;
 import com.back.reservoirmanagement.pojo.dto.EmployeePageQueryDTO;
@@ -13,6 +14,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
+
+import java.time.LocalDateTime;
 
 /**
  * Author:tan hao
@@ -44,6 +48,7 @@ public class EmployeeServiceImpl extends ServiceImpl<UserMapper, User> implement
                     .employeeId(id)
                     .level(sendMessageDTO.getLevel())
                     .content(sendMessageDTO.getContent())
+                    .checked(0)
                     .build();
             messageMapper.insert(message);
         }
@@ -52,5 +57,22 @@ public class EmployeeServiceImpl extends ServiceImpl<UserMapper, User> implement
     @Override
     public void deleteEmployee(Long id) {
         userMapper.deleteById(id);
+    }
+
+    @Override
+    public void saveUser(User user) {
+        String password = user.getPassword();
+        user.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
+        user.setCreateTime(LocalDateTime.now());
+
+        // 查询是否有重复用户名
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUsername, user.getUsername());
+        User selectOne = userMapper.selectOne(queryWrapper);
+        if (selectOne == null) {
+            userMapper.insert(user);
+        } else {
+            throw new DuplicateUsernameException("用户名重复！");
+        }
     }
 }

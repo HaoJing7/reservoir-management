@@ -12,7 +12,7 @@
                 <el-button type="primary" size="mini" round icon="el-icon-search" @click="queryParams.page = 1; getEmployeeList()">搜索</el-button>
               </el-col>
               <el-col :span="10">
-                <el-button type="success" size="mini" plain icon="el-icon-plus" style="float: right; margin-right: 10px" @click="addEmployee">添加员工</el-button>
+                <el-button type="success" size="mini" plain icon="el-icon-plus" style="float: right; margin-right: 10px" @click="addEmp">添加员工</el-button>
                 <el-button type="primary" size="mini" plain icon="el-icon-plus" style="float: right; margin-right: 10px" @click="messageDialogVisible=true">群发消息</el-button>
               </el-col>
             </el-row>
@@ -34,7 +34,6 @@
             <el-table-column label="操作" width="250">
               <template slot-scope="scope">
                 <el-button type="text" @click="showDetails(scope.row)" style="margin-right: 10px;color: green">详情</el-button>
-                <el-button type="text" @click="editEmployee" style="margin-right: 10px">修改</el-button>
                 <el-button type="text" style="color: red" @click="confirmDelete(scope.row.id)">删除</el-button>
               </template>
             </el-table-column>
@@ -82,25 +81,61 @@
           </div>
           <div>
             <div style="width: 150px; height: 150px; float: left" >
-              <img style="width: 100%; height: 100%" alt="无效" />
+              <img style="width: 100%; height: 100%" :src="employeeDetails.icon" alt="无效" />
             </div>
             <div>
               <el-row :gutter="20">
-                <el-col :span="8" style="margin: 5px">姓名：{{employeeDetails.realname}}</el-col>
-                <el-col :span="8" style="margin: 5px">登陆用户名：{{employeeDetails.usernmae}}</el-col>
-                <el-col :span="8" style="margin: 5px">手机号：{{employeeDetails.usernmae}}</el-col>
+                <el-col :span="8" style="margin: 5px;font-size: 15px">姓名：{{employeeDetails.realname}}</el-col>
+                <el-col :span="8" style="margin: 5px;font-size: 15px">登陆用户名：{{employeeDetails.username}}</el-col>
+                <el-col :span="8" style="margin: 5px;font-size: 15px">手机号：{{employeeDetails.phone}}</el-col>
+                <el-col :span="8" style="margin: 5px;font-size: 15px">性别：{{employeeDetails.sex == 1? '男':'女'}}</el-col>
+                <el-col :span="8" style="margin: 5px;font-size: 15px">工作地点：{{employeeDetails.workPlace}}</el-col>
+                <el-col :span="8" style="margin: 5px;font-size: 15px">家庭地址：{{employeeDetails.homeAddress}}</el-col>
+                <el-col :span="8" style="margin: 5px;font-size: 15px">创建时间：{{employeeDetails.createTime}}</el-col>
               </el-row>
             </div>
           </div>
         </el-card>
       </el-dialog>
+      <el-dialog :visible.sync="addDialog" @close="closeAddDialog">
+        <el-form :model="addEmployeeForm" ref="addEmployeeForm">
+          <el-form-item prop="realname" label="姓名" label-width="200px">
+            <el-input v-model="addEmployeeForm.realname" style="width: 300px" clearable></el-input>
+          </el-form-item>
+          <el-form-item prop="username" label="登陆用户名" label-width="200px">
+            <el-input v-model="addEmployeeForm.username" style="width: 300px" clearable></el-input>
+          </el-form-item>
+          <el-form-item prop="password" label="密码" label-width="200px">
+            <el-input v-model="addEmployeeForm.password" style="width: 300px" placeholder="密码默认为123456" clearable disabled></el-input>
+          </el-form-item>
+          <el-form-item prop="phone" label="手机号" label-width="200px">
+            <el-input v-model="addEmployeeForm.phone" style="width: 300px" clearable></el-input>
+          </el-form-item>
+          <el-form-item prop="gender" label="性别" label-width="200px">
+            <el-select v-model="addEmployeeForm.gender" placeholder="请选择">
+              <el-option label="男" :value="1"></el-option>
+              <el-option label="女" :value="0"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item prop="workPlace" label="工作地点" label-width="200px">
+            <el-input v-model="addEmployeeForm.workPlace" style="width: 300px" clearable></el-input>
+          </el-form-item>
+          <el-form-item prop="homeAddress" label="家庭地址" label-width="200px">
+            <el-input v-model="addEmployeeForm.homeAddress" style="width: 300px" clearable></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="closeAddDialog">取 消</el-button>
+          <el-button type="primary" @click="confirmAdd">确 定</el-button>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
 <script>
-import {deleteEmployee, getEmployeeList, sendMessage} from "@/api/employee";
+import {addEmployee, deleteEmployee, getEmployeeList, sendMessage} from "@/api/employee";
 
-// TODO 添加员工  员工详情  修改员工
+// TODO 添加员工
 export default {
   name: 'Employee',
   data() {
@@ -123,6 +158,17 @@ export default {
       },
       employeeDetails: {},
       detailsDialog: false,
+      addEmployeeForm: {
+        realname: '',
+        username: '',
+        password: '123456',
+        phone: '',
+        gender: 1,
+        workPlace: '',
+        homePlace: '',
+        icon: '',
+      },
+      addDialog: false,
     }
   },
   methods: {
@@ -160,13 +206,15 @@ export default {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
+      }).then(async () => {
         console.log(id)
         deleteEmployee(id)
         this.$message({
           type: 'success',
           message: '删除成功！'
         });
+        this.queryParams.page = 1
+        this.getEmployeeList()
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -180,13 +228,17 @@ export default {
       this.detailsDialog = true
     },
     // 添加员工
-    addEmployee() {
-
+    addEmp() {
+      this.addDialog = true
     },
-    // 修改员工
-    editEmployee() {
-
+    closeAddDialog() {
+      this.addDialog = false
+      this.$refs.addEmployeeForm.resetFields()
     },
+    async confirmAdd() {
+      await addEmployee(this.addEmployeeForm)
+      this.closeAddDialog()
+    }
   },
   created() {
     // 页面创建的时候获取员工列表

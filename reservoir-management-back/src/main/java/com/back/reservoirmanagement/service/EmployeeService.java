@@ -13,4 +13,6 @@ public interface EmployeeService extends IService<User> {
     void sendMessage(SendMessageDTO sendMessageDTO);
 
     void deleteEmployee(Long id);
+
+    void saveUser(User user);
 }
