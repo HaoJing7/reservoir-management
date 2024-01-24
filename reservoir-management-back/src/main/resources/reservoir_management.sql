@@ -133,3 +133,34 @@ values (null, 1, '一号水库进行放水', 1, 0),
        (null, 3, '三号水库进行放水', 1, 0),
        (null, 3, '四号水库进行放水', 1, 1);
 
+# 电站信息表
+DROP TABLE IF EXISTS `app_powerstation`;
+CREATE TABLE `app_powerstation`  (
+  `power_station_id` bigint NOT NULL COMMENT '电站id',
+  `power_station_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '电站名称',
+  `type` int NOT NULL COMMENT '电站类型(1:蓄水式 2:引水式 3: 径流式)',
+  `reservoir_id` bigint NOT NULL COMMENT '对应水库id',
+  `unit` int NOT NULL COMMENT '机组数量',
+  `contain` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '装机容量',
+  `annual_average_runoff` decimal(8, 2) NOT NULL COMMENT '年均径流量',
+  `annual_average_power_generation` decimal(8, 2) NOT NULL COMMENT '年均发电量',
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '电站地址',
+  `max_reference_taffic` decimal(8, 2) NOT NULL COMMENT '最大引用流量',
+  `min_reference_taffic` decimal(8, 2) NOT NULL COMMENT '最小引用流量',
+  PRIMARY KEY (`power_station_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+# 插入两条电站数据
+INSERT INTO `app_powerstation` VALUES (1, '电站一号', 1, 1, 3, '500', 254.80, 121.72, '地址一', 267.00, 30.00);
+INSERT INTO `app_powerstation` VALUES (2, '电站二号', 2, 2, 4, '650', 200.00, 80.23, '地址二', 244.00, 32.00);
+
+# 员工用户申请表
+DROP TABLE IF EXISTS `app_application`;
+CREATE TABLE `app_application`  (
+                                    `id` bigint NOT NULL COMMENT '申请消息的id(主键自增)',
+                                    `employee_id` bigint NOT NULL COMMENT '申请用户的id',
+                                    `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '申请消息内容',
+                                    `create_time` datetime NOT NULL COMMENT '申请时间',
+                                    `employee_realname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '申请用户的名字',
+                                    `status` int NOT NULL COMMENT '申请消息的状态(0:未受理 1:已处理)',
+                                    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
