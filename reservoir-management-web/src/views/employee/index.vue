@@ -7,19 +7,28 @@
           <el-card style="width: 100%; margin-top: 5px">
             <el-row type="flex" justify="space-between">
               <el-col :span="14">
-                <el-input v-model="queryParams.name" size="mini" style="width: 200px; margin-right: 10px" placeholder="请输入姓名"></el-input>
-                <el-input v-model="queryParams.phone" size="mini" style="width: 200px; margin-right: 20px" placeholder="请输入电话"></el-input>
-                <el-button type="primary" size="mini" round icon="el-icon-search" @click="queryParams.page = 1; getEmployeeList()">搜索</el-button>
+                <el-input v-model="queryParams.name" size="mini" style="width: 200px; margin-right: 10px"
+                          placeholder="请输入姓名"></el-input>
+                <el-input v-model="queryParams.phone" size="mini" style="width: 200px; margin-right: 20px"
+                          placeholder="请输入电话"></el-input>
+                <el-button type="primary" size="mini" round icon="el-icon-search"
+                           @click="queryParams.page = 1; getEmployeeList()">搜索
+                </el-button>
               </el-col>
               <el-col :span="10">
-                <el-button type="success" size="mini" plain icon="el-icon-plus" style="float: right; margin-right: 10px" @click="addEmp">添加员工</el-button>
-                <el-button type="primary" size="mini" plain icon="el-icon-plus" style="float: right; margin-right: 10px" @click="messageDialogVisible=true">群发消息</el-button>
+                <el-button type="success" size="mini" plain icon="el-icon-plus" style="float: right; margin-right: 10px"
+                           @click="addEmp">添加员工
+                </el-button>
+                <el-button type="primary" size="mini" plain icon="el-icon-plus" style="float: right; margin-right: 10px"
+                           @click="messageDialogVisible=true">群发消息
+                </el-button>
               </el-col>
             </el-row>
           </el-card>
         </el-header>
         <el-main style="width: 100%">
-          <el-table ref="employeeTable" :data="employeeList" @selection-change="handleSelectionChange" tooltip-effect="dark" stripe style="width: 100%">
+          <el-table ref="employeeTable" :data="employeeList" @selection-change="handleSelectionChange"
+                    tooltip-effect="dark" stripe style="width: 100%">
             <!--多选框-->
             <el-table-column
               type="selection"
@@ -28,12 +37,13 @@
             <el-table-column prop="realname" label="姓名" width="250" sortable></el-table-column>
             <el-table-column prop="phone" label="手机号" width="250" sortable></el-table-column>
             <el-table-column label="性别" width="150">
-              <template slot-scope="scope">{{ scope.row.gender == 1 ? '男' : '女'}}</template>
+              <template slot-scope="scope">{{ scope.row.gender == 1 ? '男' : '女' }}</template>
             </el-table-column>
             <el-table-column prop="workPlace" label="工作地点" width="200"></el-table-column>
             <el-table-column label="操作" width="250">
               <template slot-scope="scope">
-                <el-button type="text" @click="showDetails(scope.row)" style="margin-right: 10px;color: green">详情</el-button>
+                <el-button type="text" @click="showDetails(scope.row)" style="margin-right: 10px;color: green">详情
+                </el-button>
                 <el-button type="text" style="color: red" @click="confirmDelete(scope.row.id)">删除</el-button>
               </template>
             </el-table-column>
@@ -80,25 +90,28 @@
             <span style="font-size: 20px">员工详情</span>
           </div>
           <div>
-            <div style="width: 150px; height: 150px; float: left" >
-              <img style="width: 100%; height: 100%" :src="employeeDetails.icon" alt="无效" />
+            <div style="width: 150px; height: 150px; float: left">
+              <img style="width: 100%; height: 100%" :src="employeeDetails.icon" alt="无效"/>
             </div>
             <div>
               <el-row :gutter="20">
-                <el-col :span="8" style="margin: 5px;font-size: 15px">姓名：{{employeeDetails.realname}}</el-col>
-                <el-col :span="8" style="margin: 5px;font-size: 15px">登陆用户名：{{employeeDetails.username}}</el-col>
-                <el-col :span="8" style="margin: 5px;font-size: 15px">手机号：{{employeeDetails.phone}}</el-col>
-                <el-col :span="8" style="margin: 5px;font-size: 15px">性别：{{employeeDetails.sex == 1? '男':'女'}}</el-col>
-                <el-col :span="8" style="margin: 5px;font-size: 15px">工作地点：{{employeeDetails.workPlace}}</el-col>
-                <el-col :span="8" style="margin: 5px;font-size: 15px">家庭地址：{{employeeDetails.homeAddress}}</el-col>
-                <el-col :span="8" style="margin: 5px;font-size: 15px">创建时间：{{employeeDetails.createTime}}</el-col>
+                <el-col :span="8" style="margin: 5px;font-size: 15px">姓名：{{ employeeDetails.realname }}</el-col>
+                <el-col :span="8" style="margin: 5px;font-size: 15px">登陆用户名：{{ employeeDetails.username }}</el-col>
+                <el-col :span="8" style="margin: 5px;font-size: 15px">手机号：{{ employeeDetails.phone }}</el-col>
+                <el-col :span="8" style="margin: 5px;font-size: 15px">
+                  性别：{{ employeeDetails.sex == 1 ? '男' : '女' }}
+                </el-col>
+                <el-col :span="8" style="margin: 5px;font-size: 15px">工作地点：{{ employeeDetails.workPlace }}</el-col>
+                <el-col :span="8" style="margin: 5px;font-size: 15px">家庭地址：{{ employeeDetails.homeAddress }}
+                </el-col>
+                <el-col :span="8" style="margin: 5px;font-size: 15px">创建时间：{{ employeeDetails.createTime }}</el-col>
               </el-row>
             </div>
           </div>
         </el-card>
       </el-dialog>
       <el-dialog :visible.sync="addDialog" @close="closeAddDialog">
-        <el-form :model="addEmployeeForm" ref="addEmployeeForm">
+        <el-form :model="addEmployeeForm" ref="addEmployeeForm" :rules="addRules">
           <el-form-item prop="realname" label="姓名" label-width="200px">
             <el-input v-model="addEmployeeForm.realname" style="width: 300px" clearable></el-input>
           </el-form-item>
@@ -106,7 +119,8 @@
             <el-input v-model="addEmployeeForm.username" style="width: 300px" clearable></el-input>
           </el-form-item>
           <el-form-item prop="password" label="密码" label-width="200px">
-            <el-input v-model="addEmployeeForm.password" style="width: 300px" placeholder="密码默认为123456" clearable disabled></el-input>
+            <el-input v-model="addEmployeeForm.password" style="width: 300px" placeholder="密码默认为123456" clearable
+                      disabled></el-input>
           </el-form-item>
           <el-form-item prop="phone" label="手机号" label-width="200px">
             <el-input v-model="addEmployeeForm.phone" style="width: 300px" clearable></el-input>
@@ -135,7 +149,6 @@
 <script>
 import {addEmployee, deleteEmployee, getEmployeeList, sendMessage} from "@/api/employee";
 
-// TODO 添加员工
 export default {
   name: 'Employee',
   data() {
@@ -165,8 +178,25 @@ export default {
         phone: '',
         gender: 1,
         workPlace: '',
-        homePlace: '',
+        homeAddress: '',
         icon: '',
+      },
+      addRules: {
+        realname: {required: true, message: '请输入真实姓名', trigger: 'blur'},
+        username: [
+          {required: true, message: '请输入登陆用户名', trigger: 'blur'},
+          {min: 4, message: '登陆用户名最少为4位'}
+        ],
+        phone: [
+          {required: true, message: '请输入手机号', trigger: 'blur'},
+          {
+            //   pattern 正则表达式
+            pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确', trigger: 'blur'
+          }
+        ],
+        gender: {required: true, message: '请选择性别', trigger: 'blur'},
+        workPlace: {required: true, message: '请输入工作地址', trigger: 'blur'},
+        homeAddress: {required: true, message: '请输入家庭地址', trigger: 'blur'},
       },
       addDialog: false,
     }
@@ -235,8 +265,12 @@ export default {
       this.addDialog = false
       this.$refs.addEmployeeForm.resetFields()
     },
-    async confirmAdd() {
-      await addEmployee(this.addEmployeeForm)
+    confirmAdd() {
+      this.$refs.addEmployeeForm.validate(async isOK => {
+        if (isOK) {
+          await addEmployee(this.addEmployeeForm)
+        }
+      })
       this.closeAddDialog()
     }
   },
@@ -266,6 +300,7 @@ export default {
   display: table;
   content: "";
 }
+
 .clearfix:after {
   clear: both
 }
