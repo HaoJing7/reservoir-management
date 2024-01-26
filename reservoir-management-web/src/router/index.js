@@ -11,7 +11,7 @@ import station from "@/router/modules/station";
 import dispatch from "@/router/modules/dispatch";
 import log from "@/router/modules/log"
 import employee from "@/router/modules/employee";
-import work from "@/router/modules/work";
+import application from "@/router/modules/application";
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -69,7 +69,7 @@ export const constantRoutes = [
   dispatch,
   log,
   employee,
-  work,
+  application,
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

@@ -64,7 +64,7 @@ public class EmployeeServiceImpl extends ServiceImpl<UserMapper, User> implement
         String password = user.getPassword();
         user.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
         user.setCreateTime(LocalDateTime.now());
-
+        user.setIcon("https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/reservoir-a1b9048b-e165-0934-49e0-25d97865fc78.png");
         // 查询是否有重复用户名
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getUsername, user.getUsername());

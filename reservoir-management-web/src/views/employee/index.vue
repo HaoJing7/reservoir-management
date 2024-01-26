@@ -59,8 +59,9 @@
           </el-row>
         </el-main>
       </el-container>
+      <!--群法消息-->
       <el-dialog title="群发消息" :visible.sync="messageDialogVisible" @close="closeMessageDialog">
-        <el-form ref="messageForm" :model="messageForm">
+        <el-form ref="messageForm" :model="messageForm" :rules="messageRules">
           <el-form-item label="消息等级" :label-width="labelWidth" prop="level">
             <el-select v-model="messageForm.level" placeholder="请选择消息等级">
               <el-option value="1" label="通知消息"></el-option>
@@ -84,6 +85,7 @@
           <el-button type="primary" @click="sendMessage">确 定</el-button>
         </div>
       </el-dialog>
+      <!--员工详情-->
       <el-dialog :visible.sync="detailsDialog">
         <el-card>
           <div slot="header" class="clearfix">
@@ -110,6 +112,7 @@
           </div>
         </el-card>
       </el-dialog>
+      <!--添加员工-->
       <el-dialog :visible.sync="addDialog" @close="closeAddDialog">
         <el-form :model="addEmployeeForm" ref="addEmployeeForm" :rules="addRules">
           <el-form-item prop="realname" label="姓名" label-width="200px">
@@ -169,6 +172,10 @@ export default {
         content: '',
         employeeIds: []
       },
+      messageRules: {
+        level: {required: true, message: '请选择消息级别', trigger: 'blur'},
+        content: {required: true, message: '请输入消息内容', trigger: 'blur'},
+      },
       employeeDetails: {},
       detailsDialog: false,
       addEmployeeForm: {
@@ -213,14 +220,19 @@ export default {
       this.selectedEmployee = val;
     },
     // 群发消息
-    async sendMessage() {
+    sendMessage() {
       for (const val of this.selectedEmployee) {
         console.log(val.id)
         this.messageForm.employeeIds.push(val.id)
       }
-      await sendMessage(this.messageForm)
-      this.closeMessageDialog()
+      this.$refs.messageForm.validate(async isOK => {
+        if (isOK) {
+          await sendMessage(this.messageForm)
+          this.closeMessageDialog()
+        }
+      })
     },
+    // 关闭消息框
     closeMessageDialog() {
       this.messageDialogVisible = false
       this.$refs.messageForm.resetFields()
@@ -244,7 +256,7 @@ export default {
           message: '删除成功！'
         });
         this.queryParams.page = 1
-        this.getEmployeeList()
+        await this.getEmployeeList()
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -268,10 +280,14 @@ export default {
     confirmAdd() {
       this.$refs.addEmployeeForm.validate(async isOK => {
         if (isOK) {
+          console.log(this.addEmployeeForm)
           await addEmployee(this.addEmployeeForm)
+          this.closeAddDialog()
+          this.$message.success("添加成功！")
+          this.queryParams.page = 1
+          await this.getEmployeeList()
         }
       })
-      this.closeAddDialog()
     }
   },
   created() {

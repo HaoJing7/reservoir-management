@@ -153,20 +153,22 @@ create table app_message
     level       int          not null check ( level in (1, 2, 3)) comment '消息的类型  1为通知消息 2为提示消息 3为紧急消息',
     content     varchar(300) not null comment '消息的内容',
     employee_id bigint       not null comment '接收该消息的员工id',
-    checked     int          not null check ( checked in (0, 1) ) comment '是否已读，0为未读  1为已读'
+    checked     int          not null check ( checked in (0, 1) ) comment '是否已读，0为未读  1为已读',
+    finished        int          not null check ( finished in (0, 1) ) comment '是否已完成，0位完成  1位未完成',
+    create_time datetime     not null comment '消息创建时间'
 );
 insert into app_message
-values (null, 1, '一号水库进行放水', 1, 0),
-       (null, 2, '二号水库进行放水', 2, 0),
-       (null, 3, '三号水库进行放水', 1, 0),
-       (null, 3, '四号水库进行放水', 1, 1);
+values (null, 1, '一号水库进行放水', 1, 0, 0, '2023-12-02 00:00:00'),
+       (null, 2, '二号水库进行放水', 2, 0, 0, '2023-12-02 00:00:00'),
+       (null, 3, '三号水库进行放水', 1, 0, 0, '2023-12-02 00:00:00'),
+       (null, 3, '四号水库进行放水', 1, 1, 0, '2023-12-02 00:00:00');
 
 
 # 电站信息表
 DROP TABLE IF EXISTS `app_powerstation`;
 CREATE TABLE `app_powerstation`
 (
-    `power_station_id`                bigint        NOT NULL COMMENT '电站id',
+    `power_station_id`                bigint auto_increment primary key COMMENT '电站id',
     `power_station_name`              varchar(255)  NOT NULL COMMENT '电站名称',
     `type`                            int           NOT NULL COMMENT '电站类型(1:蓄水式 2:引水式 3: 径流式)',
     `reservoir_id`                    bigint        NOT NULL COMMENT '对应水库id',
@@ -176,24 +178,23 @@ CREATE TABLE `app_powerstation`
     `annual_average_power_generation` decimal(8, 2) NOT NULL COMMENT '年均发电量',
     `address`                         varchar(255)  NOT NULL COMMENT '电站地址',
     `max_reference_taffic`            decimal(8, 2) NOT NULL COMMENT '最大引用流量',
-    `min_reference_taffic`            decimal(8, 2) NOT NULL COMMENT '最小引用流量',
-    PRIMARY KEY (`power_station_id`) USING BTREE
+    `min_reference_taffic`            decimal(8, 2) NOT NULL COMMENT '最小引用流量'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci
   ROW_FORMAT = Dynamic;
 # 插入两条电站数据
 INSERT INTO `app_powerstation`
-VALUES (1, '电站一号', 1, 1, 3, '500', 254.80, 121.72, '地址一', 267.00, 30.00);
+VALUES (null, '电站一号', 1, 1, 3, '500', 254.80, 121.72, '地址一', 267.00, 30.00);
 INSERT INTO `app_powerstation`
-VALUES (2, '电站二号', 2, 2, 4, '650', 200.00, 80.23, '地址二', 244.00, 32.00);
+VALUES (null, '电站二号', 2, 2, 4, '650', 200.00, 80.23, '地址二', 244.00, 32.00);
 
 
 # 员工用户申请表
 DROP TABLE IF EXISTS `app_application`;
 CREATE TABLE `app_application`
 (
-    `id`                bigint       NOT NULL COMMENT '申请消息的id(主键自增)',
+    `id`                bigint primary key auto_increment COMMENT '申请消息的id(主键自增)',
     `employee_id`       bigint       NOT NULL COMMENT '申请用户的id',
     `employee_realname` varchar(255) NOT NULL COMMENT '申请用户的名字',
     `reservoir_id`      bigint       NOT NULL COMMENT '水库id，id为0的话表示不选择水库',
@@ -202,9 +203,36 @@ CREATE TABLE `app_application`
     `content`           varchar(255) NOT NULL COMMENT '申请消息内容',
     `create_time`       datetime     NOT NULL COMMENT '申请时间',
     `status`            int          NOT NULL COMMENT '申请消息的状态(0:未受理 1：受理中 2:已处理)',
-    `picture`           varchar(255) COMMENT '附件，该字段为附件图片url，只能提交一张附件图片',
-    PRIMARY KEY (`id`) USING BTREE
+    `picture`           varchar(255) COMMENT '附件，该字段为附件图片url，只能提交一张附件图片'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci
   ROW_FORMAT = Dynamic;
+
+INSERT INTO app_application (id, employee_id, employee_realname, reservoir_id, power_station_id, type, content,
+                             create_time,
+                             status, picture)
+values (null, 1, '张三', 1, 1, 1, '变压器故障', '2023-12-02 00:00:00', 0,
+        'https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/reservoir-22074cb8-d038-09f2-c09d-65ad33a998ed.jpg'),
+        (null, 2, '太乙真人', 1, 1, 1, '变压器故障', '2023-12-02 00:00:00', 0,
+        'https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/reservoir-22074cb8-d038-09f2-c09d-65ad33a998ed.jpg'),
+        (null, 3, '孙悟空', 1, 1, 2, '调速器故障', '2023-12-02 00:00:00', 0,
+        'https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/reservoir-22074cb8-d038-09f2-c09d-65ad33a998ed.jpg'),
+        (null, 4, '狄仁杰', 1, 1, 2, '调速器故障', '2023-12-02 00:00:00', 0,
+        'https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/reservoir-22074cb8-d038-09f2-c09d-65ad33a998ed.jpg'),
+        (null, 5, '东方求败', 1, 1, 3, '水轮机故障', '2023-12-02 00:00:00', 0,
+        'https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/reservoir-22074cb8-d038-09f2-c09d-65ad33a998ed.jpg'),
+        (null, 6, '武则天', 1, 1, 3, '水轮机故障', '2023-12-02 00:00:00', 0,
+        'https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/reservoir-22074cb8-d038-09f2-c09d-65ad33a998ed.jpg'),
+        (null, 7, '宫本武藏', 1, 1, 4, '发电机组故障', '2023-12-02 00:00:00', 0,
+        'https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/reservoir-22074cb8-d038-09f2-c09d-65ad33a998ed.jpg'),
+        (null, 8, '李元芳', 1, 1, 4, '发电机组故障', '2024-01-02 00:00:00', 0,
+        'https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/reservoir-22074cb8-d038-09f2-c09d-65ad33a998ed.jpg'),
+        (null, 9, '法外狂徒', 1, 1, 4, '发电机组故障', '2024-01-02 00:00:00', 0,
+        'https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/reservoir-22074cb8-d038-09f2-c09d-65ad33a998ed.jpg'),
+        (null, 10, '上官婉儿', 1, 1, 4, '发电机组故障', '2024-01-02 00:00:00', 0,
+        'https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/reservoir-22074cb8-d038-09f2-c09d-65ad33a998ed.jpg'),
+        (null, 11, '王七', 1, 1, 4, '发电机组故障', '2024-01-02 00:00:00', 0,
+        'https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/reservoir-22074cb8-d038-09f2-c09d-65ad33a998ed.jpg'),
+        (null, 12, '王八', 1, 1, 4, '发电机组故障', '2024-01-02 00:00:00', 0,
+        'https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/reservoir-22074cb8-d038-09f2-c09d-65ad33a998ed.jpg')
