@@ -5,8 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-@ApiModel("水库分页时传入的数据")
-public class ReservoirPageQueryDTO {
+@ApiModel("水库分类查找时传入的数据")
+public class ReservoirQueryDTO {
 
     @ApiModelProperty("水库名称")
     private String name;
@@ -14,6 +14,6 @@ public class ReservoirPageQueryDTO {
     @ApiModelProperty("页码")
     private int page;
 
-    @ApiModelProperty("每页显示记录数")
-    private int pageSize;
+    @ApiModelProperty("水库类型")
+    private int type;
 }
