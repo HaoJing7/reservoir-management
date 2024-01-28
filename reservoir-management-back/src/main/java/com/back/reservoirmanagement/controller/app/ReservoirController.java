@@ -1,65 +1,114 @@
 package com.back.reservoirmanagement.controller.app;
 
-
 import com.back.reservoirmanagement.common.result.Result;
-import com.back.reservoirmanagement.pojo.dto.ReservoirDTO;
-import com.back.reservoirmanagement.pojo.dto.ReservoirPageQueryDTO;
+import com.back.reservoirmanagement.pojo.dto.ReservoirQueryDTO;
 import com.back.reservoirmanagement.pojo.entity.Reservoir;
+import com.back.reservoirmanagement.pojo.vo.ReservoirDefaultVO;
 import com.back.reservoirmanagement.service.ReservoirService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/app/reservoir")
 @Api(tags = "小程序端水库的查询操作")
 @Slf4j
 public class ReservoirController {
+
     @Autowired
     private ReservoirService reservoirService;
 
 
-    @GetMapping("/detail")
+    @GetMapping("/detail/{id}")
     @ApiOperation("详细信息")
-    public Result getDetailReservoir(ReservoirDTO reservoirDTO){
-        log.info("请求传入的参数：{}",reservoirDTO);
-        LambdaQueryWrapper<Reservoir> queryWrapper=new LambdaQueryWrapper();
-        queryWrapper.eq(Reservoir::getNumber,reservoirDTO.getNumber());
+    public Result getDetailReservoir(@PathVariable Long id){
+        log.info("请求传入的参数：{}",id);
 
         //在页面基于某个水库的编辑触发，故该水库一定存在，无须查找判断
-        Reservoir reservoir01=reservoirService.getOne(queryWrapper);
+        Reservoir reservoir=reservoirService.getById(id);
 
-        log.info("详细信息为：{}", reservoir01);
-        return Result.success(reservoir01);
+        log.info("详细信息为：{}", reservoir);
+        return Result.success(reservoir);
     }
 
+    @ApiOperation("搜索与分类")
+    @GetMapping("/query")
+    public Result getByQueryAndSort(ReservoirQueryDTO reservoirQueryDTO){
+        log.info("查询参数：{}", reservoirQueryDTO);
+
+        int page = reservoirQueryDTO.getPage();
+        if (page == 0) {
+            page = 1;  // 如果没有提供 page 参数，那么默认为 1
+        }
+
+        int size=4;    //因为数据少，先规定页面大小为4
+        Page<Reservoir> pageInfo = new Page<>(page, size);
+
+        //条件构造 按名称模糊查询、水库类型查询
+        LambdaQueryWrapper<Reservoir> queryWrapper=new LambdaQueryWrapper<>();
+        queryWrapper.like(reservoirQueryDTO.getName()!=null,
+                        Reservoir::getName, reservoirQueryDTO.getName())
+                .eq(reservoirQueryDTO.getType()!=0,
+                        Reservoir::getType, reservoirQueryDTO.getType())
+                .orderByAsc(Reservoir::getId);
+
+        //分页查询
+        reservoirService.page(pageInfo, queryWrapper);
+
+        //将Reservoir对象转换为ReservoirDefaultVO对象
+        List<ReservoirDefaultVO> voList = pageInfo.getRecords().stream().map(reservoir -> {
+            ReservoirDefaultVO vo = new ReservoirDefaultVO();
+            BeanUtils.copyProperties(reservoir, vo);
+            return vo;
+        }).collect(Collectors.toList());
+
+        //创建一个新的Page对象，用于存储ReservoirDefaultVO对象
+        Page<ReservoirDefaultVO> voPage = new Page<>(pageInfo.getCurrent(), pageInfo.getSize(), pageInfo.getTotal());
+        voPage.setRecords(voList);
+
+        return Result.success(voPage);
+    }
     /**
-     * 水库分页展示
-     * @param reservoirPageQueryDTO 分页传递的信息
+     * 点击水库信息默认调用的接口
+     * @param page 页码数，默认是1显示第一页，和百度查询一样，我们提供上一页，下一页，xx页参数实现翻页
      * @return
      */
-    @GetMapping("/page")
-    @ApiOperation("水库分页展示")//todo 这里先水库名字作为参数，后面可以弄个分类，拓展分页规则
-    public Result<Page> page(ReservoirPageQueryDTO reservoirPageQueryDTO){
-        log.info("分页查询参数：{}", reservoirPageQueryDTO);
+    @GetMapping("/default")
+    @ApiOperation("默认查询")
+    public Result<Page> page(Integer page){
+        if (page == null) {
+            page = 1;  // 如果没有提供 page 参数，那么默认为 1
+        }
+        int size = 4;  //因为数据少，先规定页面大小为4
 
-        //分页构造器,传入dto的page，pageSize
-        Page pageInfo = new Page(reservoirPageQueryDTO.getPage(),reservoirPageQueryDTO.getPageSize());
+        //用于存储Reservoir对象
+        Page<Reservoir> pageInfo = new Page<>(page, size);
+        //条件构造
+        LambdaQueryWrapper<Reservoir> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByAsc(Reservoir::getId);
+        //分页查询
+        reservoirService.page(pageInfo, queryWrapper);
 
-        LambdaQueryWrapper<Reservoir> queryWrapper=new LambdaQueryWrapper<>();
-        queryWrapper.like(StringUtils.hasText(reservoirPageQueryDTO.getName()),
-                Reservoir::getName,reservoirPageQueryDTO.getName());
-        queryWrapper.orderByAsc(Reservoir::getNumber);
+        //将Reservoir对象转换为ReservoirDefaultVO对象
+        List<ReservoirDefaultVO> voList = pageInfo.getRecords().stream().map(reservoir -> {
+            ReservoirDefaultVO vo = new ReservoirDefaultVO();
+            BeanUtils.copyProperties(reservoir, vo);
+            return vo;
+        }).collect(Collectors.toList());
 
-        reservoirService.page(pageInfo,queryWrapper);
+        //创建一个新的Page对象，用于存储ReservoirDefaultVO对象
+        Page<ReservoirDefaultVO> voPage = new Page<>(pageInfo.getCurrent(), pageInfo.getSize(), pageInfo.getTotal());
+        voPage.setRecords(voList);
 
-
-        return Result.success(pageInfo);
+        return Result.success(voPage);
     }
 
 }

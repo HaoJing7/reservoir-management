@@ -10,4 +10,10 @@ public interface ApplicationService extends IService<Application> {
     Page<Application> getApplicationList(ApplicationPageQueryDTO dto);
 
     ApplicationDetailVO getApplicationDetail(Integer id);
+
+    /**
+     * 提交申请
+     * @param applicationSubmitDTO
+     */
+    void submit(ApplicationSubmitDTO applicationSubmitDTO);
 }

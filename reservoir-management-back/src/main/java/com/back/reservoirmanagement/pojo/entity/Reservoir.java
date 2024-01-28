@@ -19,6 +19,7 @@ public class Reservoir {
     private Long id;  // 主键id
     private String number;   //水库编号
     private String name;     //水库名称
+    private int type;           //水库类型
     private String address;    //水库地址
     private String usableCapacity;  //有效容量
     private String designCapacity;  //设计容量

@@ -1,4 +1,4 @@
-package com.back.reservoirmanagement.pojo.dto;
+package com.back.reservoirmanagement.pojo.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,8 +7,11 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-@ApiModel("水库操作时传入的数据")
-public class ReservoirDTO implements Serializable {
+@ApiModel(description = "水库默认调用返回的数据格式")
+public class ReservoirDefaultVO implements Serializable {
+
+    @ApiModelProperty("水库id")
+    private Long id;
 
     @ApiModelProperty("水库编号")
     private String number;
@@ -17,7 +20,7 @@ public class ReservoirDTO implements Serializable {
     private String name;
 
     @ApiModelProperty("水库类型")
-    private String address;
+    private int type;
 
     @ApiModelProperty("设计库容")
     private String designCapacity;

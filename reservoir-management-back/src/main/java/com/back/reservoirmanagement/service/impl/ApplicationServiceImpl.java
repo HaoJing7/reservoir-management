@@ -1,5 +1,6 @@
 package com.back.reservoirmanagement.service.impl;
 
+import com.back.reservoirmanagement.common.context.BaseContext;
 import com.back.reservoirmanagement.mapper.ApplicationMapper;
 import com.back.reservoirmanagement.mapper.PowerStationMapper;
 import com.back.reservoirmanagement.mapper.ReservoirMapper;
@@ -79,5 +80,22 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
         detailVO.setStatus(status == 0 ? "未受理" : status == 1 ? "受理中" : "已处理");
         detailVO.setGender(application.getPicture());
         return detailVO;
+    }
+
+    /**
+     * 提交申请
+     * @param applicationSubmitDTO
+     */
+    @Override
+    public void submit(ApplicationSubmitDTO applicationSubmitDTO) {
+        // 数据封装
+        Application application=new Application();
+        BeanUtils.copyProperties(applicationSubmitDTO,application);
+        // 设置一条申请的相关信息(用户id、提交状态、申请时间)
+//        application.setId(System.currentTimeMillis());
+        application.setEmployeeId(BaseContext.getCurrentId());
+        application.setStatus(0);
+        application.setCreateTime(LocalDateTime.now());
+        save(application);
     }
 }
