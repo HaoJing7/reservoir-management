@@ -3,42 +3,9 @@ import request from "@/utils/request";
 /**
  * 查询所有的申请
  */
-export function getAll(params) {
+export function getApplicationList(params) {
   return request({
-    url: '/application/all',
-    method: 'get',
-    params
-  })
-}
-
-/**
- * 查询待处理的请求
- */
-export function getWaiting(params) {
-  return request({
-    url: '/application/waiting',
-    method: 'get',
-    params
-  })
-}
-
-/**
- * 查询处理中的请求
- */
-export function getProcessing(params) {
-  return request({
-    url: '/application/processing',
-    method: 'get',
-    params
-  })
-}
-
-/**
- * 查询处理完成的请求
- */
-export function getProcessed(params) {
-  return request({
-    url: '/application/processed',
+    url: '/application/page',
     method: 'get',
     params
   })
@@ -59,7 +26,28 @@ export function getWaitingNumber() {
  */
 export function getProcessingNumber() {
   return request({
-    url: 'application/process/number',
+    url: '/application/processing/number',
     method: 'get'
+  })
+}
+
+/**
+ * 更改申请状态
+ */
+export function changeStatus(data) {
+  return request({
+    url: `/application/status`,
+    method: 'put',
+    data
+  })
+}
+
+/**
+ * 获取申请详情
+ */
+export function getApplicationDetail(id) {
+  return request({
+    url: `/application/detail/${id}`,
+    method: 'get',
   })
 }

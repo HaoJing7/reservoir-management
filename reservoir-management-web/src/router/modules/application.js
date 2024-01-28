@@ -13,5 +13,12 @@ export default {
       icon: 'work', // 图标
       title: '员工申请' // 标题
     }
+  }, {
+    path: '/application/detail/:id',
+    component: () => import('@/views/application/detail.vue'),
+    hidden: true,
+    meta: {
+      title: '申请详情'
+    }
   }]
 }

@@ -24,7 +24,7 @@ public class Application {
     @TableId(type = IdType.AUTO)
     private Long id;  // 自增主键id
     private Long employeeId;  // 申请用户的id
-    private String realName;
+    private String employeeRealname;
     private Long reservoirId;
     private Long powerStationId;
     private Integer type;

@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 /**
  * Author:tan hao
  * Date: 2024-01-23 15:15
@@ -26,4 +28,6 @@ public class Message {
     private String content;  // 消息的内容
     private Long employeeId;  // 接收该消息的用户
     private Integer checked;  // 是否已读  0未读  1已读
+    private Integer finished;  // 是否已完成  0未完成  1已完成
+    private LocalDateTime createTime;  // 消息创建时间
 }

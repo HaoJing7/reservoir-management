@@ -49,6 +49,8 @@ public class EmployeeServiceImpl extends ServiceImpl<UserMapper, User> implement
                     .level(sendMessageDTO.getLevel())
                     .content(sendMessageDTO.getContent())
                     .checked(0)
+                    .finished(0)
+                    .createTime(LocalDateTime.now())
                     .build();
             messageMapper.insert(message);
         }
