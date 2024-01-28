@@ -24,10 +24,14 @@ import java.math.BigDecimal;
 public class PowerStation {
     @TableId(type = IdType.AUTO)
     private Long powerStationId;
+    // 电站编号
+    private String powerStationNumber;
     // 电站名称
     private String powerStationName;
     // 电站类型
     private Integer type;
+    // 是否阶梯
+    private Boolean IsStair;
     // 对应水库id
     private Long reservoirId;
     // 机组数量

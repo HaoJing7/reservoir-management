@@ -6,6 +6,7 @@ import com.back.reservoirmanagement.mapper.PowerStationMapper;
 import com.back.reservoirmanagement.mapper.ReservoirMapper;
 import com.back.reservoirmanagement.mapper.UserMapper;
 import com.back.reservoirmanagement.pojo.dto.ApplicationPageQueryDTO;
+import com.back.reservoirmanagement.pojo.dto.ApplicationSubmitDTO;
 import com.back.reservoirmanagement.pojo.entity.Application;
 import com.back.reservoirmanagement.pojo.entity.PowerStation;
 import com.back.reservoirmanagement.pojo.entity.Reservoir;
