@@ -31,5 +31,12 @@ export default {
     meta: {
       title: '运行数据'
     }
+  }, {
+    path: '/station/add/:id?',
+    component: () => import('@/views/station/add.vue'),
+    hidden: true,
+    meta: {
+      title: '添加/修改电站'
+    }
   }]
 }

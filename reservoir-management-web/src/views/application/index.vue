@@ -133,6 +133,8 @@ export default {
       } else {
         await changeStatus(application)
         this.$message.success('状态更改成功！')
+        this.waitingNumber = await getWaitingNumber()
+        this.processingNumber = await getProcessingNumber()
         await this.getApplicationList()
       }
     },

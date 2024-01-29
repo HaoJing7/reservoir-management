@@ -28,10 +28,11 @@ public class PowerStation {
     private String powerStationNumber;
     // 电站名称
     private String powerStationName;
-    // 电站类型
+    // 电站类型(1:蓄水式 2:引水式 3: 径流式)
     private Integer type;
-    // 是否阶梯
-    private Boolean IsStair;
+    // 是否梯级
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Boolean isStair;
     // 对应水库id
     private Long reservoirId;
     // 机组数量

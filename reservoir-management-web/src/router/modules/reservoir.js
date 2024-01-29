@@ -1,4 +1,5 @@
 import layout from '@/layout'
+
 export default {
   // 路由信息
   path: '/reservoir',
@@ -17,7 +18,7 @@ export default {
     meta: {
       title: '水库列表'
     }
-  },{
+  }, {
     path: 'hydrology', // 二级路由地址为空时 表示 /weather 显示一级路由 + 二级路由
     name: 'hydrology', // 可以用来跳转 也可以标记路由
     component: () => import('@/views/reservoir/hydrology.vue'),
@@ -30,6 +31,13 @@ export default {
     component: () => import('@/views/reservoir/realtime.vue'),
     meta: {
       title: '流域实况'
+    }
+  }, {
+    path: '/reservoir/add/:id?',
+    component: () => import('@/views/reservoir/add.vue'),
+    hidden: true,
+    meta: {
+      title: '添加/修改水库'
     }
   }]
 }

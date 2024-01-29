@@ -21,7 +21,7 @@ import java.util.Map;
  * Description:
  * 用于处理后台有关管理员的请求
  */
-@RestController
+@RestController("adminAdminController")
 @Slf4j
 @RequestMapping("/admin/user")
 public class AdminController {

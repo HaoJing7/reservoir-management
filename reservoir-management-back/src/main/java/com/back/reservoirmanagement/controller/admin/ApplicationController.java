@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * Date: 2024-01-27 01:25
  * Description:
  */
-@RestController
+@RestController("adminApplicationController")
 @RequestMapping("/admin/application")
 @Slf4j
 public class ApplicationController {

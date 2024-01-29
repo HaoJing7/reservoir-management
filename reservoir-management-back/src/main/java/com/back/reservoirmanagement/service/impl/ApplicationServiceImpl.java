@@ -79,7 +79,7 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
         detailVO.setApplicationCreateTime(application.getCreateTime());
         Integer status = application.getStatus();
         detailVO.setStatus(status == 0 ? "未受理" : status == 1 ? "受理中" : "已处理");
-        detailVO.setGender(application.getPicture());
+        detailVO.setPicture(application.getPicture());
         return detailVO;
     }
 

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * Date: 2024-01-23 12:25
  * Description:
  */
-@RestController
+@RestController("adminEmployeeController")
 @Slf4j
 @RequestMapping("/admin/employee")
 public class EmployeeController {

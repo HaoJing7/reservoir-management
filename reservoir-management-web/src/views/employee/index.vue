@@ -101,7 +101,7 @@
                 <el-col :span="8" style="margin: 5px;font-size: 15px">登陆用户名：{{ employeeDetails.username }}</el-col>
                 <el-col :span="8" style="margin: 5px;font-size: 15px">手机号：{{ employeeDetails.phone }}</el-col>
                 <el-col :span="8" style="margin: 5px;font-size: 15px">
-                  性别：{{ employeeDetails.sex == 1 ? '男' : '女' }}
+                  性别：{{ employeeDetails.gender == 1 ? '男' : '女' }}
                 </el-col>
                 <el-col :span="8" style="margin: 5px;font-size: 15px">工作地点：{{ employeeDetails.workPlace }}</el-col>
                 <el-col :span="8" style="margin: 5px;font-size: 15px">家庭地址：{{ employeeDetails.homeAddress }}
@@ -214,6 +214,8 @@ export default {
       const data = await getEmployeeList(this.queryParams)
       this.employeeList = data.records
       this.total = data.total
+      this.queryParams.name = ''
+      this.queryParams.phone = ''
     },
     // 多选
     handleSelectionChange(val) {
