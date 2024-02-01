@@ -12,6 +12,7 @@ import com.back.reservoirmanagement.pojo.entity.PowerStation;
 import com.back.reservoirmanagement.pojo.entity.Reservoir;
 import com.back.reservoirmanagement.pojo.entity.User;
 import com.back.reservoirmanagement.pojo.vo.ApplicationDetailVO;
+import com.back.reservoirmanagement.pojo.vo.ApplicationVO;
 import com.back.reservoirmanagement.service.ApplicationService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * Author:tan hao
@@ -98,5 +100,29 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
         application.setStatus(0);
         application.setCreateTime(LocalDateTime.now());
         save(application);
+    }
+
+    /**
+     * 员工用户获取历史申请
+     * @return
+     */
+    @Override
+    public List<ApplicationVO> historicalList() {
+        Long userId = BaseContext.getCurrentId();
+        List<ApplicationVO> list = applicationMapper.historicalList(userId);
+        // 进行参数转换
+        for (ApplicationVO applicationVO : list) {
+            String currentStatus = applicationVO.getStatus();
+            String type = applicationVO.getType();
+            applicationVO.setStatus("0".equals(currentStatus)?"未受理"
+                                    :"1".equals(currentStatus)?"受理中"
+                                    :"2".equals(currentStatus)?"已处理":"未知");
+            applicationVO.setType(
+                    "1".equals(type)?"变压器故障"
+                    :"2".equals(type)?"调速器故障"
+                    :"3".equals(type)?"水轮机故障"
+                    :"4".equals(type)?"发电机组故障":"其它");
+        }
+        return list;
     }
 }
