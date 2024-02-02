@@ -4,6 +4,7 @@ import com.back.reservoirmanagement.common.result.Result;
 import com.back.reservoirmanagement.pojo.dto.ReservoirQueryDTO;
 import com.back.reservoirmanagement.pojo.entity.Reservoir;
 import com.back.reservoirmanagement.pojo.vo.ReservoirDefaultVO;
+import com.back.reservoirmanagement.pojo.vo.ReservoirSimpleVO;
 import com.back.reservoirmanagement.service.ReservoirService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -111,4 +112,17 @@ public class ReservoirController {
         return Result.success(voPage);
     }
 
+    @ApiOperation("获取水库简单信息")
+    @GetMapping("/simple")
+    public Result<List<ReservoirSimpleVO>> simpleInfo(){
+        // 获取水库信息
+        List<Reservoir> list = reservoirService.list();
+        // 封装水库简单信息
+        List<ReservoirSimpleVO> simpleInfoList = list.stream().map(reservoir -> {
+            ReservoirSimpleVO simpleInfo = new ReservoirSimpleVO();
+            BeanUtils.copyProperties(reservoir, simpleInfo);
+            return simpleInfo;
+        }).collect(Collectors.toList());
+        return Result.success(simpleInfoList);
+    }
 }

@@ -5,9 +5,7 @@ import com.back.reservoirmanagement.pojo.dto.PowerStationQueryDTO;
 import com.back.reservoirmanagement.pojo.dto.ReservoirQueryDTO;
 import com.back.reservoirmanagement.pojo.entity.PowerStation;
 import com.back.reservoirmanagement.pojo.entity.Reservoir;
-import com.back.reservoirmanagement.pojo.vo.PowerStationDefaultVO;
-import com.back.reservoirmanagement.pojo.vo.PowerStationDetailVO;
-import com.back.reservoirmanagement.pojo.vo.ReservoirDefaultVO;
+import com.back.reservoirmanagement.pojo.vo.*;
 import com.back.reservoirmanagement.service.PowerStationService;
 import com.back.reservoirmanagement.service.ReservoirService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -139,5 +137,19 @@ public class PowerStationController {
         voPage.setRecords(voList);
 
         return Result.success(voPage);
+    }
+
+    @ApiOperation("获取电站简单信息")
+    @GetMapping("/simple")
+    public Result<List<PowerStationSimpleVO>> simpleInfo(){
+        // 获取电站信息
+        List<PowerStation> list = powerStationService.list();
+        // 封装电站简单信息
+        List<PowerStationSimpleVO> simpleInfoList = list.stream().map(powerstation -> {
+            PowerStationSimpleVO simpleInfo = new PowerStationSimpleVO();
+            BeanUtils.copyProperties(powerstation, simpleInfo);
+            return simpleInfo;
+        }).collect(Collectors.toList());
+        return Result.success(simpleInfoList);
     }
 }
