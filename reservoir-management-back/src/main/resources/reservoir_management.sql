@@ -157,22 +157,26 @@ VALUES (null, 'R001', '水库一',1, '地址一', '1000', '1200', '1500', '800',
 
 
 # 消息表  管理员发送给用户的消息
-drop table if exists app_message;
-create table app_message
-(
-    id          bigint auto_increment primary key comment '主键自增id',
-    level       int          not null check ( level in (1, 2, 3)) comment '消息的类型  1为通知消息 2为提示消息 3为紧急消息',
-    content     varchar(300) not null comment '消息的内容',
-    employee_id bigint       not null comment '接收该消息的员工id',
-    checked     int          not null check ( checked in (0, 1) ) comment '是否已读，0为未读  1为已读',
-    finished        int          not null check ( finished in (0, 1) ) comment '是否已完成  0未完成  1已完成',
-    create_time datetime     not null comment '消息创建时间'
-);
-insert into app_message
-values (null, 1, '一号水库进行放水', 1, 0, 0, '2023-12-02 00:00:00'),
-       (null, 2, '二号水库进行放水', 2, 0, 0, '2023-12-02 00:00:00'),
-       (null, 3, '三号水库进行放水', 1, 0, 0, '2023-12-02 00:00:00'),
-       (null, 3, '四号水库进行放水', 1, 1, 0, '2023-12-02 00:00:00');
+DROP TABLE IF EXISTS `app_message`;
+CREATE TABLE `app_message`  (
+    `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键自增id',
+    `level` int NOT NULL COMMENT '消息的类型  1为通知消息 2为提示消息 3为紧急消息',
+    `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '消息的标题',
+    `content` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '消息的内容',
+    `employee_id` bigint NOT NULL COMMENT '接收该消息的员工id',
+    `checked` int NOT NULL COMMENT '是否已读，0为未读  1为已读',
+    `finished` int NOT NULL COMMENT '是否已完成  0未完成  1已完成',
+    `create_time` datetime NOT NULL COMMENT '消息创建时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    CONSTRAINT `app_message_chk_1` CHECK (`level` in (1,2,3)),
+    CONSTRAINT `app_message_chk_2` CHECK (`checked` in (0,1)),
+    CONSTRAINT `app_message_chk_3` CHECK (`finished` in (0,1))
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+INSERT INTO `app_message` VALUES (1, 1, '放水计划', '一号水库进行放水', 1, 0, 0, '2023-12-02 00:00:00');
+INSERT INTO `app_message` VALUES (2, 2, '放水计划', '二号水库进行放水', 2, 0, 0, '2023-12-02 00:00:00');
+INSERT INTO `app_message` VALUES (3, 3, '放水计划', '三号水库进行放水', 1, 0, 0, '2023-12-02 00:00:00');
+INSERT INTO `app_message` VALUES (4, 3, '放水计划', '四号水库进行放水', 1, 1, 0, '2023-12-02 00:00:00');
 
 # 电站表
 DROP TABLE IF EXISTS `app_powerstation`;
