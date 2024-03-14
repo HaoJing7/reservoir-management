@@ -31,7 +31,7 @@ public class ReservoirController {
     @GetMapping("/detail/{id}")
     @ApiOperation("详细信息")
     public Result getDetailReservoir(@PathVariable Long id){
-        log.info("请求传入的参数：{}",id);
+        log.info("详细信息传入的参数：{}",id);
 
         //在页面基于某个水库的编辑触发，故该水库一定存在，无须查找判断
         Reservoir reservoir=reservoirService.getById(id);
@@ -43,7 +43,7 @@ public class ReservoirController {
     @ApiOperation("搜索与分类")
     @GetMapping("/query")
     public Result getByQueryAndSort(ReservoirQueryDTO reservoirQueryDTO){
-        log.info("查询参数：{}", reservoirQueryDTO);
+        log.info("水库搜索与分类传入的参数：{}", reservoirQueryDTO);
 
         int page = reservoirQueryDTO.getPage();
         if (page == 0) {
@@ -85,10 +85,11 @@ public class ReservoirController {
     @GetMapping("/default")
     @ApiOperation("默认查询")
     public Result<Page> page(Integer page){
+        log.info("水库默认查询：{}", page);
         if (page == null) {
             page = 1;  // 如果没有提供 page 参数，那么默认为 1
         }
-        int size = 4;  //因为数据少，先规定页面大小为4
+        int size = 6;  //因为数据少，先规定页面大小为4
 
         //用于存储Reservoir对象
         Page<Reservoir> pageInfo = new Page<>(page, size);
@@ -108,13 +109,20 @@ public class ReservoirController {
         //创建一个新的Page对象，用于存储ReservoirDefaultVO对象
         Page<ReservoirDefaultVO> voPage = new Page<>(pageInfo.getCurrent(), pageInfo.getSize(), pageInfo.getTotal());
         voPage.setRecords(voList);
-
+        log.info("voList:{}",voList);
         return Result.success(voPage);
     }
 
+
+    /**
+     * 申请模块的获取水库简单信息功能
+     * by nongqd
+     * @return
+     */
     @ApiOperation("获取水库简单信息")
     @GetMapping("/simple")
     public Result<List<ReservoirSimpleVO>> simpleInfo(){
+        log.info("水库简单信息:");
         // 获取水库信息
         List<Reservoir> list = reservoirService.list();
         // 封装水库简单信息
@@ -123,6 +131,7 @@ public class ReservoirController {
             BeanUtils.copyProperties(reservoir, simpleInfo);
             return simpleInfo;
         }).collect(Collectors.toList());
+        log.info("水库获取电站简单信息返回{}",simpleInfoList);
         return Result.success(simpleInfoList);
     }
 }

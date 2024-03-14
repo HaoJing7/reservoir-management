@@ -35,8 +35,8 @@ public class Message {
     private String content;  // 消息的内容
     @ApiModelProperty("接收消息的用户的id")
     private Long employeeId;  // 接收该消息的用户
-    @ApiModelProperty("是否完成标志 0 已完成  1 未完成")
-    private Integer finished;  // 是否完成  0 已完成  1 未完成
+    @ApiModelProperty("是否完成标志 0 未完成  1 已完成")
+    private Integer finished;  // 是否完成  0 未完成  1 已完成
     @ApiModelProperty("消息编号 0未读  1已读")
     private Integer checked;  // 是否已读  0未读  1已读
     @ApiModelProperty("消息创建时间")
