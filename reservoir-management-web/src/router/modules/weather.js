@@ -31,12 +31,5 @@ export default {
     meta: {
       title: '降水'
     }
-  }, {
-    path: 'evaporation', // 二级路由地址为空时 表示 /weather 显示一级路由 + 二级路由
-    name: 'evaporation', // 可以用来跳转 也可以标记路由
-    component: () => import('@/views/weather/evaporation.vue'),
-    meta: {
-      title: '蒸发'
-    }
   }]
 }

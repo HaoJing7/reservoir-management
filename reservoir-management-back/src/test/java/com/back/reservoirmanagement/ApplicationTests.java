@@ -3,11 +3,8 @@ package com.back.reservoirmanagement;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class ApplicationTests {
+import java.util.LinkedList;
 
-    @Test
-    void contextLoads() {
-    }
+class ApplicationTests {
 
 }

@@ -1,6 +1,8 @@
 package com.back.reservoirmanagement.service.impl;
 
+import com.back.reservoirmanagement.mapper.HydrologyMapper;
 import com.back.reservoirmanagement.pojo.dto.ReservoirPageDTO;
+import com.back.reservoirmanagement.pojo.entity.Hydrology;
 import com.back.reservoirmanagement.pojo.entity.Reservoir;
 import com.back.reservoirmanagement.mapper.ReservoirMapper;
 import com.back.reservoirmanagement.service.ReservoirService;
@@ -21,6 +23,9 @@ public class ReservoirServiceImpl extends ServiceImpl<ReservoirMapper, Reservoir
     @Autowired
     private ReservoirMapper reservoirMapper;
 
+    @Autowired
+    private HydrologyMapper hydrologyMapper;
+
     /**
      * 管理端获取水库列表
      */
@@ -33,5 +38,21 @@ public class ReservoirServiceImpl extends ServiceImpl<ReservoirMapper, Reservoir
                 .eq(dto.getType() != null, Reservoir::getType, dto.getType());
         reservoirMapper.selectPage(page, queryWrapper);
         return page;
+    }
+
+    /**
+     * 获取水文数据
+     */
+    @Override
+    public Hydrology getHydrology() {
+        return hydrologyMapper.selectById(1);
+    }
+
+    /**
+     * 修改水文数据
+     */
+    @Override
+    public void updateHydrology(Hydrology hydrology) {
+       hydrologyMapper.updateById(hydrology);
     }
 }

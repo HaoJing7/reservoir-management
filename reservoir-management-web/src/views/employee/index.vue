@@ -178,6 +178,7 @@ export default {
       },
       employeeDetails: {},
       detailsDialog: false,
+
       addEmployeeForm: {
         realname: '',
         username: '',

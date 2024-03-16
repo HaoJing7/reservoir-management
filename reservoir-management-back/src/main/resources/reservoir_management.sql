@@ -253,4 +253,21 @@ values (null, 1, '张三', 1, 1, 1, '变压器故障', '2023-12-02 00:00:00', 0,
         (null, 11, '王七', 1, 1, 4, '发电机组故障', '2024-01-02 00:00:00', 2,
         'https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/reservoir-22074cb8-d038-09f2-c09d-65ad33a998ed.jpg'),
         (null, 12, '王八', 1, 1, 4, '发电机组故障', '2024-01-02 00:00:00', 2,
-        'https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/reservoir-22074cb8-d038-09f2-c09d-65ad33a998ed.jpg')
+        'https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/reservoir-22074cb8-d038-09f2-c09d-65ad33a998ed.jpg');
+
+# 水文数据表
+drop table if exists `hydrology`;
+create table `hydrology`
+(
+    id int primary key auto_increment comment '主键id',
+    water_level int  comment '水位',
+    runoff_volume int comment '净流量大小',
+    sediment_concentration int comment '含沙量',
+    flood_season int comment '汛期 1 2 3 4代表春夏秋冬',
+    presence_of_ice_cover int comment '有无结冰期 0为无 1为有',
+    flow_velocity int comment '流速',
+    river_network_shape int comment '河流水系形状 0为未知 1为树枝状水系，2为向心状水系，3为平行状水系，4为网状水系',
+    hydropower_potential int comment  '水能资源蕴藏量',
+    river_navigation_value int comment '河流航运价值 0为低 1位中 2为高'
+);
+insert into hydrology values (null, 101, 501, 50, 2, 0, 2, 1, 100, 2);

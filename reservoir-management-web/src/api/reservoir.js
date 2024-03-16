@@ -52,3 +52,24 @@ export function addReservoir(data) {
     data
   })
 }
+
+/**
+ * 获取水文数据
+ */
+export function getHydrology() {
+  return request({
+    url: '/reservoir/hydrology',
+    method: 'get',
+  })
+}
+
+/**
+ * 修改水文数据
+ */
+export function updateHydrology(data) {
+  return request({
+    url: '/reservoir/hydrology',
+    method: 'put',
+    data
+  })
+}

@@ -17,13 +17,6 @@ export default {
     meta: {
       title: '电站列表'
     }
-  },{
-    path: 'unit', // 二级路由地址为空时 表示 /weather 显示一级路由 + 二级路由
-    name: 'unit', // 可以用来跳转 也可以标记路由
-    component: () => import('@/views/station/unit.vue'),
-    meta: {
-      title: '机组列表'
-    }
   }, {
     path: 'realtime', // 二级路由地址为空时 表示 /weather 显示一级路由 + 二级路由
     name: 'realtime', // 可以用来跳转 也可以标记路由
