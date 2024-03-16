@@ -2,6 +2,7 @@ import axios from 'axios'
 import store from '@/store'
 import { Message } from 'element-ui'
 import router from '@/router'
+import message from "element-ui/packages/message";
 // 创建一个新的axios实例
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // 基础地址
@@ -43,8 +44,8 @@ service.interceptors.response.use((response) => {
     router.push('/login') // 跳转到登录页
     return Promise.reject(error)
   }
-  // error.message 其它的错误
-  Message({ type: 'error', message: error.message })
+  // error.message 其它的错误  ->  统一通知为 操作有误，请重试！
+  Message({ type: 'warning', message: '操作有误，请重试！' })
   return Promise.reject(error)
 })
 // 导出service
