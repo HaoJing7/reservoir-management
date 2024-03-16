@@ -50,8 +50,8 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         //用户端
         registry.addInterceptor(jwtTokenUserInterceptor)
                 .addPathPatterns("/app/**")
-//                .excludePathPatterns("/app/user/login");
-                .excludePathPatterns("/app/**");
+                .excludePathPatterns("/app/user/login");
+//                .excludePathPatterns("/app/**");
     }
 
     /**
@@ -78,21 +78,64 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
+//    @Bean
+//    public Docket createRestApi() {
+//        // 文档类型
+//        return new Docket(DocumentationType.SWAGGER_2)
+//                .apiInfo(apiInfo())
+//                .select()
+//                .apis(RequestHandlerSelectors.basePackage("com.back.reservoirmanagement.controller"))
+//                .paths(PathSelectors.any())
+//                .build();
+//    }
+    /**
+     * 通过knife4j生成管理端接口文档
+     * @return
+     */
     @Bean
-    public Docket createRestApi() {
-        // 文档类型
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
+    public Docket docketAdmin() {
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                .title("水库项目接口文档")
+                .version("2.0")
+                .description("水库项目接口文档")
+                .build();
+
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("管理端接口")
+                .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.back.reservoirmanagement.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.back.reservoirmanagement.controller.admin"))
                 .paths(PathSelectors.any())
                 .build();
+        return docket;
+    }
+
+    /**
+     * 通过knife4j生成用户端接口文档
+     * @return
+     */
+    @Bean
+    public Docket docketUser() {
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                .title("水库项目接口文档")
+                .version("2.0")
+                .description("水库项目接口文档")
+                .build();
+
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("用户端接口")
+                .apiInfo(apiInfo)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.back.reservoirmanagement.controller.app"))
+                .paths(PathSelectors.any())
+                .build();
+        return docket;
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("水库项目")
-                .version("1.0")
+                .version("2.0")
                 .description("水库项目接口文档")
                 .build();
     }

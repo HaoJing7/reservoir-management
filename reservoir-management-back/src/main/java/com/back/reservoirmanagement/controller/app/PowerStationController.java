@@ -5,9 +5,7 @@ import com.back.reservoirmanagement.pojo.dto.PowerStationQueryDTO;
 import com.back.reservoirmanagement.pojo.dto.ReservoirQueryDTO;
 import com.back.reservoirmanagement.pojo.entity.PowerStation;
 import com.back.reservoirmanagement.pojo.entity.Reservoir;
-import com.back.reservoirmanagement.pojo.vo.PowerStationDefaultVO;
-import com.back.reservoirmanagement.pojo.vo.PowerStationDetailVO;
-import com.back.reservoirmanagement.pojo.vo.ReservoirDefaultVO;
+import com.back.reservoirmanagement.pojo.vo.*;
 import com.back.reservoirmanagement.service.PowerStationService;
 import com.back.reservoirmanagement.service.ReservoirService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -43,6 +41,7 @@ public class PowerStationController {
     @ApiOperation("查看详细信息")
     @GetMapping("/detail/{id}")
     public Result getPowerStationDetail(@PathVariable Long id){
+        log.info("电站查看详细信息{}:",id);
         //查询电站信息
         PowerStation powerStation = powerStationService.getById(id);
 
@@ -68,7 +67,7 @@ public class PowerStationController {
     @ApiOperation("搜索与分类")
     @GetMapping("/query")
     public Result getByQueryAndSort(PowerStationQueryDTO powerStationQueryDTO){
-        log.info("查询参数：{}", powerStationQueryDTO);
+        log.info("电站搜索与分类：{}", powerStationQueryDTO);
 
         int page = powerStationQueryDTO.getPage();
         if (page == 0) {
@@ -114,6 +113,7 @@ public class PowerStationController {
     @GetMapping("/default")
     @ApiOperation("默认查询")
     public Result<Page> page(Integer page){
+        log.info("电站默认查询:{}",page);
         if (page == null) {
             page = 1;  // 如果没有提供 page 参数，那么默认为 1
         }
@@ -137,7 +137,28 @@ public class PowerStationController {
         //创建一个新的Page对象，用于存储PowerStationDefaultVO对象
         Page<PowerStationDefaultVO> voPage = new Page<>(pageInfo.getCurrent(), pageInfo.getSize(), pageInfo.getTotal());
         voPage.setRecords(voList);
-
+        log.info("voList:{}",voList);
         return Result.success(voPage);
+    }
+
+    /**
+     * 申请模块的获取电站简单信息功能
+     * by nongqd
+     * @return
+     */
+    @ApiOperation("获取电站简单信息")
+    @GetMapping("/simple")
+    public Result<List<PowerStationSimpleVO>> simpleInfo(){
+        log.info("电站获取电站简单信息");
+        // 获取电站信息
+        List<PowerStation> list = powerStationService.list();
+        // 封装电站简单信息
+        List<PowerStationSimpleVO> simpleInfoList = list.stream().map(powerstation -> {
+            PowerStationSimpleVO simpleInfo = new PowerStationSimpleVO();
+            BeanUtils.copyProperties(powerstation, simpleInfo);
+            return simpleInfo;
+        }).collect(Collectors.toList());
+        log.info("电站获取电站简单信息返回{}",simpleInfoList);
+        return Result.success(simpleInfoList);
     }
 }

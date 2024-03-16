@@ -4,6 +4,7 @@ import com.back.reservoirmanagement.common.context.BaseContext;
 import com.back.reservoirmanagement.common.result.Result;
 import com.back.reservoirmanagement.pojo.dto.ApplicationSubmitDTO;
 import com.back.reservoirmanagement.pojo.entity.Application;
+import com.back.reservoirmanagement.pojo.vo.ApplicationVO;
 import com.back.reservoirmanagement.service.ApplicationService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
@@ -46,11 +47,9 @@ public class ApplicationController {
      */
     @PostMapping("/list")
     @ApiOperation("查看历史申请")
-    public Result<List<Application>> list(){
-        log.info("获取历史数据");
-        LambdaQueryWrapper<Application> queryWrapper =new LambdaQueryWrapper<>();
-        queryWrapper.eq(Application::getEmployeeId, BaseContext.getCurrentId()).orderByAsc(Application::getStatus).orderByDesc(Application::getCreateTime);
-        List<Application> list = applicationService.list(queryWrapper);
+    public Result<List<ApplicationVO>> list(){
+        List<ApplicationVO> list = applicationService.historicalList();
+        log.info("获取历史数据:{}",list);
         return Result.success(list);
     }
 

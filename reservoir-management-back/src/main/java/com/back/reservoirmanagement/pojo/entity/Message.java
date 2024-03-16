@@ -29,12 +29,14 @@ public class Message {
     private Long id;  // 自增主键id
     @ApiModelProperty("消息类型")
     private Integer level;  // 消息的类型  1为通知消息 2为提示消息 3为紧急消息
+    @ApiModelProperty("消息标题")
+    private String title;  // 消息的标题
     @ApiModelProperty("消息内容")
     private String content;  // 消息的内容
     @ApiModelProperty("接收消息的用户的id")
     private Long employeeId;  // 接收该消息的用户
-    @ApiModelProperty("是否完成标志 0 已完成  1 未完成")
-    private Integer finished;  // 是否完成  0 已完成  1 未完成
+    @ApiModelProperty("是否完成标志 0 未完成  1 已完成")
+    private Integer finished;  // 是否完成  0 未完成  1 已完成
     @ApiModelProperty("消息编号 0未读  1已读")
     private Integer checked;  // 是否已读  0未读  1已读
     @ApiModelProperty("消息创建时间")

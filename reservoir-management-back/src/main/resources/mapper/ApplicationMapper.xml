@@ -4,5 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.back.reservoirmanagement.mapper.ApplicationMapper">
-
+    <select id="historicalList" resultType="com.back.reservoirmanagement.pojo.vo.ApplicationVO">
+        SELECT aa.id,ar.`name` as reservoirName,ap.power_station_name,aa.type,aa.`status`,aa.content,aa.create_time
+        FROM `app_application` aa
+            LEFT JOIN app_reservoir ar ON aa.reservoir_id=ar.id
+            LEFT JOIN app_powerstation ap ON aa.power_station_id=ap.power_station_id
+        WHERE employee_id=#{userId}
+    </select>
 </mapper>
