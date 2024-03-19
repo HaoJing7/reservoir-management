@@ -25,14 +25,14 @@ export default {
     meta: {
       title: '水文数据'
     }
-  }, {
+  }, /*{
     path: 'realtime', // 二级路由地址为空时 表示 /weather 显示一级路由 + 二级路由
     name: 'realtime', // 可以用来跳转 也可以标记路由
     component: () => import('@/views/reservoir/realtime.vue'),
     meta: {
       title: '流域实况'
     }
-  }, {
+  }, */{
     path: '/reservoir/add/:id?',
     component: () => import('@/views/reservoir/add.vue'),
     hidden: true,

@@ -275,3 +275,20 @@ create table `hydrology`
     river_navigation_value int comment '河流航运价值 0为低 1位中 2为高'
 );
 insert into hydrology values (null, 101, 501, 50, 2, 0, 2, 1, 100, 2);
+
+# 电站运行数据表
+drop table if exists `powerstation_data`;
+create table `powerstation_data`
+(
+    id int not null auto_increment primary key,
+    date date not null comment '电站某日的运行数据',
+    power_generation int comment '发电量(kWh)',
+    water_level float comment '平均水位(m)',
+    inflow_flow_rate float comment '进流流量(m^3/s)',
+    outflow_flow_rate float comment '出流流量(m^3/s)',
+    pressure float comment '压力(Pa)',
+    speed float comment '转速(rpm)',
+    voltage float comment '电网电压(V)',
+    frequency float comment '电网频率(Hz)',
+    grid_load float comment '电网负荷(kW)'
+)

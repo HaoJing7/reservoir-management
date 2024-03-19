@@ -175,7 +175,7 @@ export default {
           await updateHydrology(this.updateHydrologyForm)
           await this.getHydrology()
           this.closeDialog();
-          this.$message.success("添加成功！")
+          this.$message.success("修改成功！")
         }
       })
     }

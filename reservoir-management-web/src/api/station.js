@@ -52,3 +52,24 @@ export function addStation(data) {
     data
   })
 }
+
+/**
+ * 获取电站id和名称列表
+ */
+export function getAllStationList() {
+  return request({
+    url: '/station/list',
+    method: 'get'
+  })
+}
+
+/**
+ * 获取电站运行数据
+ */
+export function getRunningData(data) {
+  return request({
+    url: `/station/data/${data}`,
+    method: 'get',
+  })
+}
+
