@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 
 @Slf4j
 @RestController
-@RequestMapping("/weather")
+@RequestMapping({"/weather", "/admin/weather"})
 public class WeatherController {
 
     @Resource
@@ -22,8 +22,8 @@ public class WeatherController {
      * 获取实时天气
      * @return
      */
-    @GetMapping()
-    public Result getWeather()  {
+    @GetMapping
+    public Result<?> getWeather()  {
         APIWeatherInfo weathers = null;
         try {
             weathers = weatherService.getWeather();
