@@ -32,6 +32,8 @@ module.exports = {
   devServer: {
     port: port,
     open: true,
+    // 设置允许访问开发服务器的主机列表(用于cpolar内网穿透)
+    disableHostCheck:true,
     overlay: {
       warnings: false,
       errors: true

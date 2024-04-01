@@ -1,14 +1,12 @@
 package com.back.reservoirmanagement.controller.admin;
 
 import com.back.reservoirmanagement.common.result.Result;
-import com.back.reservoirmanagement.mapper.HydrologyMapper;
 import com.back.reservoirmanagement.pojo.dto.ReservoirPageDTO;
 import com.back.reservoirmanagement.pojo.entity.Hydrology;
 import com.back.reservoirmanagement.pojo.entity.Reservoir;
 import com.back.reservoirmanagement.service.ReservoirService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Results;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

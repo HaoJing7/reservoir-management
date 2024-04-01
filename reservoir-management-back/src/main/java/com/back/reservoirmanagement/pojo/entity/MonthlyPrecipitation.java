@@ -13,5 +13,5 @@ public class MonthlyPrecipitation {
     private Long id;
     private Integer year;//年份
     private Integer month;//月份
-    private Double precip;//月总降水量，默认单位：毫米
+    private Double precipitation;//月总降水量，默认单位：毫米
 }

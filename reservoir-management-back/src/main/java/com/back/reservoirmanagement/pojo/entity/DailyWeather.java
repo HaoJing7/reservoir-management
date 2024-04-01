@@ -16,5 +16,5 @@ public class DailyWeather {
     private LocalDateTime date;
     private Integer tempMax;//当天最高温度
     private Integer tempMin;//当天最低温度
-    private Double precip;//当天总降水量，默认单位：毫米
+    private Double precipitation;//当天总降水量，默认单位：毫米
 }

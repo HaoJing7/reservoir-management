@@ -110,6 +110,7 @@ export default {
   },
 
   mounted() {
+    console.log(this.$refs.powerGenerationChart);
     this.power = echarts.init(this.$refs.powerGenerationChart, null, {
       width: 800,
       height: 300
@@ -124,6 +125,7 @@ export default {
   watch: {
     // 监听runningData的变化
     runningData() {
+      console.log("=======")
       this.renderPowerGenerationChart();
       this.renderWaterLevelChart();
     }
@@ -235,6 +237,7 @@ export default {
   },
 }
 </script>
+
 <style>
 .el-card__header {
   padding: 5px 15px;

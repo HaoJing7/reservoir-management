@@ -22,14 +22,14 @@ export default {
     name: 'temperature', // 可以用来跳转 也可以标记路由
     component: () => import('@/views/weather/temperature.vue'),
     meta: {
-      title: '气温'
+      title: '月气温统计'
     }
   }, {
     path: 'rain', // 二级路由地址为空时 表示 /weather 显示一级路由 + 二级路由
     name: 'rain', // 可以用来跳转 也可以标记路由
     component: () => import('@/views/weather/rain.vue'),
     meta: {
-      title: '降水'
+      title: '年降水统计'
     }
   }]
 }

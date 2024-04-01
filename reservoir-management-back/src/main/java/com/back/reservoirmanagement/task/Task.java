@@ -59,8 +59,8 @@ public class Task {
         // 计算月总降水量并保存
         MonthlyPrecipitation total=new MonthlyPrecipitation();
         for (DailyWeather dailyWeather : list) {
-            Double precip=total.getPrecip();
-            total.setPrecip(precip+dailyWeather.getPrecip());
+            Double precip=total.getPrecipitation();
+            total.setPrecipitation(precip+dailyWeather.getPrecipitation());
         }
         // 其他参数
         total.setYear(end.getYear());
