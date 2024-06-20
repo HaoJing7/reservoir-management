@@ -56,4 +56,8 @@ http://localhost:9528
 
 ## 登陆界面
 
+![image](https://github.com/HaoJing7/IMG/blob/master/%E9%A6%96%E9%A1%B5.jpg)
 
+## 首页
+
+![image](https://github.com/HaoJing7/IMG/blob/master/img2.jpg)
