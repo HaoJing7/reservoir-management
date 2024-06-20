@@ -52,12 +52,40 @@ npm run start  或者  npm run dev
 http://localhost:9528
 ```
 
-# 项目展示
+# 部分内容展示
 
 ## 登陆界面
 
-![image](https://github.com/HaoJing7/IMG/blob/master/%E9%A6%96%E9%A1%B5.jpg)
+![image](https://github.com/HaoJing7/IMG/blob/master/img1.jpg)
 
 ## 首页
 
 ![image](https://github.com/HaoJing7/IMG/blob/master/img2.jpg)
+
+## 实时气象数据
+
+![image](https://github.com/HaoJing7/IMG/blob/master/img3.jpg)
+
+## 月气温统计
+
+![image](https://github.com/HaoJing7/IMG/blob/master/img4.jpg)
+
+## 年降水统计
+
+![image](https://github.com/HaoJing7/IMG/blob/master/img5.jpg)
+
+## 水库列表
+
+![image](https://github.com/HaoJing7/IMG/blob/master/img6.jpg)
+
+## 水文数据管理
+
+![image](https://github.com/HaoJing7/IMG/blob/master/img7.jpg)
+
+## 电站运行数据
+
+![image](https://github.com/HaoJing7/IMG/blob/master/img8.jpg)
+
+## 员工申请
+
+![image](https://github.com/HaoJing7/IMG/blob/master/img9.jpg)
