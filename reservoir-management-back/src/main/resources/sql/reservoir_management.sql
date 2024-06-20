@@ -160,11 +160,11 @@ create table `powerstation_data`
 DROP TABLE IF EXISTS `daily_weather`;
 CREATE TABLE `daily_weather`
 (
-    `id`       bigint       NOT NULL AUTO_INCREMENT COMMENT 'id主键',
-    `date`     date     NULL DEFAULT NULL COMMENT '日期',
-    `temp_min` int          NULL DEFAULT NULL COMMENT '当日最低温',
-    `temp_max` int          NULL DEFAULT NULL COMMENT '当日最高温',
-    `precipitation`   double(6, 1) NULL DEFAULT NULL COMMENT '当日降水(单位:mm)',
+    `id`            bigint       NOT NULL AUTO_INCREMENT COMMENT 'id主键',
+    `date`          date         NULL DEFAULT NULL COMMENT '日期',
+    `temp_min`      int          NULL DEFAULT NULL COMMENT '当日最低温',
+    `temp_max`      int          NULL DEFAULT NULL COMMENT '当日最高温',
+    `precipitation` double(6, 1) NULL DEFAULT NULL COMMENT '当日降水(单位:mm)',
     PRIMARY KEY (`id`) USING BTREE
 );
 
@@ -172,9 +172,18 @@ CREATE TABLE `daily_weather`
 DROP TABLE IF EXISTS `monthly_precipitation`;
 CREATE TABLE `monthly_precipitation`
 (
-    `id`     bigint       NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `year`   int          NULL DEFAULT NULL COMMENT '年份',
-    `month`  int          NULL DEFAULT NULL COMMENT '月份',
+    `id`            bigint       NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `year`          int          NULL DEFAULT NULL COMMENT '年份',
+    `month`         int          NULL DEFAULT NULL COMMENT '月份',
     `precipitation` double(6, 1) NULL DEFAULT NULL COMMENT '月总降水',
     PRIMARY KEY (`id`) USING BTREE
 );
+
+# 备忘录表
+DROP TABLE IF EXISTS `record`;
+CREATE TABLE `record`
+(
+    `id`      int PRIMARY KEY AUTO_INCREMENT COMMENT '主键id',
+    `content` varchar(50) NOT NULL COMMENT '内容',
+    `create_time`    varchar(50)    NOT NULL COMMENT '创建时间'
+)

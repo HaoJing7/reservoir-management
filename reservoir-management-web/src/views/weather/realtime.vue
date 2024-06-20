@@ -6,7 +6,7 @@
         <div class="weather-icon" :class="'wi wi-yahoo-' + realTime.iconDay"></div>
         <div class="weather-description">{{ realTime.textDay }}</div>
         &emsp;
-        <div class="temp-max">{{ realTime.tempMax }}°C ~ {{ realTime.tempMin }}°C</div>
+        <div class="temp-max">{{ realTime.tempMin }}°C ~ {{ realTime.tempMax }}°C</div>
       </div>
 
       <div class="sunrise-sunset">

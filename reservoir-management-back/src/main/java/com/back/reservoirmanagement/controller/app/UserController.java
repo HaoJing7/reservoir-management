@@ -113,8 +113,6 @@ public class UserController {
         return Result.success();
     }
 
-    //TODO 更新基本信息，更改密码，密码找回
-
     @PostMapping("/updatePassword")
     @ApiOperation("更改密码")
     public Result updatePassword(User user){

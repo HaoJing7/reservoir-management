@@ -86,11 +86,9 @@
 
 <script>
 import {changeStatus, getApplicationList, getProcessingNumber, getWaitingNumber} from "@/api/application";
-import Template from "@/views/template.vue";
 
 export default {
   name: 'Application',
-  components: {Template},
   data() {
     return {
       waitingNumber: 0,  // 待处理数量  用于角标

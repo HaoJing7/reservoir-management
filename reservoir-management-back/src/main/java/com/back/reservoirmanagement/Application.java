@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Slf4j
 public class Application {
 
+    // TODO 首页编写
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
         log.info("服务已经启动");
