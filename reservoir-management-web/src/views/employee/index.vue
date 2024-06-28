@@ -62,6 +62,9 @@
       <!--群法消息-->
       <el-dialog title="群发消息" :visible.sync="messageDialogVisible" @close="closeMessageDialog">
         <el-form ref="messageForm" :model="messageForm" :rules="messageRules">
+          <el-form-item label="消息主题" :label-width="labelWidth" prop="title">
+            <el-input v-model="messageForm.title" placeholder="请输入消息主题" style="width: 400px" clearable></el-input>
+          </el-form-item>
           <el-form-item label="消息等级" :label-width="labelWidth" prop="level">
             <el-select v-model="messageForm.level" placeholder="请选择消息等级">
               <el-option value="1" label="通知消息"></el-option>
@@ -168,11 +171,13 @@ export default {
       selectedEmployee: [], // 选中群发的员工
       messageDialogVisible: false, // 发送消息对话框
       messageForm: {
+        title: '',
         level: '',
         content: '',
         employeeIds: []
       },
       messageRules: {
+        title: {required: true, message: '请输入消息主题', trigger: 'blur'},
         level: {required: true, message: '请选择消息级别', trigger: 'blur'},
         content: {required: true, message: '请输入消息内容', trigger: 'blur'},
       },
@@ -232,6 +237,10 @@ export default {
         if (isOK) {
           await sendMessage(this.messageForm)
           this.closeMessageDialog()
+          this.$message({
+            type: 'success',
+            message: '发送成功！'
+          });
         }
       })
     },

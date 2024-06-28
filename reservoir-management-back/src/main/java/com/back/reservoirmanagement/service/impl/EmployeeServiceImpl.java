@@ -1,10 +1,12 @@
 package com.back.reservoirmanagement.service.impl;
 
 import com.back.reservoirmanagement.common.exception.DuplicateUsernameException;
+import com.back.reservoirmanagement.mapper.ApplicationMapper;
 import com.back.reservoirmanagement.mapper.MessageMapper;
 import com.back.reservoirmanagement.mapper.UserMapper;
 import com.back.reservoirmanagement.pojo.dto.EmployeePageQueryDTO;
 import com.back.reservoirmanagement.pojo.dto.SendMessageDTO;
+import com.back.reservoirmanagement.pojo.entity.Application;
 import com.back.reservoirmanagement.pojo.entity.Message;
 import com.back.reservoirmanagement.pojo.entity.User;
 import com.back.reservoirmanagement.service.EmployeeService;
@@ -31,6 +33,10 @@ public class EmployeeServiceImpl extends ServiceImpl<UserMapper, User> implement
 
     @Autowired
     private MessageMapper messageMapper;
+
+    @Autowired
+    private ApplicationMapper applicationMapper;
+
     @Override
     public Page<User> page(EmployeePageQueryDTO employeePageQueryDTO) {
         Page<User> page = new Page<>(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
@@ -45,6 +51,7 @@ public class EmployeeServiceImpl extends ServiceImpl<UserMapper, User> implement
     public void sendMessage(SendMessageDTO sendMessageDTO) {
         for (Long id : sendMessageDTO.getEmployeeIds()) {
             Message message = Message.builder()
+                    .title(sendMessageDTO.getTitle())
                     .employeeId(id)
                     .level(sendMessageDTO.getLevel())
                     .content(sendMessageDTO.getContent())
@@ -59,6 +66,15 @@ public class EmployeeServiceImpl extends ServiceImpl<UserMapper, User> implement
     @Override
     public void deleteEmployee(Long id) {
         userMapper.deleteById(id);
+        // 删除员工之后要把有关他的所有内容都删除（message和application）
+        // 删除message
+        LambdaQueryWrapper<Message> messageLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        messageLambdaQueryWrapper.eq(Message::getEmployeeId, id);
+        messageMapper.delete(messageLambdaQueryWrapper);
+        // 删除application
+        LambdaQueryWrapper<Application> applicationLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        applicationLambdaQueryWrapper.eq(Application::getEmployeeId, id);
+        applicationMapper.delete(applicationLambdaQueryWrapper);
     }
 
     @Override

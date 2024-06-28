@@ -1,15 +1,14 @@
 <template>
   <div class="container">
     <div class="log-container">
-      <h2>调度日志下载</h2>
+      <h2>调度优化日志查看</h2>
       <div class="log-list">
         <div class="log-item" v-for="file in fileList" :key="file.name">
           <div class="log-info">
             <div class="log-name">{{ file.name }}</div>
-            <div class="log-size">{{ formatFileSize(file.size) }}</div>
           </div>
           <div class="log-actions">
-            <a :href="file.url" class="download-btn">下载</a>
+            <a :href="file.url" class="download-btn">查看</a>
           </div>
         </div>
       </div>

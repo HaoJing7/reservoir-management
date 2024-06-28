@@ -13,4 +13,6 @@ public interface ReservoirService extends IService<Reservoir> {
     Hydrology getHydrology();
 
     void updateHydrology(Hydrology hydrology);
+
+    void deleteReservoir(Integer id);
 }

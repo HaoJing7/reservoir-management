@@ -1,7 +1,9 @@
 package com.back.reservoirmanagement.service.impl;
 
+import com.back.reservoirmanagement.mapper.ApplicationMapper;
 import com.back.reservoirmanagement.mapper.HydrologyMapper;
 import com.back.reservoirmanagement.pojo.dto.ReservoirPageDTO;
+import com.back.reservoirmanagement.pojo.entity.Application;
 import com.back.reservoirmanagement.pojo.entity.Hydrology;
 import com.back.reservoirmanagement.pojo.entity.Reservoir;
 import com.back.reservoirmanagement.mapper.ReservoirMapper;
@@ -25,6 +27,9 @@ public class ReservoirServiceImpl extends ServiceImpl<ReservoirMapper, Reservoir
 
     @Autowired
     private HydrologyMapper hydrologyMapper;
+
+    @Autowired
+    private ApplicationMapper applicationMapper;
 
     /**
      * 管理端获取水库列表
@@ -53,6 +58,14 @@ public class ReservoirServiceImpl extends ServiceImpl<ReservoirMapper, Reservoir
      */
     @Override
     public void updateHydrology(Hydrology hydrology) {
-       hydrologyMapper.updateById(hydrology);
+        hydrologyMapper.updateById(hydrology);
+    }
+
+    @Override
+    public void deleteReservoir(Integer id) {
+        reservoirMapper.deleteById(id);
+        LambdaQueryWrapper<Application> applicationLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        applicationLambdaQueryWrapper.eq(Application::getReservoirId, id);
+        applicationMapper.delete(applicationLambdaQueryWrapper);
     }
 }

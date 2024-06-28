@@ -36,7 +36,7 @@ public class ReservoirController {
      */
     @DeleteMapping("/{id}")
     public Result<?> deleteReservoir(@PathVariable Integer id) {
-        reservoirService.removeById(id);
+        reservoirService.deleteReservoir(id);
         return Result.success();
     }
 

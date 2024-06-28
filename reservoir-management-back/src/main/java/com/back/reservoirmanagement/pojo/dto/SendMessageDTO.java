@@ -11,6 +11,7 @@ import java.util.List;
  */
 @Data
 public class SendMessageDTO {
+    private String title;
     private List<Long> employeeIds;
     private String content;
     private Integer level;

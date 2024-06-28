@@ -7,4 +7,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface PowerStationService extends IService<PowerStation> {
     Page<PowerStation> getStationList(StationPageDTO dto);
+
+    void deleteStation(Integer id);
 }

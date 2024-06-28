@@ -38,7 +38,7 @@ public class PowerStationController {
      */
     @DeleteMapping("/{id}")
     public Result<?> deleteStation(@PathVariable Integer id) {
-        powerStationService.removeById(id);
+        powerStationService.deleteStation(id);
         return Result.success();
     }
 
