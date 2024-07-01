@@ -16,6 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
@@ -98,16 +99,8 @@ public class UserController {
         User userInfo=userService.getById(BaseContext.getCurrentId());
 
         //理论上点开编辑效果是默认填上原先的基本信息的,不需要进行非空判断，为了方便接口文档测试，这里加了判断
-        if(StringUtils.isNotEmpty(userUpdateDTO.getRealname()))
-            userInfo.setRealname(userUpdateDTO.getRealname());
-        if(StringUtils.isNotEmpty(userUpdateDTO.getGender()))
-            userInfo.setGender(userUpdateDTO.getGender());
-        if(StringUtils.isNotEmpty(userUpdateDTO.getPhone()))
-            userInfo.setPhone(userUpdateDTO.getPhone());
-        if(StringUtils.isNotEmpty(userUpdateDTO.getHomeAddress()))
-            userInfo.setHomeAddress(userUpdateDTO.getHomeAddress());
-        if(StringUtils.isNotEmpty(userUpdateDTO.getWorkPlace()))
-            userInfo.setWorkPlace(userUpdateDTO.getWorkPlace());
+        BeanUtils.copyProperties(userUpdateDTO,userInfo,"id");
+        log.info("{}",userInfo);
 
         userService.updateById(userInfo);
         return Result.success();

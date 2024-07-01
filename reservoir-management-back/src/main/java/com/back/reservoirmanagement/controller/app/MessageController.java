@@ -82,6 +82,7 @@ public class MessageController {
         log.info("查询条件：{}",messageQueryDTO);
         LambdaQueryWrapper<Message> queryWrapper=new LambdaQueryWrapper<>();
         String title = messageQueryDTO.getTitle();
+        queryWrapper.eq(Message::getEmployeeId,BaseContext.getCurrentId());
         queryWrapper.like(StringUtils.isNoneEmpty(title),Message::getTitle,title);
         List<Message> list = messageService.list(queryWrapper);
         // 将查询所得的消息转为缩略形式

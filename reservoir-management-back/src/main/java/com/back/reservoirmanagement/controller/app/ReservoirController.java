@@ -2,7 +2,9 @@ package com.back.reservoirmanagement.controller.app;
 
 import com.back.reservoirmanagement.common.result.Result;
 import com.back.reservoirmanagement.pojo.dto.ReservoirQueryDTO;
+import com.back.reservoirmanagement.pojo.entity.Hydrology;
 import com.back.reservoirmanagement.pojo.entity.Reservoir;
+import com.back.reservoirmanagement.pojo.vo.HydrologyVO;
 import com.back.reservoirmanagement.pojo.vo.ReservoirDefaultVO;
 import com.back.reservoirmanagement.pojo.vo.ReservoirSimpleVO;
 import com.back.reservoirmanagement.service.ReservoirService;
@@ -133,5 +135,35 @@ public class ReservoirController {
         }).collect(Collectors.toList());
         log.info("水库获取电站简单信息返回{}",simpleInfoList);
         return Result.success(simpleInfoList);
+    }
+
+    /**
+     * 获取水文数据
+     * @return
+     */
+    @ApiOperation("获取水文数据")
+    @GetMapping("/hydrology")
+    public Result<HydrologyVO> getHydrology() {
+        Hydrology hydrology = reservoirService.getHydrology();
+
+        return Result.success(convertToHydrologyVO(hydrology));
+    }
+
+    private HydrologyVO convertToHydrologyVO(Hydrology hydrology){
+        int floodSeason = hydrology.getFloodSeason().intValue();
+        int iceCover = hydrology.getPresenceOfIceCover().intValue();
+        int shape = hydrology.getRiverNetworkShape().intValue();
+        int value = hydrology.getRiverNavigationValue().intValue();
+        return HydrologyVO.builder()
+                .waterLevel(hydrology.getWaterLevel())
+                .runoffVolume(hydrology.getRunoffVolume())
+                .sedimentConcentration(hydrology.getSedimentConcentration())
+                .floodSeason(floodSeason==1?"春":(floodSeason==2?"夏":(floodSeason==3?"秋":"冬")))
+                .presenceOfIceCover(iceCover==0?"无":"有")
+                .flowVelocity(hydrology.getFlowVelocity())
+                .riverNetworkShape(shape==0?"未知":(shape==1?"树枝状水系":(shape==2?"向心状水系":(shape==3?"平行状水系":"网状水系"))))
+                .hydropowerPotential(hydrology.getHydropowerPotential())
+                .riverNavigationValue(value==0?"低":(value==1?"中":"高"))
+                .build();
     }
 }

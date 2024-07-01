@@ -132,6 +132,18 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         return docket;
     }
 
+    @Bean
+    public Docket dockerCommon() {
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("通用接口")
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.back.reservoirmanagement.controller.common"))
+                .paths(PathSelectors.any())
+                .build();
+        return docket;
+    }
+
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("水库项目")

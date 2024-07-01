@@ -8,7 +8,7 @@ import lombok.Data;
 @ApiModel("消息的按条件查找封装的数据")
 public class MessageQueryDTO {
 
-    @ApiModelProperty("水库名称")
+    @ApiModelProperty("消息")
     private String title;
 
 }
