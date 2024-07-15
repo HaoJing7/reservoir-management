@@ -1,13 +1,20 @@
 package com.back.reservoirmanagement.controller.admin;
 
 import com.back.reservoirmanagement.common.result.Result;
+import com.back.reservoirmanagement.service.DispatchService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.val;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.websocket.server.PathParam;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Author:tan hao
@@ -18,9 +25,22 @@ import javax.websocket.server.PathParam;
 @RequestMapping("/admin/dispatch")
 @Slf4j
 public class DispatchController {
-    @GetMapping("/cal/{sa}/{pc}/{it}")
-    public Result<?> Algorithm(@PathVariable Integer sa, @PathVariable Integer pc, @PathVariable Integer it) {
-        String result = "https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/%E5%8F%82%E6%95%B0%E6%A8%A1%E6%9D%BF.xlsx";
-        return Result.success(result);
+
+    @Autowired
+    private DispatchService dispatchService;
+
+    @PostMapping("/execute")
+    public Result<?> executeAlgorithm(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("algorithm") Integer algorithm,
+            @RequestParam("particleCount") Integer particleCount,
+            @RequestParam("iterationCount") Integer iterationCount) {
+
+        String url = dispatchService.executeAlgorithm(file, algorithm, particleCount, iterationCount);
+        log.info(url);
+        return Result.success(url);
     }
+
 }
+
+

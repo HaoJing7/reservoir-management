@@ -24,25 +24,27 @@
         <div class="section">
           <div class="label">请选择粒子数量:</div>
           <div class="input">
-            <el-input-number v-model="particleCount" :min="10" :max="200" label="粒子数量"></el-input-number>
+            <el-input-number v-model="particleCount" :min="30" :max="200" label="粒子数量"></el-input-number>
           </div>
         </div>
         <div class="section">
           <div class="label">请选择迭代次数:</div>
           <div class="input">
-            <el-input-number v-model="iterationCount" :min="10" :max="200" label="迭代次数"></el-input-number>
+            <el-input-number v-model="iterationCount" :min="100" :max="300" label="迭代次数"></el-input-number>
           </div>
         </div>
         <div class="section">
           <div class="label">上传参数附件:</div>
           <div class="input">
             <el-upload
-              class="upload-btn"
               drag
-              action="#"
-              :show-file-list="false"
-              :on-success="handleUploadSuccess"
-              :on-error="handleUploadError">
+              class="upload-btn"
+              :file-list="fileList"
+              :show-file-list="true"
+              action=""
+              :before-upload="beforeFileUpload"
+              :on-change="handleFileChange"
+              accept=".xlsx,.xls">
               <i class="el-icon-upload"></i>
               <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
             </el-upload>
@@ -68,6 +70,7 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import { executeAlgorithm } from '@/api/dispatch'
 
 Vue.use(ElementUI)
 
@@ -79,21 +82,25 @@ export default {
       particleCount: 30,
       iterationCount: 100,
       algorithms: [
-        {value: 'MOEA/D', label: 'MOEA/D'},
-        {value: 'NSGA-II', label: 'NSGA-II'},
+        { value: 0, label: 'MOEA/D' },
+        { value: 1, label: 'NSGA-II' },
       ],
       isExecuting: false,
-      resultFileUrl: ''
+      resultFileUrl: '',
+      file: null,
+      fileList: []
     }
   },
   methods: {
-    handleUploadSuccess(response, file, fileList) {
-      // 上传成功的处理逻辑
-      console.log('Upload success:', response)
+    beforeFileUpload(file) {
+      this.file = file;
+      this.fileList.push({ name: file.name, status: 'ready', raw: file });
+      return false; // Prevent default upload behavior
     },
-    handleUploadError(err, file, fileList) {
-      // 上传失败的处理逻辑
-      console.error('Upload error:', err)
+    handleFileChange(file, fileList) {
+      console.log('File changed:', file, fileList);
+      this.fileList = fileList;
+      this.file = file.raw;
     },
     downloadFile() {
       const url = 'https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/%E5%8F%82%E6%95%B0%E6%A8%A1%E6%9D%BF.xlsx';
@@ -113,23 +120,31 @@ export default {
       link.click();
       document.body.removeChild(link);
     },
-    executeAlgorithm() {
-      // 执行优化算法的逻辑
+    async executeAlgorithm() {
+      if (!this.file) {
+        this.$message.error('请先上传文件');
+        return;
+      }
       this.isExecuting = true;
-      console.log('Executing algorithm...')
-      console.log('Selected algorithm:', this.selectedAlgorithm)
-      console.log('Particle count:', this.particleCount)
-      console.log('Iteration count:', this.iterationCount)
+      const formData = new FormData();
+      formData.append('file', this.file);
+      formData.append('algorithm', this.selectedAlgorithm);
+      formData.append('particleCount', this.particleCount);
+      formData.append('iterationCount', this.iterationCount);
 
-      // 模拟后端返回结果
-      setTimeout(() => {
-        this.isExecuting = false;
-        this.resultFileUrl = 'https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/%E4%BC%98%E5%8C%96%E7%BB%93%E6%9E%9C.xlsx';
-      }, 3000);
+      this.resultFileUrl = await executeAlgorithm(formData)
+      this.isExecuting = false
+      console.log(this.resultFileUrl)
     }
   }
 }
 </script>
+
+
+
+
+
+
 
 <style scoped>
 .container {
