@@ -11,12 +11,12 @@ public class PowerStationQueryDTO {
     @ApiModelProperty("电站名称")
     private String powerStationName;
 
-    @ApiModelProperty("页码")
-    private int page;
-
     @ApiModelProperty("电站类型")
-    private int type;
+    private String type;
 
     @ApiModelProperty("是否梯级")
-    private int isStair;
+    private String isStair;
+
+//    @ApiModelProperty("页码")
+//    private int page;
 }

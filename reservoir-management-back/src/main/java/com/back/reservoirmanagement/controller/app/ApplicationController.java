@@ -1,12 +1,9 @@
 package com.back.reservoirmanagement.controller.app;
 
-import com.back.reservoirmanagement.common.context.BaseContext;
 import com.back.reservoirmanagement.common.result.Result;
 import com.back.reservoirmanagement.pojo.dto.ApplicationSubmitDTO;
-import com.back.reservoirmanagement.pojo.entity.Application;
 import com.back.reservoirmanagement.pojo.vo.ApplicationVO;
 import com.back.reservoirmanagement.service.ApplicationService;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +33,6 @@ public class ApplicationController {
     @ApiOperation("提交申请")
     public Result applicationSubmit(@RequestBody ApplicationSubmitDTO applicationSubmitDTO){
         log.info("申请信息数据：{}",applicationSubmitDTO);
-
         applicationService.submit(applicationSubmitDTO);
         return Result.success();
     }

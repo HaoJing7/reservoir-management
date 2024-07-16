@@ -6,6 +6,7 @@ import com.back.reservoirmanagement.common.properties.JwtProperties;
 import com.back.reservoirmanagement.common.result.Result;
 import com.back.reservoirmanagement.common.utils.JwtUtil;
 import com.back.reservoirmanagement.pojo.dto.FindBackPasswordDTO;
+import com.back.reservoirmanagement.pojo.dto.UpdatePasswordDTO;
 import com.back.reservoirmanagement.pojo.dto.UserLoginDTO;
 import com.back.reservoirmanagement.pojo.dto.UserUpdateDTO;
 import com.back.reservoirmanagement.pojo.entity.User;
@@ -108,15 +109,31 @@ public class UserController {
 
     @PostMapping("/updatePassword")
     @ApiOperation("更改密码")
-    public Result updatePassword(User user){
+    public Result updatePassword(@RequestBody UpdatePasswordDTO updatePasswordDTO){
+        // 获取旧数据并且比对
         User userInfo =userService.getById(BaseContext.getCurrentId());
-
-        String password =user.getPassword();
+        log.info("user:{}",userInfo);
+        String password =updatePasswordDTO.getOldPassword();
+        if (!StringUtils.isNotBlank(password)){
+            return Result.error("旧密码不能为空!");
+        }
         password=DigestUtils.md5DigestAsHex(password.getBytes());//加密
-
-        userInfo.setPassword(password);
+        log.info("数据库旧密码：{},输入的旧密码:{}",userInfo.getPassword(),password);
+        if (!password.equals(userInfo.getPassword())){
+            return Result.error("旧密码有误,请重新输入!");
+        }
+        // 新密码处理
+        String newPassword = updatePasswordDTO.getNewPassword();
+        if (!StringUtils.isNotBlank(newPassword)){
+            return Result.error("新密码不能为空!");
+        }
+//        if (!newPassword.equals(updatePasswordDTO.getConfirmPassword())){
+//            return Result.error("两次密码不一致,请重新输入!");
+//        }
+        newPassword=DigestUtils.md5DigestAsHex(newPassword.getBytes());
+        userInfo.setPassword(newPassword);
         userService.updateById(userInfo);
-        return Result.success();
+        return Result.success("密码修改成功");
     }
 
     @PostMapping("/findBackPassword")

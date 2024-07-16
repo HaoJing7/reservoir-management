@@ -30,7 +30,7 @@ public class PowerStationDefaultVO implements Serializable {
     private String address;
 
     @ApiModelProperty("电站类型")
-    private int type;       //电站类型(1:蓄水式 2:引水式 3: 径流式)
+    private int type;//电站类型(1:蓄水式 2:引水式 3: 径流式)
 
     @ApiModelProperty("对应水库id")
     private Long reservoirId;

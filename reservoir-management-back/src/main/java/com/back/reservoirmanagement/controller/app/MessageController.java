@@ -3,22 +3,19 @@ package com.back.reservoirmanagement.controller.app;
 
 import com.back.reservoirmanagement.common.context.BaseContext;
 import com.back.reservoirmanagement.common.result.Result;
-import com.back.reservoirmanagement.pojo.dto.ApplicationSubmitDTO;
-import com.back.reservoirmanagement.pojo.dto.MessageQueryDTO;
+import com.back.reservoirmanagement.pojo.dto.MessagePageQueryDTO;
 import com.back.reservoirmanagement.pojo.entity.Message;
-import com.back.reservoirmanagement.pojo.vo.ReservoirDefaultVO;
+import com.back.reservoirmanagement.pojo.vo.SimpleMessageListVO;
 import com.back.reservoirmanagement.pojo.vo.SimpleMessageVO;
 import com.back.reservoirmanagement.service.MessageService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,24 +31,24 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
-    @GetMapping("/simpleList")
-    @ApiOperation("返回所有消息的缩略形式")
-    public Result<List<SimpleMessageVO>> list(){
-        // 获取所有消息
-        LambdaQueryWrapper<Message> queryWrapper=new LambdaQueryWrapper<>();
-        // 消息排序: 级别、是否完成、是否已读、创建时间
-        queryWrapper.eq(Message::getEmployeeId, BaseContext.getCurrentId());
-        queryWrapper.orderByDesc(Message::getLevel)
-                .orderByDesc(Message::getFinished)
-                .orderByAsc(Message::getChecked)
-                .orderByDesc(Message::getCreateTime);
-        List<Message> list = messageService.list(queryWrapper);
+    @GetMapping("/query")
+    @ApiOperation("返回消息的缩略形式")
+    public Result<SimpleMessageListVO> list(MessagePageQueryDTO pageQueryDTO){
+
+        List<Message> list = messageService.pageQuery(pageQueryDTO);
 
         // 将所有的消息转为缩略形式
         List<SimpleMessageVO> voList =convert(list);
         log.info("voList内容:{}",voList);
 
-        return Result.success(voList);
+        LambdaQueryWrapper<Message> wrapper=new LambdaQueryWrapper<>();
+        wrapper.eq(Message::getEmployeeId,BaseContext.getCurrentId());
+
+        LambdaQueryWrapper<Message> countWrapper=new LambdaQueryWrapper<>();
+        countWrapper.eq(Message::getEmployeeId,BaseContext.getCurrentId());
+        long count = messageService.count(countWrapper);
+
+        return Result.success(new SimpleMessageListVO(count,voList));
     }
 
     @GetMapping("/detail/{id}")
@@ -70,24 +67,16 @@ public class MessageController {
         return Result.success(detailMessage);
     }
 
-    /**
-     *
-     * @param messageQueryDTO
-     * @return
-     */
-    @PostMapping("/query")
-    @ApiOperation("消息的条件查询")
-    public Result queryByTitle(@RequestBody MessageQueryDTO messageQueryDTO){
-        // 模糊查询
-        log.info("查询条件：{}",messageQueryDTO);
-        LambdaQueryWrapper<Message> queryWrapper=new LambdaQueryWrapper<>();
-        String title = messageQueryDTO.getTitle();
-        queryWrapper.eq(Message::getEmployeeId,BaseContext.getCurrentId());
-        queryWrapper.like(StringUtils.isNoneEmpty(title),Message::getTitle,title);
-        List<Message> list = messageService.list(queryWrapper);
-        // 将查询所得的消息转为缩略形式
-        List<SimpleMessageVO> voList =convert(list);
-        return Result.success(voList);
+    @PostMapping("/check")
+    @ApiOperation("消息已读")
+    public Result check(Long id){
+
+        log.info("消息任务完成：{}",id);
+        Message mes=new Message();
+        mes.setId(id);
+        mes.setChecked(MESSAGE_CHECKED);
+        messageService.updateById(mes);
+        return Result.success("消息已读");
     }
 
     @PostMapping("/confirm")
@@ -99,7 +88,7 @@ public class MessageController {
         mes.setId(id);
         mes.setFinished(MESSAGE_FINISHED);
         messageService.updateById(mes);
-        return Result.success();
+        return Result.success("消息任务已完成");
     }
 
     /**

@@ -11,9 +11,9 @@ public class ReservoirQueryDTO {
     @ApiModelProperty("水库名称")
     private String name;
 
-    @ApiModelProperty("页码")
-    private int page;
-
     @ApiModelProperty("水库类型")
-    private int type;
+    private String type;
+
+//    @ApiModelProperty("页码")
+//    private int page;
 }
