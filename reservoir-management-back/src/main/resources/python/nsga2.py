@@ -28,8 +28,9 @@ def main():
                       drawing=0,
                       outputMsg=False,
                       drawLog=False,
-                      saveFlag=True)
-    print(res)
+                      saveFlag=True,
+                      dirName='result')
+    print('NSGA2算法调用成功=========')
 
 if __name__ == '__main__':
     main()

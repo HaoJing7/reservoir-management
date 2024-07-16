@@ -1,19 +1,23 @@
 package com.back.reservoirmanagement.service.impl;
 
 import com.back.reservoirmanagement.common.exception.ParameterErrorException;
-import com.back.reservoirmanagement.common.result.Result;
 import com.back.reservoirmanagement.common.utils.AlgorithmParameter;
 import com.back.reservoirmanagement.common.utils.AlgorithmUtil;
+import com.back.reservoirmanagement.mapper.FileUrlMapper;
+import com.back.reservoirmanagement.pojo.entity.FileUrl;
 import com.back.reservoirmanagement.service.DispatchService;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +29,18 @@ import java.util.List;
 @Slf4j
 @Service
 public class DispatchServiceImpl implements DispatchService {
+
+    @Autowired
+    private FileUrlMapper fileUrlMapper;
+
+    /**
+     * 管理端调用方法
+     * @param file
+     * @param algorithm
+     * @param particleCount
+     * @param iterationCount
+     * @return 文件url
+     */
     @Override
     public String executeAlgorithm(MultipartFile file, Integer algorithm, Integer particleCount, Integer iterationCount) {
         try {
@@ -76,14 +92,43 @@ public class DispatchServiceImpl implements DispatchService {
                     .reservoirParams(reservoirParams)
                     .build();
 
-            AlgorithmUtil.dispatch(algorithmParameter);
-            // 模拟返回结果文件的 URL
-            return "https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/%E4%BC%98%E5%8C%96%E7%BB%93%E6%9E%9C.xlsx";
-
+            return getFileUrl(algorithmParameter);
 
         } catch (Exception e) {
             log.error("Error reading file:", e);
             throw new ParameterErrorException("文件上传处理失败！");
         }
+    }
+
+
+    /**
+     * 小程序调用功能算法方法
+     *
+     * @param algorithmParameter
+     * @return 文件的url，可通过这个文件url下载文件
+     */
+    @Override
+    public String executeByApp(AlgorithmParameter algorithmParameter) {
+        return getFileUrl(algorithmParameter);
+    }
+
+    /**
+     * 调用算法并返回文件的url
+     * @param algorithmParameter
+     * @return 文件的url
+     */
+    private @NotNull String getFileUrl(AlgorithmParameter algorithmParameter) {
+        // 调用算法并返回结果文件的URL
+        String fileURL = AlgorithmUtil.dispatch(algorithmParameter);
+
+        // 获取当前的时间作为文件名
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        String formattedNow = now.format(formatter);
+
+        // 把文件URL存入数据库，当成日志使用
+        fileUrlMapper.insert(new FileUrl(null, formattedNow, fileURL));
+
+        return fileURL;
     }
 }

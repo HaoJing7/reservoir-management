@@ -186,4 +186,13 @@ CREATE TABLE `record`
     `id`      int PRIMARY KEY AUTO_INCREMENT COMMENT '主键id',
     `content` varchar(50) NOT NULL COMMENT '内容',
     `create_time`    varchar(50)    NOT NULL COMMENT '创建时间'
+);
+
+# 文件URL表
+DROP TABLE IF EXISTS `file_url`;
+CREATE TABLE `file_url`
+(
+    `id`      int PRIMARY KEY AUTO_INCREMENT COMMENT '主键id',
+    `file_name`    varchar(50) NOT NULL NULL COMMENT '名称(以时间戳命名)',
+    `file_url` varchar(200) NOT NULL COMMENT '文件url'
 )
