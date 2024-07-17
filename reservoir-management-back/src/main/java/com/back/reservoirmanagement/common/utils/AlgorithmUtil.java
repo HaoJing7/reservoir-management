@@ -17,8 +17,6 @@ import java.nio.file.Paths;
 @Slf4j
 public class AlgorithmUtil {
 
-    // TODO 处理结果文件，添加表头，上传到阿里云OSS，然后返回对应的url
-
     // 调用算法（参数为算法参数类）
     public static String dispatch(AlgorithmParameter algorithmParameter) {
         Process proc;
@@ -65,10 +63,24 @@ public class AlgorithmUtil {
             e.printStackTrace();
         }
 
-        try {
-            Thread.sleep(20000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        // try {
+        //     Thread.sleep(20000);
+        // } catch (InterruptedException e) {
+        //     throw new RuntimeException(e);
+        // }
+
+        while (true) {
+            String currentDir = System.getProperty("user.dir");
+            String csvFilePath = Paths.get(currentDir, "result", "optPop", "Phen.csv").toString();
+            File file = new File(csvFilePath);
+            if (file.exists()) {
+                break;
+            }
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         // 提取结果的csv文件并转换格式
