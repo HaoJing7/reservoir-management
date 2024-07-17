@@ -135,6 +135,7 @@ export default {
       this.resultFileUrl = await executeAlgorithm(formData)
       this.isExecuting = false
       console.log(this.resultFileUrl)
+      this.$message.success("算法调用完成！")
     }
   }
 }

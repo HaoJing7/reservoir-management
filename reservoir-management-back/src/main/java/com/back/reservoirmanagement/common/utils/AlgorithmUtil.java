@@ -63,12 +63,6 @@ public class AlgorithmUtil {
             e.printStackTrace();
         }
 
-        // try {
-        //     Thread.sleep(20000);
-        // } catch (InterruptedException e) {
-        //     throw new RuntimeException(e);
-        // }
-
         while (true) {
             String currentDir = System.getProperty("user.dir");
             String csvFilePath = Paths.get(currentDir, "result", "optPop", "Phen.csv").toString();
@@ -116,7 +110,7 @@ public class AlgorithmUtil {
             }
         }
         // 暂时默认返回这个文件URL
-        return "https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/%E4%BC%98%E5%8C%96%E7%BB%93%E6%9E%9C.xlsx";
+        return "https://tanhao-bucket.oss-cn-guangzhou.aliyuncs.com/%E4%BC%98%E5%8C%96%E7%9A%84%E7%BB%93%E6%9E%9C.xlsx";
 
     }
 
@@ -124,9 +118,11 @@ public class AlgorithmUtil {
     public static void convertCsvToXlsx() {
         String currentDir = System.getProperty("user.dir");
         String csvFilePath = Paths.get(currentDir, "result", "optPop", "Phen.csv").toString();
+        String objvFilePath = Paths.get(currentDir, "result", "optPop", "Objv.csv").toString();
         String xlsxFilePath = Paths.get(currentDir, "优化结果.xlsx").toString();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath));
+        try (BufferedReader phenReader = new BufferedReader(new FileReader(csvFilePath));
+             BufferedReader objvReader = new BufferedReader(new FileReader(objvFilePath));
              Workbook workbook = new XSSFWorkbook();
              FileOutputStream fileOut = new FileOutputStream(xlsxFilePath)) {
 
@@ -135,37 +131,56 @@ public class AlgorithmUtil {
             String[] headers = {"1月平均下泄流量(m³/s)", "2月平均下泄流量(m³/s)", "3月平均下泄流量(m³/s)",
                     "4月平均下泄流量(m³/s)", "5月平均下泄流量(m³/s)", "6月平均下泄流量(m³/s)",
                     "7月平均下泄流量(m³/s)", "8月平均下泄流量(m³/s)", "9月平均下泄流量(m³/s)",
-                    "10月平均下泄流量(m³/s)", "11月平均下泄流量(m³/s)", "12月平均下泄流量(m³/s)"};
+                    "10月平均下泄流量(m³/s)", "11月平均下泄流量(m³/s)", "12月平均下泄流量(m³/s)",
+                    "总发电量(kwH)", "总缺水量(m³)"};
             Row headerRow = sheet.createRow(0);
 
             // 添加表头
             for (int i = 0; i < headers.length; i++) {
                 headerRow.createCell(i).setCellValue(headers[i]);
+                // 设置列宽，256*列宽表示Excel中的宽度单位
+                sheet.setColumnWidth(i, 25 * 256);
             }
 
-            String line;
+            String phenLine, objvLine;
             int rowNum = 1;
 
             // 读取CSV文件并将内容写入XLSX文件
-            while ((line = br.readLine()) != null) {
-                String[] values = line.split(",");
+            while ((phenLine = phenReader.readLine()) != null && (objvLine = objvReader.readLine()) != null) {
+                String[] phenValues = phenLine.split(",");
+                String[] objvValues = objvLine.split(",");
                 Row row = sheet.createRow(rowNum++);
-                for (int i = 0; i < values.length; i++) {
+
+                // 写入Phen.csv的内容
+                for (int i = 0; i < phenValues.length; i++) {
                     try {
-                        double numericValue = Double.parseDouble(values[i]);
+                        double numericValue = Double.parseDouble(phenValues[i]);
                         // 保留5位小数
                         String formattedValue = String.format("%.5f", numericValue);
                         row.createCell(i).setCellValue(formattedValue);
                     } catch (NumberFormatException e) {
                         // 处理无法解析为数字的情况
-                        row.createCell(i).setCellValue(values[i]);
+                        row.createCell(i).setCellValue(phenValues[i]);
+                    }
+                }
+
+                // 写入Objv.csv的内容
+                for (int i = 0; i < objvValues.length; i++) {
+                    try {
+                        double numericValue = Double.parseDouble(objvValues[i]);
+                        // 保留5位小数
+                        String formattedValue = String.format("%.5f", numericValue);
+                        row.createCell(phenValues.length + i).setCellValue(formattedValue);
+                    } catch (NumberFormatException e) {
+                        // 处理无法解析为数字的情况
+                        row.createCell(phenValues.length + i).setCellValue(objvValues[i]);
                     }
                 }
             }
 
             // 写入XLSX文件
             workbook.write(fileOut);
-            System.out.println("CSV file has been converted to XLSX file successfully.");
+            System.out.println("CSV files have been converted to XLSX file successfully.");
 
         } catch (IOException e) {
             e.printStackTrace();
