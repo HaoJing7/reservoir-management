@@ -67,9 +67,9 @@ public class MessageController {
         return Result.success(detailMessage);
     }
 
-    @PostMapping("/check")
+    @PutMapping("/check/{id}")
     @ApiOperation("消息已读")
-    public Result check(Long id){
+    public Result check(@PathVariable Long id){
 
         log.info("消息任务完成：{}",id);
         Message mes=new Message();
@@ -79,9 +79,9 @@ public class MessageController {
         return Result.success("消息已读");
     }
 
-    @PostMapping("/confirm")
+    @PutMapping("/confirm/{id}")
     @ApiOperation("消息确认完成")
-    public Result confirm(Long id){
+    public Result confirm(@PathVariable  Long id){
 
         log.info("消息任务完成：{}",id);
         Message mes=new Message();
